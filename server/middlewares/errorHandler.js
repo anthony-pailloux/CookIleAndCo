@@ -1,5 +1,5 @@
 /**
- * Attrape les erreurs remontées par throw ou next(err) dans les routes.
+ * Attrape les erreurs remontées par next(err) dans les routes.
  * Renvoie { "error": "..." } avec le bon code HTTP.
  */
 export default function errorHandler(err, req, res, next) {
