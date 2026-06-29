@@ -24,8 +24,7 @@ app.get('/api/health', (req, res) => {
 
 // Route test — throw direct pour simuler une erreur vers errorHandler
 app.get('/api/test-error', (req, res) => {
-    console.log('Route GET /api/test-error / déclenchement erreur');
-    throw 'test';
+    throw 'Erreur 500';
 });
 
 app.use(notFound);

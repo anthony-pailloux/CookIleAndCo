@@ -3,8 +3,7 @@
  * Renvoie { "error": "..." } avec le bon code HTTP.
  */
 export default function errorHandler(err, req, res, next) {
-    console.error('errorHandler — err:', err);
-    
+    console.error(err);
 
     const status = err.status || 500;
 
