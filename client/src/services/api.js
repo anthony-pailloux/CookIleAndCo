@@ -2,21 +2,33 @@
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 
-async function request(method, path) {
-  // URL complète : base + chemin (ex. http://localhost:3000/api/health)
+// Envoie une requête HTTP au back : construit l'URL, appelle fetch avec cookies, renvoie la Response brute.
+async function fetchFromServer(method, path) {
+  
   const url = apiBaseUrl + path;
 
-  console.log('api.request —', method, url);
+  console.log('test', method, url);
 
-  // fetch = requête HTTP ; credentials envoie les cookies
   const response = await fetch(url, {
     method: method,
     credentials: 'include',
   });
 
-  console.log('api.request — status:', response.status);
+  console.log('test', response.status);
 
   return response;
+}
+
+// Pour lire des données du back (GET) : une seule fonction à appeler depuis les pages.
+export async function getFromApi(path) {
+
+    const response = await fetchFromServer('GET', path);
+
+    const data = await response.json();
+
+    console.log('test', data);
+    
+    return data;
 }
 
 
