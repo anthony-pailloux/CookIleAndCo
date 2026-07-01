@@ -1,34 +1,132 @@
+// Client HTTP centralisé — toutes les requêtes front → back passent par ici.
+
+
+
 // URL du back (ex. http://localhost:3000) — lue depuis client .env
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
+// Envoie une requête HTTP : URL, cookies, body sérialisé en JSON (stringify) si présent ; renvoie la Response brute (pas de parse).
+async function requestFromApi(method, path, body) {
 
-// Envoie une requête HTTP au back : construit l'URL, appelle fetch avec cookies, renvoie la Response brute.
-async function fetchFromServer(method, path) {
-  
-  const url = apiBaseUrl + path;
+    const url = apiBaseUrl + path;
 
-  console.log('test', method, url);
+    const options = {
 
-  const response = await fetch(url, {
-    method: method,
-    credentials: 'include',
-  });
+        method: method,
 
-  console.log('test', response.status);
+        credentials: 'include',
 
-  return response;
+        headers: {},
+    };
+
+    if (body !== undefined) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(url, options);
+
+    return response;
 }
 
-// Pour lire des données du back (GET) : une seule fonction à appeler depuis les pages.
+// GET : appelle requestFromApi, parse la réponse JSON (response.json), gère les erreurs { error }.
 export async function getFromApi(path) {
 
-    const response = await fetchFromServer('GET', path);
+    const response = await requestFromApi('GET', path);
 
     const data = await response.json();
 
-    console.log('test', data);
-    
+    if (!response.ok) {
+
+        let message;
+
+        if (data && data.error) {
+
+            message = data.error;
+
+        } else {
+
+            message = 'Erreur serveur';
+        }
+        throw new Error(message);
+    }
+
     return data;
 }
 
+
+// POST : envoie un body JSON, parse la réponse, gère les erreurs { error }.
+export async function postToApi(path, body) {
+
+    const response = await requestFromApi('POST', path, body);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+
+        let message;
+
+        if (data && data.error) {
+
+            message = data.error;
+
+        } else {
+            message = 'Erreur serveur';
+        }
+        throw new Error(message);
+    }
+
+    return data;
+}
+
+// PUT : modifie une ressource (body JSON), parse la réponse, gère les erreurs { error }.
+export async function putToApi(path, body) {
+
+    const response = await requestFromApi('PUT', path, body);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+
+        let message;
+
+        if (data && data.error) {
+
+            message = data.error;
+
+        } else {
+
+            message = 'Erreur serveur';
+
+        }
+        throw new Error(message);
+    }
+
+    return data;
+}
+
+// DELETE : supprime une ressource, parse la réponse, gère les erreurs { error }.
+export async function deleteToApi(path) {
+
+    const response = await requestFromApi('DELETE', path);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        
+        let message;
+
+        if (data && data.error) {
+
+            message = data.error;
+        } else {
+
+            message = 'Erreur serveur';
+
+        }
+        throw new Error(message);
+    }
+
+    return data;
+}
 

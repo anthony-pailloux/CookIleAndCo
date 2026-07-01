@@ -1,7 +1,5 @@
-/**
- * Attrape les erreurs remontées par next(err) dans les routes.
- * Renvoie { "error": "..." } avec le bon code HTTP.
- */
+// Middleware Express d'erreur : reçoit err (via next(err) ou throw dans une route) et renvoie { "error": "..." }.
+ 
 export default function errorHandler(err, req, res, next) {
     console.error(err);
 

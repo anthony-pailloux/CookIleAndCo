@@ -19,12 +19,12 @@ app.use(cors({
 
 // Route test — pas de try/catch : rien ne peut échouer ici
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'Route GET /api/health / ok' });
+    res.json({ status: 'Route GET /api/health / Connecter' });
 });
 
 // Route test — throw direct pour simuler une erreur vers errorHandler
-app.get('/api/test-error', (req, res) => {
-    throw 'Erreur 500';
+app.get('/api/test-error', (req, res, next) => {
+    next('Erreur 500');
 });
 
 app.use(notFound);
