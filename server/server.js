@@ -1,7 +1,4 @@
-/**
- * Point d'entrée du backend : charge les variables d'environnement (.env),
- * importe l'app Express depuis app.js, puis démarre le serveur sur le port configuré.
- */
+// Point d'entrée du backend : charge les variables d'environnement (.env), importe l'app Express depuis app.js, puis démarre le serveur sur le port configuré.
 import 'dotenv/config';
 import app from './app.js';
 
