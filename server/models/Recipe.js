@@ -3,7 +3,11 @@ import sequelize from '../config/database.js';
 
 class Recipe extends Model {
     static associate(models) {
-
+         // belongsTo = la recette porte la clé étrangère category_id
+        Recipe.belongsTo(models.Category, {
+            foreignKey: 'categoryId', // attribut du modèle (→ colonne category_id)
+            as: 'category',  // alias
+        });
     }
 }
 

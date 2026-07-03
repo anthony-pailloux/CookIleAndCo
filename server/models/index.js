@@ -1,3 +1,6 @@
+// Point d'entrée des modèles Sequelize : regroupe toutes les classes,
+
+
 import sequelize from "../config/database.js";
 import User from './User.js';
 import Category from './Category.js';
