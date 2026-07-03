@@ -8,6 +8,11 @@ class Recipe extends Model {
             foreignKey: 'categoryId', // attribut du modèle (→ colonne category_id)
             as: 'category',  // alias
         });
+
+        Recipe.belongsTo(models.Origin, {
+            foreignKey: 'originId',
+            as: 'origin',
+        });
     }
 }
 

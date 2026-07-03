@@ -11,7 +11,7 @@ MealType.init(
     {
         name: {
             type: DataTypes.STRING,
-            allowwNull: false,
+            allowNull: false,
             unique: true,
         },
     },
