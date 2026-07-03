@@ -3,7 +3,10 @@ import sequelize from "../config/database.js";
 
 class MealType extends Model {
     static associate(models) {
-
+        MealType.hasMany(models.Recipe, {
+            foreignKey: 'mealTypeId',
+            as: 'recipes',
+        })
     }
 }
 

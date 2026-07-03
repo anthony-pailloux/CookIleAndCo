@@ -13,6 +13,10 @@ class Recipe extends Model {
             foreignKey: 'originId',
             as: 'origin',
         });
+        Recipe.belongsTo(models.MealType, {
+            foreignKey: 'mealTypeId', // → colonne meal_type_id en base
+            as: 'recipes', // alias
+        });
     }
 }
 
