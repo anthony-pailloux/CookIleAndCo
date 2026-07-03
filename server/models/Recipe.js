@@ -15,7 +15,7 @@ class Recipe extends Model {
         });
         Recipe.belongsTo(models.MealType, {
             foreignKey: 'mealTypeId', // → colonne meal_type_id en base
-            as: 'recipes', // alias
+            as: 'mealType', // alias
         });
     }
 }
