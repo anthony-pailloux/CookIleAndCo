@@ -26,5 +26,6 @@ Object.values(models).forEach(function (model) {
     }
 });
 
+
 export { sequelize };
 export default models;

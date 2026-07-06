@@ -8,8 +8,6 @@ import models from './models/index.js';
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
-
-    console.log('associations Recipe —', Object.keys(models.Recipe.associations));
     
     try {
         await sequelize.authenticate();

@@ -6,7 +6,7 @@ class MealType extends Model {
         MealType.hasMany(models.Recipe, {
             foreignKey: 'mealTypeId',
             as: 'recipes',
-        })
+        });
     }
 }
 

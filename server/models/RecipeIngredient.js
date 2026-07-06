@@ -3,7 +3,9 @@ import sequelize from "../config/database.js";
 
 class RecipeIngredient extends Model {
     static associate(models) {
-
+        RecipeIngredient.belongsTo(models.Recipe, {
+            foreignKey: 'recipeId',
+        });
     }
 }
 

@@ -3,10 +3,10 @@ import sequelize from '../config/database.js';
 
 class Recipe extends Model {
     static associate(models) {
-         // belongsTo = la recette porte la clé étrangère category_id
+         
         Recipe.belongsTo(models.Category, {
-            foreignKey: 'categoryId', // attribut du modèle (→ colonne category_id)
-            as: 'category',  // alias
+            foreignKey: 'categoryId', 
+            as: 'category',  
         });
 
         Recipe.belongsTo(models.Origin, {
@@ -14,8 +14,17 @@ class Recipe extends Model {
             as: 'origin',
         });
         Recipe.belongsTo(models.MealType, {
-            foreignKey: 'mealTypeId', // → colonne meal_type_id en base
-            as: 'mealType', // alias
+            foreignKey: 'mealTypeId', 
+            as: 'mealType', 
+        });
+
+        Recipe.hasMany(models.RecipeIngredient, {
+            foreignKey: 'recipeId',
+            as: 'ingredients',
+        });
+        Recipe.hasMany(models.RecipeStep, {
+            foreignKey: 'recipeId',
+            as:'steps',
         });
     }
 }
