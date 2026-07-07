@@ -8,7 +8,7 @@ import models from './models/index.js';
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
-    
+
     try {
         await sequelize.authenticate();
 
@@ -23,7 +23,7 @@ async function startServer() {
         console.error('Erreur de connexion à la DB:', error.message);
 
         process.exit(1)
-        
+
     }
 }
 

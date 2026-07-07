@@ -3,10 +3,10 @@ import sequelize from '../config/database.js';
 
 class Recipe extends Model {
     static associate(models) {
-         
+
         Recipe.belongsTo(models.Category, {
-            foreignKey: 'categoryId', 
-            as: 'category',  
+            foreignKey: 'categoryId',
+            as: 'category',
         });
 
         Recipe.belongsTo(models.Origin, {
@@ -14,8 +14,8 @@ class Recipe extends Model {
             as: 'origin',
         });
         Recipe.belongsTo(models.MealType, {
-            foreignKey: 'mealTypeId', 
-            as: 'mealType', 
+            foreignKey: 'mealTypeId',
+            as: 'mealType',
         });
 
         Recipe.hasMany(models.RecipeIngredient, {
@@ -24,7 +24,7 @@ class Recipe extends Model {
         });
         Recipe.hasMany(models.RecipeStep, {
             foreignKey: 'recipeId',
-            as:'steps',
+            as: 'steps',
         });
     }
 }
