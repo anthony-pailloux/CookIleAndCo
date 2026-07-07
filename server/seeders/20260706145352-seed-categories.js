@@ -3,6 +3,22 @@
 /** @type {import('sequelize-cli').Migration} */
 export default {
   async up(queryInterface, Sequelize) {
+
+    const [countRows] = await queryInterface.sequelize.query(
+      'SELECT COUNT(*) AS total FROM categories'
+    );
+
+    let total = countRows[0].total;
+
+    console.log('seed categories — lignes en base :', total);
+
+    if (total > 0) {
+
+      console.log('seed categories — déjà rempli, insertion ignorée');
+
+      return;
+    }
+
     const now = new Date();
 
     const categories = [
@@ -20,7 +36,10 @@ export default {
       { name: 'Pâtisserie', created_at: now, updated_at: now },
       { name: 'Boulangerie', created_at: now, updated_at: now },
     ];
+
     await queryInterface.bulkInsert('categories', categories);
+
+    console.log('seed categories — insertion terminée :', categories.length, 'ligne(s)');
   },
 
   async down(queryInterface, Sequelize) {
