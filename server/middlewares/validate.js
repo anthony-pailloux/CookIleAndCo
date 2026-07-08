@@ -2,10 +2,8 @@
 import { validationResult } from 'express-validator';
 
 export default function validate(req, res, next) {
-
     // Récupère le résultat des règles body()
     const result = validationResult(req);
-    console.log('validate — erreurs:', result.array());
 
     // S'il y a au moins une erreur de validation
     if (!result.isEmpty()) {
