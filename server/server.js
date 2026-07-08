@@ -3,7 +3,7 @@ import 'dotenv/config';
 import app from './app.js';
 import sequelize from './config/database.js';
 
-import models from './models/index.js'; // charge les modèles au démarrage
+import models from './models/index.js'; 
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,13 +16,13 @@ async function startServer() {
 
         app.listen(PORT, () => {
             console.log(`Server demarré sur http://localhost:${PORT}`);
-        })
+        });
 
     } catch (error) {
 
         console.error('Erreur de connexion à la DB:', error.message);
 
-        process.exit(1)
+        process.exit(1);
 
     }
 }

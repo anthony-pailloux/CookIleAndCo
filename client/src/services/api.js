@@ -9,13 +9,10 @@ const apiBaseUrl = import.meta.env.VITE_API_URL;
 async function requestFromApi(method, path, body) {
 
     const url = apiBaseUrl + path;
-
     const options = {
 
         method: method,
-
         credentials: 'include',
-
         headers: {},
     };
 
@@ -33,24 +30,17 @@ async function requestFromApi(method, path, body) {
 export async function getFromApi(path) {
 
     const response = await requestFromApi('GET', path);
-
     const data = await response.json();
 
     if (!response.ok) {
-
         let message;
-
         if (data && data.error) {
-
             message = data.error;
-
         } else {
-
             message = 'Erreur serveur';
         }
         throw new Error(message);
     }
-
     return data;
 }
 
@@ -59,23 +49,17 @@ export async function getFromApi(path) {
 export async function postToApi(path, body) {
 
     const response = await requestFromApi('POST', path, body);
-
     const data = await response.json();
 
     if (!response.ok) {
-
         let message;
-
         if (data && data.error) {
-
             message = data.error;
-
         } else {
             message = 'Erreur serveur';
         }
         throw new Error(message);
     }
-
     return data;
 }
 
@@ -83,25 +67,17 @@ export async function postToApi(path, body) {
 export async function putToApi(path, body) {
 
     const response = await requestFromApi('PUT', path, body);
-
     const data = await response.json();
 
     if (!response.ok) {
-
         let message;
-
         if (data && data.error) {
-
             message = data.error;
-
         } else {
-
             message = 'Erreur serveur';
-
         }
         throw new Error(message);
     }
-
     return data;
 }
 
@@ -109,24 +85,17 @@ export async function putToApi(path, body) {
 export async function deleteToApi(path) {
 
     const response = await requestFromApi('DELETE', path);
-
     const data = await response.json();
 
     if (!response.ok) {
-        
         let message;
-
         if (data && data.error) {
-
             message = data.error;
         } else {
-
             message = 'Erreur serveur';
-
         }
         throw new Error(message);
     }
-
     return data;
 }
 

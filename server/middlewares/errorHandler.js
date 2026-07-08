@@ -1,5 +1,5 @@
 // renvoie une erreur json quand ça plante
- 
+
 export default function errorHandler(err, req, res, next) {
     console.error(err);
 

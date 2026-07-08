@@ -1,9 +1,10 @@
-// l'app express avec les routes
-
+// l'app express avec les routes et middlewares
 import express from 'express';
 import cors from 'cors';
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
+
+import authRoutes from './routes/authRoutes.js';
 
 
 const app = express();
@@ -26,6 +27,9 @@ app.get('/api/health', (req, res) => {
 app.get('/api/test-error', (req, res, next) => {
     next('Erreur 500');
 });
+
+// Routes auth
+app.use('/api/auth', authRoutes);
 
 // 404 puis gestion des erreurs
 app.use(notFound);
