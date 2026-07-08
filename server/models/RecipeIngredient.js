@@ -1,8 +1,11 @@
+// ingrédient d'une recette
+
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 class RecipeIngredient extends Model {
     static associate(models) {
+        // lié à une recette
         RecipeIngredient.belongsTo(models.Recipe, {
             foreignKey: 'recipeId',
         });

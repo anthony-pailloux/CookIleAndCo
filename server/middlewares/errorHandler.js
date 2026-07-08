@@ -1,4 +1,4 @@
-// Middleware Express d'erreur : reçoit err (via next(err) ou throw dans une route) et renvoie { "error": "..." }.
+// renvoie une erreur json quand ça plante
  
 export default function errorHandler(err, req, res, next) {
     console.error(err);
@@ -8,6 +8,7 @@ export default function errorHandler(err, req, res, next) {
     let message;
 
     if (status === 500) {
+        // message générique, on ne montre pas le détail technique
         message = 'Erreur serveur';
     } else {
         message = err.message;

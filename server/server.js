@@ -1,16 +1,16 @@
-// Point d'entrée du backend : charge .env, teste la connexion MySQL (Sequelize), puis démarre Express.
+// démarre le serveur et vérifie la base
 import 'dotenv/config';
 import app from './app.js';
 import sequelize from './config/database.js';
 
-import models from './models/index.js';
+import models from './models/index.js'; // charge les modèles au démarrage
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
 
     try {
-        await sequelize.authenticate();
+        await sequelize.authenticate(); // test connexion mysql
 
         console.log('Connexion à la DB mysql : ok');
 

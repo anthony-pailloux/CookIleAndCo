@@ -1,3 +1,5 @@
+// compte utilisateur
+
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database.js';
 
@@ -21,7 +23,7 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user',
+      defaultValue: 'user', // user ou admin
       validate: {
         isIn: [['user', 'admin']],
       },

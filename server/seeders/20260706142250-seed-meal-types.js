@@ -1,22 +1,23 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
+
 export default {
   async up(queryInterface, Sequelize) {
-    // 1 — Vérifier si la table est déjà remplie
+    // on vérifie si la table est déjà remplie
     const [countRows] = await queryInterface.sequelize.query(
       'SELECT COUNT(*) AS total FROM meal_types'
     );
 
     let total = countRows[0].total;
-    console.log('seed meal_types — lignes en base :', total);
+    console.log('seed meal_types, lignes en base :', total);
 
     if (total > 0) {
-      console.log('seed meal_types — déjà rempli, insertion ignorée');
+      console.log('seed meal_types, déjà rempli, on fait rien');
       return;
     }
 
-    // 2 — Préparer les données (seulement si insertion nécessaire)
+    // liste des types de repas
     const now = new Date();
 
     
@@ -27,18 +28,13 @@ export default {
       { name: 'Dîner', created_at: now, updated_at: now },
     ];
     
-    // 3 — Insérer
+    // on insère en base
     await queryInterface.bulkInsert('meal_types', mealTypes);
 
-    console.log('seed meal_types — insertion terminée :', mealTypes.length, 'ligne(s)');
+    console.log('seed meal_types, insertion ok :', mealTypes.length, 'ligne(s)');
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    // annule le seed
   }
 };

@@ -1,6 +1,4 @@
-/**
- * Réponse 404 pour toute requête qui n'a matché aucune route déclarée avant.
- */
+// route inconnue, renvoie 404
 export default function notFound(req, res) {
     const status = 404;
     const message = 'Route introuvable';

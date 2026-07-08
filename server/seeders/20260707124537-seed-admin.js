@@ -1,28 +1,32 @@
 'use strict';
 
-// admin de l'appli
-
 import bcrypt from 'bcrypt';
 
-const ADMIN_EMAIL = 'anthonypailloux.dev@gmail.com';
-
 /** @type {import('sequelize-cli').Migration} */
+
 export default {
   async up(queryInterface, Sequelize) {
 
+    const adminEmail = process.env.ADMIN_EMAIL;
+
+    if (!adminEmail) {
+      throw new Error('ADMIN_EMAIL manquant dans .env');
+    }
+
+    // on cherche si l'admin existe déjà
     const existingRows = await queryInterface.sequelize.query(
       'SELECT id FROM users WHERE email = :email',
       {
-        replacements: { email: ADMIN_EMAIL },
+        replacements: { email: adminEmail },
         type: Sequelize.QueryTypes.SELECT,
       }
     );
 
-    console.log('seed admin — compte en base :', existingRows.length);
+    console.log('seed admin, compte en base :', existingRows.length);
 
     if (existingRows.length > 0) {
 
-      console.log('seed admin — Compte déjà présent, insertion ignorée');
+      console.log('seed admin, compte déjà là, on fait rien');
 
       return;
     }
@@ -33,11 +37,12 @@ export default {
       throw new Error('ADMIN_PASSWORD manquant dans .env');
     }
 
+    // mot de passe hashé depuis le .env
     const passwordHash = await bcrypt.hash(adminPassword, 10);
     const now = new Date();
 
     const adminUser = {
-      email: ADMIN_EMAIL,
+      email: adminEmail,
       password_hash: passwordHash,
       role: 'admin',
       profile_photo: null,
@@ -45,17 +50,19 @@ export default {
       updated_at: now,
     };
 
+    // on crée le compte admin
     await queryInterface.bulkInsert('users', [adminUser]);
 
-
-    console.log('seed admin — Compte inséré :', ADMIN_EMAIL);
+    console.log('seed admin, compte inséré :', adminEmail);
   },
 
   async down(queryInterface, Sequelize) {
+
+    // supprime le compte admin
     await queryInterface.bulkDelete('users', {
-      email: ADMIN_EMAIL,
+      email: adminEmail,
     });
 
-    console.log('seed admin — compte supprimé :', ADMIN_EMAIL);
+    console.log('seed admin, compte supprimé :', adminEmail);
   },
 };

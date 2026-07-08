@@ -1,5 +1,4 @@
-// Point d'entrée des modèles Sequelize : regroupe toutes les classes,
-
+// regroupe tous les modèles et leurs liens
 
 import sequelize from "../config/database.js";
 import User from './User.js';
@@ -21,6 +20,7 @@ const models = {
 };
 
 Object.values(models).forEach(function (model) {
+    // branche les liens entre modèles (catégorie, recette, etc.)
     if (typeof model.associate) {
         model.associate(models);
     }

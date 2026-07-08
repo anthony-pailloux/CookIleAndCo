@@ -1,4 +1,4 @@
-// Construit l'application Express (middlewares + routes).
+// l'app express avec les routes
 
 import express from 'express';
 import cors from 'cors';
@@ -8,21 +8,26 @@ import errorHandler from './middlewares/errorHandler.js';
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); // lit le json des requêtes
+
+// autorise le front à appeler l'api
 app.use(cors({
-    origin: process.env.CLIENT_URL, // adresse du front / seule origine autorisée à appeler l'API
-    credentials: true, // le navigateur peut envoyer/recevoir des cookies
+    origin: process.env.CLIENT_URL, // url du front
+    credentials: true, // autorise les cookies
 }));
 
 
+// route de test pour voir si le serveur répond
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Route GET /api/health / Connecter' });
 });
 
+// route de test pour l'error handler
 app.get('/api/test-error', (req, res, next) => {
     next('Erreur 500');
 });
 
+// 404 puis gestion des erreurs
 app.use(notFound);
 app.use(errorHandler);
 

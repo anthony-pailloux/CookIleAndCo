@@ -1,9 +1,12 @@
+// une recette
+
 import { DataTypes, Model } from "sequelize";
 import sequelize from '../config/database.js';
 
 class Recipe extends Model {
     static associate(models) {
 
+        // chaque recette a une catégorie, une origine et un type de repas
         Recipe.belongsTo(models.Category, {
             foreignKey: 'categoryId',
             as: 'category',
@@ -18,6 +21,7 @@ class Recipe extends Model {
             as: 'mealType',
         });
 
+        // ingrédients et étapes de la recette
         Recipe.hasMany(models.RecipeIngredient, {
             foreignKey: 'recipeId',
             as: 'ingredients',

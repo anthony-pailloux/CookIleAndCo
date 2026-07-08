@@ -1,9 +1,11 @@
+// catégorie d'une recette
+
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 class Category extends Model {
     static associate(models) {
-        // hasMany = l'autre côté du lien (Category n'a pas de FK)
+        // une catégorie a plein de recettes
         Category.hasMany(models.Recipe, {
             foreignKey: 'categoryId',
             as: 'recipes',

@@ -1,4 +1,4 @@
-// Instance Sequelize partagée — connexion MySQL lue depuis .env.
+// connexion mysql avec les infos du .env
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(

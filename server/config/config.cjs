@@ -1,4 +1,4 @@
-// Config Sequelize CLI — mêmes variables que database.js (CommonJS pour le CLI).
+// config pour les commandes sequelize (migrate, seed...)
 module.exports = {
     development: {
       username: process.env.DB_USER,

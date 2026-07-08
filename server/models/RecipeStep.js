@@ -1,8 +1,11 @@
+// étape de préparation d'une recette
+
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 class RecipeStep extends Model {
     static associate(models) {
+        // lié à une recette
         RecipeStep.belongsTo(models.Recipe, {
             foreignKey: 'recipeId'
         });
