@@ -1,4 +1,4 @@
-// config pour les commandes sequelize (migrate, seed...)
+// config pour les commandes sequelize (migrate, seed...) on récupere les infos du .env avec le process.env
 module.exports = {
     development: {
         username: process.env.DB_USER,

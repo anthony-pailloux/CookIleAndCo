@@ -1,4 +1,4 @@
-// connexion mysql avec les infos du .env
+// connexion mysql avec les infos du .env on les récuperes avec process.env
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(

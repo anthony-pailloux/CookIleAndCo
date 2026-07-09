@@ -1,6 +1,7 @@
 // l'app express avec les routes et middlewares
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -15,6 +16,17 @@ app.use(express.json()); // lit le json des requêtes
 app.use(cors({
     origin: process.env.CLIENT_URL, // url du front
     credentials: true, // autorise les cookies
+}));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false,
+    },
 }));
 
 
