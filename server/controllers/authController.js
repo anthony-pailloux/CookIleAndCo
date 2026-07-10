@@ -39,6 +39,7 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
+
     // supprime la session connectée 
     req.session.destroy((err) => {
         if (err) {
@@ -52,30 +53,19 @@ export function logout(req, res) {
 // utilisateur connecté via la session (cookie httpOnly posé au login)
 export async function getCurrentUser(req, res) {
 
-    // userId stocké en session au login 
-    const userId = req.session.userId;
+    // recharge l'utilisateur en BDD à partir de l'id session
+    const user = await User.findByPk(req.user.id);
 
-    // pas de session valide → visiteur non connecté
-    if (!userId) {
-        return res.status(401).json({ error: 'Non authentifié' });
+    if (!user) {
+        // session orpheline (compte supprimé entre-temps)
+        return res.status(401).json({ error: 'Non authentifié' })
     } else {
-
-        // recharge l'utilisateur en BDD à partir de l'id session
-        const user = await User.findByPk(userId);
-
-        if (!user) {
-            // session orpheline (compte supprimé entre-temps)
-            return res.status(401).json({ error: 'Non authentifié' })
-        } else {
-
-            // on renvoie id, email, role, profilePhoto — pas le passwordHash
-            return res.status(200).json({
-                id: user.id,
-                email: user.email,
-                role: user.role,
-                profilePhoto: user.profilePhoto,
-            })
-        }
+        // on renvoie id, email, role, profilePhoto — pas le passwordHash
+        return res.status(200).json({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            profilePhoto: user.profilePhoto,
+        });
     }
-
 }

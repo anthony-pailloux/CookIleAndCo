@@ -14,3 +14,13 @@ export function requireAuth(req, res, next) {
         next();
     }
 }
+
+export function requireAdmin(req, res, next) {
+
+    if (req.user.role !== 'admin') {
+        res.status(403).json({ error: 'Accès interdit' });
+    } else {
+        next();
+    }
+    
+}
