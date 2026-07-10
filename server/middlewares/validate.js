@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 
 export default function validate(req, res, next) {
 
-    // Récupère le résultat des règles body() passées avant ce middleware (ex. registerRules)
+    // Récupère le résultat des règles body() passées avant ce middleware (ex: registerRules)
     const result = validationResult(req);
 
     if (!result.isEmpty()) {

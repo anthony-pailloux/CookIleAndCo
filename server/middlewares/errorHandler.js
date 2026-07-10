@@ -8,7 +8,7 @@ export default function errorHandler(err, req, res, next) {
     let message;
 
     if (status === 500) {
-        // message générique, on ne montre pas le détail technique
+        
         message = 'Erreur serveur';
     } else {
         message = err.message;
