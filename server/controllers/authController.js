@@ -1,36 +1,9 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 
-// inscription utilisateur
-export async function register(req, res) {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    const existingUser = await User.findOne({ where: { email: email } });
-
-    // verifier si l'email existe en bdd
-    if (existingUser) {
-        return res.status(409).json({ error: 'Cet email est déjà utilisé' });
-    }
-
-    // hash le mdp
-    const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({
-        email: email,
-        passwordHash: passwordHash,
-        role: 'user',
-    });
-
-    // on renvoie id, email, role (pas le hash)
-    return res.status(201).json({
-        id: user.id,
-        email: user.email,
-        role: user.role,
-    });
-}
-
-// connexion utilisateur
+// connexion admin
 export async function login(req, res) {
+
     const email = req.body.email;
     const password = req.body.password;
 
@@ -49,6 +22,10 @@ export async function login(req, res) {
         return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
+    if (user.role !== 'admin') {
+        return res.status(403).json({ error: 'Accès réservé à l\'administrateur' });
+    }
+
     // ouvre la session : minimum userId + role (pas le mot de passe)
     req.session.userId = user.id;
     req.session.role = user.role;
@@ -62,7 +39,7 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
-    // supprime la session connecter 
+    // supprime la session connectée 
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur serveur' });
@@ -86,12 +63,11 @@ export async function getCurrentUser(req, res) {
         // recharge l'utilisateur en BDD à partir de l'id session
         const user = await User.findByPk(userId);
 
-
         if (!user) {
             // session orpheline (compte supprimé entre-temps)
             return res.status(401).json({ error: 'Non authentifié' })
         } else {
-            
+
             // on renvoie id, email, role, profilePhoto — pas le passwordHash
             return res.status(200).json({
                 id: user.id,

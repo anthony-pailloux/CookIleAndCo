@@ -1,6 +1,5 @@
 // vérifie qu'une session valide existe avant d'accéder aux routes protégées
 export function requireAuth(req, res, next) {
-    console.log('requireAuth — session userId:', req.session.userId);
     const userId = req.session.userId;
 
     if (!userId) {
@@ -12,12 +11,6 @@ export function requireAuth(req, res, next) {
             id: userId,
             role: req.session.role,
         };
-        console.log('requireAuth — req.user:', req.user);
         next();
     }
-}
-
-export function requireAdmin(req, res, next) {
-    console.log('requireAdmin — middleware branché');
-    next();
 }

@@ -58,11 +58,5 @@ export default {
 
   async down(queryInterface, Sequelize) {
 
-    // supprime le compte admin
-    await queryInterface.bulkDelete('users', {
-      email: adminEmail,
-    });
-
-    console.log('seed admin, compte supprimé :', adminEmail);
   },
 };
