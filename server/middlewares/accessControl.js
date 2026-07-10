@@ -1,3 +1,5 @@
+
+
 // vérifie qu'une session valide existe avant d'accéder aux routes protégées
 export function requireAuth(req, res, next) {
     const userId = req.session.userId;
