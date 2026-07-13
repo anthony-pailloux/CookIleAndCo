@@ -26,9 +26,10 @@ export async function login(req, res) {
         return res.status(403).json({ error: 'Accès réservé à l\'administrateur' });
     }
 
-    // ouvre la session : minimum userId + role (pas le mot de passe)
+    // ouvre la session : minimum userId + role + email (pas le mot de passe)
     req.session.userId = user.id;
     req.session.role = user.role;
+    req.session.email = user.email;
 
     // renvoie les infos de l'utilisateur connecté
     return res.status(200).json({
@@ -40,7 +41,7 @@ export async function login(req, res) {
 
 export function logout(req, res) {
 
-    // supprime la session connectée 
+    // supprime la session connectée
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur serveur' });
@@ -51,21 +52,12 @@ export function logout(req, res) {
 }
 
 // utilisateur connecté via la session (cookie httpOnly posé au login)
-export async function getCurrentUser(req, res) {
+export function getCurrentUser(req, res) {
 
-    // recharge l'utilisateur en BDD à partir de l'id session
-    const user = await User.findByPk(req.user.id);
-
-    if (!user) {
-        // session orpheline (compte supprimé entre-temps)
-        return res.status(401).json({ error: 'Non authentifié' })
-    } else {
-        // on renvoie id, email, role, profilePhoto — pas le passwordHash
-        return res.status(200).json({
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            profilePhoto: user.profilePhoto,
-        });
-    }
+    // infos depuis la session (requireAdmin a déjà vérifié userId + role)
+    return res.status(200).json({
+        id: req.user.id,
+        email: req.session.email,
+        role: req.user.role,
+    });
 }
