@@ -1,0 +1,103 @@
+:root {
+    /* Brand */
+    --tc-navy: #1B3A6B;
+    --tc-white: #FFFFFF;
+  
+    /* Madras */
+    --tc-red-madras: #D32F2F;
+    --tc-yellow-madras: #FBC02D;
+    --tc-green-madras: #388E3C;
+    --tc-gold-madras: #C9A227;
+  
+    /* Interactive */
+    --tc-primary: var(--tc-red-madras);
+    --tc-primary-hover: #B71C1C;
+    --tc-secondary: var(--tc-navy);
+    --tc-link: var(--tc-navy);
+    --tc-link-hover: var(--tc-red-madras);
+  
+    /* UI */
+    --tc-background: #FFF8E7;
+    --tc-background-alt: #FAF3E0;
+    --tc-text: #2C1810;
+    --tc-text-muted: #5c4a3a;
+    --tc-border: #e8dcc8;
+    --tc-radius: 6px;
+    --tc-spacing: 16px;
+    --tc-font: "Segoe UI", system-ui, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--tc-font);
+    font-size: 16px;
+    color: var(--tc-text);
+    background-color: var(--tc-background);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  a {
+    color: var(--tc-link);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--tc-link-hover);
+  }
+
+  .field {
+    margin-bottom: 14px;
+    text-align: left;
+  }
+
+  .field label {
+     display: block;
+     font-size: 13px;
+     color: var(--tc-text-muted)
+  }
+
+  .input {
+    width: 100%;
+    padding: 10px 12px;
+    border:  1px solid  var(--tc-border);
+    border-radius: var(--tc-radius);
+    background: var(--tc-white);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: var(--tc-radius);
+    background: var(--tc-secondary);
+    color: var(--tc-white);
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background: var(--tc-navy);
+    opacity: 0.9;
+  }
+
+  .btn--danger {
+    width: auto;
+    padding: 10px;
+    border: none;
+    border-radius: var(--tc-radius);
+    background: var(--tc-primary);
+    color: var(--tc-white);
+    cursor: pointer;
+  }
+
+  .btn--danger:hover {
+    background: var(--tc-primary-hover);
+  }
+
+  .alert-error {
+    color: var(--tc-primary);
+    font-size: 14px;
+    margin-bottom: var(--tc-spacing);
+  }

@@ -13,11 +13,11 @@ function AdminPage() {
     }
 
     return (
-        <main>
-            <header>
+        <main className="login-section">
+            <header className="form-narrow">
                 <h1>Dashboard admin</h1>
                 <p>Connecté : {auth.user.email}</p>
-                <button type="button" onClick={handleLogout}>
+                <button type="button" className='btn--danger' onClick={handleLogout}>
                     Se déconnecter
                 </button>
             </header>
