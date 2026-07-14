@@ -1,5 +1,14 @@
 .site-header {
-    background-color: var(--tc-yellow-madras);
-    color: var(--tc-text);
-    padding: 24px 32px;
+    background-color: #2F6B4F;
+    color: white;
+    padding: 5px ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--tc-ocean);
+}
+
+.logo {
+    width: 8%;
 }

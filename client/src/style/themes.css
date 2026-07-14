@@ -9,8 +9,10 @@
   --tc-green-madras: #388e3c;
   --tc-gold-madras: #c9a227;
 
-  /* Footer header */
-  --tc-ocean-head-foot: #0096C7; 
+  /* Header / Footer (page connexion) */
+  --tc-header-footer: #2f6b4f;
+  --tc-header-footer-text: #ffffff;
+  --tc-ocean: #0096c7;
 
   /* Interactive */
   --tc-primary: var(--tc-red-madras);
@@ -31,7 +33,7 @@
   --tc-font: "Segoe UI", system-ui, sans-serif;
 }
 
-*,
+ *,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -39,11 +41,22 @@
   text-decoration: none;
 }
 
-body {
+.hero-madras {
+  height: 50vh;
+  background-image: url('../assets/banniere-madras-antilles.webp');
+  color: white;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--tc-ocean);
+}
+
+ body {
   font-family: var(--tc-font);
   font-size: 16px;
   color: var(--tc-text);
-  background-color: var(--tc-background);
+  background-color: #FFF8EE;
 }
 
 #root {
@@ -65,15 +78,15 @@ a:hover {
 }
 
 .field label {
-  display: block;
+  /* display: block; */
   font-size: 13px;
-  color: var(--tc-text-muted);
+  color: #6b3d22;
 }
 
 .input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--tc-border);
+  border: 1px solid #2F6B4F;
   border-radius: var(--tc-radius);
   background: var(--tc-white);
 }
@@ -83,16 +96,17 @@ a:hover {
   padding: 10px;
   border: none;
   border-radius: var(--tc-radius);
-  background: var(--tc-secondary);
+  background: #234A7C;
   color: var(--tc-white);
   cursor: pointer;
   display: flex;
   justify-content: center;
   text-align: center;
+  
 }
 
 .btn:hover {
-  background: var(--tc-navy);
+  background: #F2382D;
   opacity: 0.9;
 }
 
@@ -114,4 +128,4 @@ a:hover {
   color: var(--tc-primary);
   font-size: 14px;
   margin-bottom: var(--tc-spacing);
-}
+} 
