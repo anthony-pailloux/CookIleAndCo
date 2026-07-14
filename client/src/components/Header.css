@@ -1,0 +1,5 @@
+.site-header {
+    background-color: var(--tc-yellow-madras);
+    color: var(--tc-text);
+    padding: 24px 32px;
+}

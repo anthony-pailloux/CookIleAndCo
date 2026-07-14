@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api";
 
 function HomePage() {
-  const [healthMessage, setHealthMessage] = useState(
-    "En cours de chargement...",
-  );
+  const [healthMessage, setHealthMessage] = useState("En cours de chargement...");
 
   useEffect(function () {
     async function loadHealth() {
@@ -16,8 +14,9 @@ function HomePage() {
 
   return (
     <main>
-      <h1>Cook'île & Co</h1>
+      <h2 className="">Des Antilles aux saveurs du monde</h2>
       <p>An Nou Ay !</p>
+      <p></p>
       <p>Connexion au back : {healthMessage}</p>
     </main>
   );

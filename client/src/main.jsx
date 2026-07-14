@@ -4,15 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 import './style/themes.css';
 import './index.css';
 import App from './App.jsx';
-import { AuthProvider } from './context/AuthContext.jsx';
 
 // Point d'entrée React — monte App dans le DOM avec BrowserRouter (react-router-dom).
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <BrowserRouter>
-            <AuthProvider>
-                <App />
-            </AuthProvider>
+            <App />
         </BrowserRouter>
     </StrictMode>,
 );

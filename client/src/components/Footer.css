@@ -1,0 +1,7 @@
+.site-footer {
+    background: var(--tc-yellow-madras);
+    color: var(--tc-text);
+    padding: 22px 24px;
+    text-align: center;
+    font-size: 13px;
+}

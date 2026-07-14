@@ -1,103 +1,117 @@
 :root {
-    /* Brand */
-    --tc-navy: #1B3A6B;
-    --tc-white: #FFFFFF;
+  /* Brand */
+  --tc-navy: #1b3a6b;
+  --tc-white: #ffffff;
+
+  /* Madras */
+  --tc-red-madras: #d32f2f;
+  --tc-yellow-madras: #fbc02d;
+  --tc-green-madras: #388e3c;
+  --tc-gold-madras: #c9a227;
+
+  /* Footer header */
+  --tc-ocean-head-foot: #0096C7; 
+
+  /* Interactive */
+  --tc-primary: var(--tc-red-madras);
+  --tc-primary-hover: #b71c1c;
+  --tc-secondary: var(--tc-navy);
+  --tc-link: var(--tc-navy);
+  --tc-link-hover: var(--tc-red-madras);
+
+  /* UI */
+  --tc-background: #fff8e7;
+  --tc-background-alt: #faf3e0;
+  --tc-text: #2c1810;
+  --tc-text-muted: #5c4a3a;
+  --tc-border: #e8dcc8;
+  --tc-radius: 6px;
+  --tc-spacing: 1rem;
+  --tc-spacing-lg: 10rem;
+  --tc-font: "Segoe UI", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  text-decoration: none;
+}
+
+body {
+  font-family: var(--tc-font);
+  font-size: 16px;
+  color: var(--tc-text);
+  background-color: var(--tc-background);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--tc-link);
   
-    /* Madras */
-    --tc-red-madras: #D32F2F;
-    --tc-yellow-madras: #FBC02D;
-    --tc-green-madras: #388E3C;
-    --tc-gold-madras: #C9A227;
-  
-    /* Interactive */
-    --tc-primary: var(--tc-red-madras);
-    --tc-primary-hover: #B71C1C;
-    --tc-secondary: var(--tc-navy);
-    --tc-link: var(--tc-navy);
-    --tc-link-hover: var(--tc-red-madras);
-  
-    /* UI */
-    --tc-background: #FFF8E7;
-    --tc-background-alt: #FAF3E0;
-    --tc-text: #2C1810;
-    --tc-text-muted: #5c4a3a;
-    --tc-border: #e8dcc8;
-    --tc-radius: 6px;
-    --tc-spacing: 16px;
-    --tc-font: "Segoe UI", system-ui, sans-serif;
-  }
+}
 
-  body {
-    margin: 0;
-    font-family: var(--tc-font);
-    font-size: 16px;
-    color: var(--tc-text);
-    background-color: var(--tc-background);
-  }
+a:hover {
+  color: var(--tc-link-hover);
+}
 
-  #root {
-    min-height: 100vh;
-  }
+.field {
+  margin-bottom: 14px;
+  text-align: left;
+}
 
-  a {
-    color: var(--tc-link);
-    text-decoration: none;
-  }
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--tc-text-muted);
+}
 
-  a:hover {
-    color: var(--tc-link-hover);
-  }
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius);
+  background: var(--tc-white);
+}
 
-  .field {
-    margin-bottom: 14px;
-    text-align: left;
-  }
+.btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: var(--tc-radius);
+  background: var(--tc-secondary);
+  color: var(--tc-white);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
 
-  .field label {
-     display: block;
-     font-size: 13px;
-     color: var(--tc-text-muted)
-  }
+.btn:hover {
+  background: var(--tc-navy);
+  opacity: 0.9;
+}
 
-  .input {
-    width: 100%;
-    padding: 10px 12px;
-    border:  1px solid  var(--tc-border);
-    border-radius: var(--tc-radius);
-    background: var(--tc-white);
-  }
+.btn--danger {
+  width: auto;
+  padding: 10px;
+  border: none;
+  border-radius: var(--tc-radius);
+  background: var(--tc-primary);
+  color: var(--tc-white);
+  cursor: pointer;
+}
 
-  .btn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: var(--tc-radius);
-    background: var(--tc-secondary);
-    color: var(--tc-white);
-    cursor: pointer;
-  }
+.btn--danger:hover {
+  background: var(--tc-primary-hover);
+}
 
-  .btn:hover {
-    background: var(--tc-navy);
-    opacity: 0.9;
-  }
-
-  .btn--danger {
-    width: auto;
-    padding: 10px;
-    border: none;
-    border-radius: var(--tc-radius);
-    background: var(--tc-primary);
-    color: var(--tc-white);
-    cursor: pointer;
-  }
-
-  .btn--danger:hover {
-    background: var(--tc-primary-hover);
-  }
-
-  .alert-error {
-    color: var(--tc-primary);
-    font-size: 14px;
-    margin-bottom: var(--tc-spacing);
-  }
+.alert-error {
+  color: var(--tc-primary);
+  font-size: 14px;
+  margin-bottom: var(--tc-spacing);
+}
