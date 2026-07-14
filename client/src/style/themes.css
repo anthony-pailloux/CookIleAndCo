@@ -94,9 +94,9 @@ a:hover {
 .btn {
   width: 100%;
   padding: 10px;
-  border: none;
+  border: 1px solid #d32f2f;
   border-radius: var(--tc-radius);
-  background: #234A7C;
+  background: #fbc02d;
   color: var(--tc-white);
   cursor: pointer;
   display: flex;

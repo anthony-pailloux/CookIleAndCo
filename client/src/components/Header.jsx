@@ -1,13 +1,10 @@
 import "./Header.css";
-import logoCocotte from "../assets/logo-cocotte-du-monde-transparent.png";
-import banniereMadras from "../assets/banniere-madras-antilles.webp";
+import logoCookIle from "../assets/logo-cook-ile-co-cuisine-du-monde-horizontal.png";
 
 function Header() {
   return (
     <header className="site-header">
-      <img src={logoCocotte} alt="Cook'île & Co — logo" className="logo" />
-      
-      <h1>Cook'île & Co</h1>
+      <img src={logoCookIle} alt="Cook'île & Co — logo" className="logo" />
     </header>
   );
 }
