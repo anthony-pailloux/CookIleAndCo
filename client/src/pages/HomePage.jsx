@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api";
-import banniereMadras from "../assets/banniere-madras-antilles.webp";
+
 
 function HomePage() {
   const [healthMessage, setHealthMessage] = useState(
@@ -9,8 +9,8 @@ function HomePage() {
 
   useEffect(function () {
     async function loadHealth() {
-      const data = await getFromApi("/api/health");
-      setHealthMessage(data.status);
+      const response = await getFromApi("/api/health");
+      setHealthMessage(response.status);
     }
     loadHealth();
   }, []);
@@ -19,7 +19,7 @@ function HomePage() {
     <>
       <section className="hero-madras">
         <div className="hero-content">
-          <p className="">Tetelle vous fera découvrir des Antilles aux saveurs du monde</p>
+          <p className="">Des Antilles aux saveurs du monde</p>
 
           <p>
             <em>"An Nou Ay !"</em>

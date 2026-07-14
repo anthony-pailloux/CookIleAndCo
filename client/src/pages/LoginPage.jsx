@@ -1,16 +1,29 @@
+import { login } from "../services/authServices.js";
 import { useState } from "react";
-import './LoginPage.css';
+import "./LoginPage.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setErrorMessage("");
+
+    try {
+      await login(email, password);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  }
 
   return (
     <>
       <section className="login-page">
         <h2>Formulaire de connexion</h2>
 
-        <form action="" className="login-form">
+        <form onSubmit={handleSubmit} className="login-form">
           <div className="field">
             <label htmlFor="email">Email*</label>
             <input
@@ -25,7 +38,7 @@ function LoginPage() {
           </div>
 
           <div className="field">
-            <label htmlFor="email">Mot de passe*</label>
+            <label htmlFor="password">Mot de passe*</label>
             <input
               id="password"
               className="input"
@@ -36,6 +49,8 @@ function LoginPage() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
+
+          {errorMessage !== "" && <p className="login-error">{errorMessage}</p>}
 
           <button type="submit" className="btn">
             Se connecter

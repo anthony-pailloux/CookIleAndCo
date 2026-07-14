@@ -9,10 +9,6 @@ export function requireAdmin(req, res, next) {
     } else if (role !== 'admin') {
         res.status(403).json({ error: 'Accès interdit' });
     } else {
-        req.user = {
-            id: userId,
-            role: role,
-        };
         next();
     }
 }

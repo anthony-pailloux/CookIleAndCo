@@ -1,5 +1,5 @@
 import "./Header.css";
-import logoCookIle from "../assets/logo-cook-ile-co-cuisine-du-monde-horizontal.png";
+import logoCookIle from "../assets/logo-cook-ile-co-cuisine-du-monde-horizontal.webp";
 
 function Header() {
   return (

@@ -3,16 +3,11 @@ import { getFromApi, postToApi } from './api.js';
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 export async function getCurrentUser() {
-    const user = await getFromApi('/api/auth/current-user');
-    return user;
+    return await getFromApi('/api/auth/current-user');
 }
 
 export async function login(email, password) {
-    const user = await postToApi('/api/auth/login', {
-        email: email,
-        password: password,
-    });
-    return user;
+    return await postToApi('/api/auth/login', { email,password });
 }
 
 // logout renvoie 204 sans body — fetch direct (postToApi attend du JSON)

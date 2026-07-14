@@ -1,6 +1,6 @@
 .site-header {
-    background-color: #2F6B4F;
-    color: white;
+    background-color: var(--tc-green-madras);
+    color: var(--tc-white);
     padding: 5px ;
     display: flex;
     align-items: center;

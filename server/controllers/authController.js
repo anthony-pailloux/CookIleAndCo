@@ -8,7 +8,7 @@ export async function login(req, res) {
     const password = req.body.password;
 
     // cherche l'utilisateur en BDD par email
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ where: { email } });
 
     // on ne dit pas si c'est l'email ou le mdp qui est invalide
     if (!user) {
@@ -56,8 +56,8 @@ export function getCurrentUser(req, res) {
 
     // infos depuis la session (requireAdmin a déjà vérifié userId + role)
     return res.status(200).json({
-        id: req.user.id,
+        id: req.session.userId,
         email: req.session.email,
-        role: req.user.role,
+        role: req.session.role,
     });
 }
