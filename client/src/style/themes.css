@@ -77,7 +77,7 @@ a:hover {
 .btn {
   width: 100%;
   padding: 10px;
-  border: 1px solid var(--tc-primary);
+  border: 1px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
   background: var(--tc-yellow-madras);
   color: var(--tc-white);
@@ -91,6 +91,7 @@ a:hover {
 .btn:hover {
   background: var(--tc-green-madras);
   opacity: 0.9;
+  border: 1px solid var(--tc-yellow-madras);
 }
 
 .btn--danger {
