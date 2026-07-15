@@ -50,7 +50,7 @@ function LoginPage() {
             />
           </div>
 
-          {errorMessage !== "" && <p className="login-error">{errorMessage}</p>}
+          {errorMessage !== "" && <p className="alert-error">{errorMessage}</p>}
 
           <button type="submit" className="btn">
             Se connecter

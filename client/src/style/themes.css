@@ -39,26 +39,11 @@
   text-decoration: none;
 }
 
-.hero-madras {
-  height: 50vh;
-  background-image: url('../assets/banniere-madras-antilles.webp');
-  color: var(--tc-white);
-  font-size: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid var(--tc-ocean);
-}
-
  body {
   font-family: var(--tc-font);
   font-size: 16px;
   color: var(--tc-text);
   background-color: var(--tc-background);
-}
-
-#root {
-  min-height: 100vh;
 }
 
 a {

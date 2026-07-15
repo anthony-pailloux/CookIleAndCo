@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api";
-
+import "./HomePage.css";
 
 function HomePage() {
   const [healthMessage, setHealthMessage] = useState(
