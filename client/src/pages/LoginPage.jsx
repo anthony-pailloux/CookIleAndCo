@@ -1,18 +1,27 @@
 import { login } from "../services/authServices.js";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 import "./LoginPage.css";
+import { useNavigate } from "react-router-dom";
+
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const auth = useAuth();
+  const navigate = useNavigate();
+
   async function handleSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
 
     try {
-      await login(email, password);
+      const loggedUser = await login(email, password);
+      auth.setUser(loggedUser);
+      navigate('/admin');
+
     } catch (error) {
       setErrorMessage(error.message);
     }

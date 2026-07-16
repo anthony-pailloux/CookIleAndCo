@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api";
+
 import "./HomePage.css";
 
 function HomePage() {
-  const [healthMessage, setHealthMessage] = useState(
-    "En cours de chargement...",
-  );
+  const [healthMessage, setHealthMessage] = useState("En cours de chargement...");
 
-  useEffect(function () {
+  useEffect(() => {
     async function loadHealth() {
       const response = await getFromApi("/api/health");
       setHealthMessage(response.status);
     }
     loadHealth();
   }, []);
+  
 
   return (
     <>
