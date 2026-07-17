@@ -61,7 +61,7 @@ function LoginPage() {
 
           {errorMessage !== "" && <p className="alert-error">{errorMessage}</p>}
 
-          <button type="submit" className="btn">
+          <button onClick={handleSubmit} className="btn">
             Se connecter
           </button>
         </form>

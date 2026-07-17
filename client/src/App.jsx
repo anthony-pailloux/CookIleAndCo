@@ -2,7 +2,10 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
+
+
 
 function App() {
   return (
@@ -12,7 +15,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/connexion-superadmin" element={<LoginPage />} />
           <Route path="/admin" element={<AdminRoute />}>
-            <Route index element={<p>Dashboard Admin</p>} />
+            <Route index element={<AdminPage />} />
           </Route>
         </Routes>
       </Layout>
