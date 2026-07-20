@@ -17,8 +17,6 @@ function RecipePage() {
 
   if (recipes.length === 0) {
     emptyMessage = <p>Aucune recette pour le moment.</p>;
-  } else {
-    emptyMessage = null;
   }
 
   return (
@@ -28,7 +26,14 @@ function RecipePage() {
 
       <ul>
         {recipes.map((recipe) => {
-          return <li key={recipe.id}>{recipe.title}</li>;
+          return (
+            <li key={recipe.id}>
+              <img src={recipe.photo} alt="plat préparé" />
+              <h1>{recipe.title}</h1>
+              <span>Temps de préparation: {recipe.cookingTime}mn</span>
+              <p>{recipe.updatedAt}</p>
+            </li>
+          );
         })}
       </ul>
     </div>
