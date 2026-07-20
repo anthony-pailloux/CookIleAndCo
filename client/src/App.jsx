@@ -3,9 +3,8 @@ import Layout from "./components/Layout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
+import RecipePage from "./pages/RecipesPage.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
-
-
 
 function App() {
   return (
@@ -17,6 +16,7 @@ function App() {
           <Route path="/admin" element={<AdminRoute />}>
             <Route index element={<AdminPage />} />
           </Route>
+          <Route path="/recettes" element={<RecipePage />} />
         </Routes>
       </Layout>
     </>

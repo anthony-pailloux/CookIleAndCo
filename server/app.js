@@ -1,11 +1,13 @@
 // l'app express avec les routes et middlewares
 import express from 'express';
-import cors from 'cors';
 import session from 'express-session';
+import cors from 'cors';
+
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
 
 import authRoutes from './routes/authRoutes.js';
+import recipeRoutes from './routes/recipeRoutes.js';
 
 
 const app = express();
@@ -42,6 +44,9 @@ app.get('/api/test-error', (req, res, next) => {
 
 // Routes auth
 app.use('/api/auth', authRoutes);
+
+// Routes recipe
+app.use('/api/recipes', recipeRoutes);
 
 // 404 puis gestion des erreurs
 app.use(notFound);

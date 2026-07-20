@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
+import Recipe from '../models/Recipe.js';
+
 
 // connexion admin
 export async function login(req, res) {
