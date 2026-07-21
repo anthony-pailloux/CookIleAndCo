@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { listRecipes } from "../controllers/recipeController.js";
+import { getRecipeById, listRecipes } from "../controllers/recipeController.js";
 
 const router = Router();
 
-
 router.get('/', listRecipes);
-
+router.get('/:id', getRecipeById);
 
 export default router;
 

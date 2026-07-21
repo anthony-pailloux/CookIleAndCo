@@ -7,7 +7,7 @@ function RecipePage() {
   useEffect(() => {
     async function loadRecipes() {
       const response = await getFromApi("/api/recipes?page=1&limit=12");
-      setRecipes(response.recipes);
+      setRecipes(response.data);
     }
 
     loadRecipes();
@@ -21,7 +21,7 @@ function RecipePage() {
 
   return (
     <div>
-      <h2>Catalogue des recettes</h2>
+      <h1>Catalogue des recettes</h1>
       {emptyMessage}
 
       <ul>
@@ -29,9 +29,9 @@ function RecipePage() {
           return (
             <li key={recipe.id}>
               <img src={recipe.photo} alt="plat préparé" />
-              <h1>{recipe.title}</h1>
-              <span>Temps de préparation: {recipe.cookingTime}mn</span>
-              <p>{recipe.updatedAt}</p>
+              <h2>{recipe.title}</h2>
+              <span>Temps de cuisson: {recipe.cookingTime}mn</span>
+              <p>Maj: {recipe.updatedAt}</p>
             </li>
           );
         })}
