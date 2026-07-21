@@ -4,6 +4,8 @@ import Recipe from '../models/Recipe.js';
 import Category from '../models/Category.js';
 import Origin from '../models/Origin.js';
 import MealType from '../models/MealType.js';
+import RecipeIngredient from '../models/RecipeIngredient.js';
+import RecipeStep from '../models/RecipeStep.js';
 
 export async function listRecipes(req, res) {
     // On lit page et limit dans l'URL, avec 1 et 12 par défaut
@@ -78,6 +80,7 @@ export async function getRecipeById(req, res) {
 
     // On récupère la recette avec sa catégorie, son origine et son type de repas
     const recipe = await Recipe.findByPk(id, {
+
         include: [
             {
                 model: Category,
@@ -94,6 +97,18 @@ export async function getRecipeById(req, res) {
                 as: 'mealType',
                 attributes: ['id', 'name'],
             },
+            {
+                model: RecipeIngredient,
+                as: 'ingredients	',
+                attributes: ['id', 'name', 'quantity', 'unit', 'sortOrder'],
+                order: [['sortOrder', 'ASC']],
+            },
+            {
+                model: RecipeStep,
+                as: 'step',
+                attributes: ['id', 'stepNumber', 'description', 'sortOrder'],
+                order: [['stepNumber', 'ASC']],
+            }
         ],
     });
 
@@ -101,6 +116,9 @@ export async function getRecipeById(req, res) {
         res.status(404).json({ error: 'Recette introuvable' });
         return;
     }
+
+    console.log('getRecipeById — ingredients:', recipe.ingredients?.length);
+    console.log('getRecipeById — steps:', recipe.steps?.length);
 
     res.status(200).json({ recipe });
 }
