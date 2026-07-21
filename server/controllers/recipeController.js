@@ -99,13 +99,13 @@ export async function getRecipeById(req, res) {
             },
             {
                 model: RecipeIngredient,
-                as: 'ingredients	',
+                as: 'ingredients',
                 attributes: ['id', 'name', 'quantity', 'unit', 'sortOrder'],
                 order: [['sortOrder', 'ASC']],
             },
             {
                 model: RecipeStep,
-                as: 'step',
+                as: 'steps',
                 attributes: ['id', 'stepNumber', 'description', 'sortOrder'],
                 order: [['stepNumber', 'ASC']],
             }
