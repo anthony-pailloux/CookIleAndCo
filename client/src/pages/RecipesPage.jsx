@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getFromApi } from "../services/api.js";
+import RecipeCard from "../components/RecipeCard.jsx";
 
 function RecipePage() {
   const [recipes, setRecipes] = useState([]);
@@ -28,10 +29,7 @@ function RecipePage() {
         {recipes.map((recipe) => {
           return (
             <li key={recipe.id}>
-              <img src={recipe.photo} alt="plat préparé" />
-              <h2>{recipe.title}</h2>
-              <span>Temps de cuisson: {recipe.cookingTime}mn</span>
-              <p>Maj: {recipe.updatedAt}</p>
+              <RecipeCard recipe={recipe} />
             </li>
           );
         })}
