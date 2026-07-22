@@ -1,3 +1,5 @@
+import "./RecipePage.css";
+
 import { useState, useEffect } from "react";
 import { getFromApi } from "../services/api.js";
 import RecipeCard from "../components/RecipeCard.jsx";
@@ -25,10 +27,10 @@ function RecipePage() {
       <h1>Catalogue des recettes</h1>
       {emptyMessage}
 
-      <ul>
+      <ul className="recipes-list">
         {recipes.map((recipe) => {
           return (
-            <li key={recipe.id}>
+            <li key={recipe.id} className="recipes-list-item">
               <RecipeCard recipe={recipe} />
             </li>
           );

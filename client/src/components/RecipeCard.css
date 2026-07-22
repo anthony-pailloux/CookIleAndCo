@@ -1,0 +1,8 @@
+h1 {
+    margin: 3rem 0 3rem 3rem;
+}
+
+.recipes-card {
+    background-color: var(--tc-white);    
+}
+
