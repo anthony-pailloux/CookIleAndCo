@@ -117,8 +117,5 @@ export async function getRecipeById(req, res) {
         return;
     }
 
-    console.log('getRecipeById — ingredients:', recipe.ingredients?.length);
-    console.log('getRecipeById — steps:', recipe.steps?.length);
-
-    res.status(200).json({ recipe });
+    res.status(200).json(recipe);
 }
