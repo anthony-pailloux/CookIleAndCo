@@ -1,7 +1,6 @@
 .recipes-card {
   border-radius: 25px;
   border: 1px solid var(--tc-yellow-madras);
-  padding: 1rem;
   background-color: var(--tc-green-madras);
   width: 360px;
   padding: 0;
@@ -36,14 +35,14 @@
     padding: 1.5rem;
   }
 
-  span {
+  .recipe-card-text span {
     margin: 6px;
   }
 
-  p {
+  .recipe-card-text p {
     margin: 6px;
   }
 
-  h2 {
+  .recipe-card-title {
     margin: 6px;
   }
