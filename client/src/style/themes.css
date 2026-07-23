@@ -6,7 +6,7 @@
   /* Madras */
   --tc-red-madras: #d32f2f;
   --tc-yellow-madras: #fbc02d;
-  --tc-green-madras: #2f6b4f;
+  --tc-green-madras: #2e8b57;
   --tc-gold-madras: #c9a227;
 
   /* Header / Footer */
@@ -20,7 +20,7 @@
   --tc-link-hover: var(--tc-red-madras);
 
   /* UI */
-  --tc-background: #fff8ee;
+  --tc-background: #f0e4d0;
   --tc-background-alt: #faf3e0;
   --tc-text: #2c1810;
   --tc-text-muted: #6b3d22;

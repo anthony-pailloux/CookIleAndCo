@@ -1,8 +1,16 @@
+h1 {
+    margin: 3rem 0 3rem 3rem;
+}
+
 .recipes-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 3rem;
-
     
+}
+
+.recipes-list-item {
+    color: var(--tc-background);
+    border-radius: 25px;
 }

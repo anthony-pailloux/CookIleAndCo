@@ -1,8 +1,49 @@
-h1 {
-    margin: 3rem 0 3rem 3rem;
-}
-
 .recipes-card {
-    background-color: var(--tc-white);    
+  border-radius: 25px;
+  border: 1px solid var(--tc-yellow-madras);
+  padding: 1rem;
+  background-color: var(--tc-green-madras);
+  width: 360px;
+  padding: 0;
+  overflow: hidden;
 }
 
+.recipes-card:hover {
+    border-color: var(--tc-yellow-madras);
+    box-shadow: 0 8px 20px rgba(27, 58, 107, 1.0);
+  }
+
+.recipe-card-photo {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 25px 25px 0 0;
+    border: 1px solid var(--tc-navy);
+  }
+
+.recipe-card-photo-zone {
+    
+    background-image: url("../assets/banniere-madras-antilles.webp");
+    background-size: 160%;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 120px;
+    padding: 1.5rem;
+    border-radius: 25px 25px 0 0;
+    border-bottom: 1px solid var(--tc-yellow-madras);
+  }
+
+  .recipe-card-text {
+    padding: 1.5rem;
+  }
+
+  span {
+    margin: 6px;
+  }
+
+  p {
+    margin: 6px;
+  }
+
+  h2 {
+    margin: 6px;
+  }

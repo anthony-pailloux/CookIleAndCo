@@ -1,6 +1,7 @@
 .site-header {
     background-color: var(--tc-green-madras);
-    color: var(--tc-white);
+    border-bottom: 3px solid var(--tc-yellow-madras);
+    color: var(--tc-yellow-madras);
     padding: 5px ;
     display: flex;
     align-items: center;
@@ -10,6 +11,5 @@
 }
 
 .logo {
-
-    width: 15%;
+    width: 18%;
 }
