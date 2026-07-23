@@ -1,5 +1,4 @@
 import "./RecipePage.css";
-
 import { useState, useEffect } from "react";
 import { getFromApi } from "../services/api.js";
 import RecipeCard from "../components/RecipeCard.jsx";
