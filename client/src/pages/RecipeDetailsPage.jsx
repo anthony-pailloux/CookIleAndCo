@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api";
 import { useParams } from "react-router-dom";
 import RecipeCard from "../components/RecipeCard";
+import IngredientItem from "../components/IngredientItem";
+
 
 function RecipeDetailsPage() {
   const [recipeDetails, setRecipesDetails] = useState();
@@ -28,18 +30,7 @@ function RecipeDetailsPage() {
       {recipeDetails && (
         <>
           <h1>{recipeDetails.title}</h1>
-          <ul>
-            <h2>Ingrédients</h2>
-            {recipeDetails.ingredients.map((ingredient) => {
-              return (
-                <li key={ingredient.id}>
-                  <p>Nom: {ingredient.name} quantité: {ingredient.quantity}
-                  {ingredient.unit}</p>
-                  <p>Temps de cuisson: {recipeDetails.cookingTime}</p>
-                </li>
-              );
-            })}
-          </ul>
+          
         </>
       )}
     </div>

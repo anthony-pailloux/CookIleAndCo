@@ -11,7 +11,7 @@ function RecipeCard({ recipe }) {
   }
 
   return (
-    <div className="recipes-card">
+    <div className="recipes-card bg-green-textured">
       <div className="recipe-card-photo-zone">
         <img
           src={photoSource}

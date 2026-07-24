@@ -3,7 +3,7 @@ import logoCookIle from "../assets/logo-cook-ile-co-cuisine-du-monde-horizontal.
 
 function Header() {
   return (
-    <header className="site-header">
+    <header className="site-header bg-green-textured">
       <img src={logoCookIle} alt="Cook'île & Co — logo" className="logo" />
     </header>
   );

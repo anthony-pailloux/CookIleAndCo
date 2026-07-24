@@ -1,7 +1,6 @@
 .recipes-card {
   border-radius: 25px;
   border: 1px solid var(--tc-yellow-madras);
-  background-color: var(--tc-green-madras);
   width: 360px;
   padding: 0;
   overflow: hidden;
