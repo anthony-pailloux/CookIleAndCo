@@ -4,10 +4,7 @@
   width: 360px;
   padding: 0;
   overflow: hidden;
-
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  box-shadow: 2px 4px 8px rgba(27, 58, 107, 0.08);
-
+  transition: transform 0.35s ease;
   box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
 }
 

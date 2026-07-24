@@ -38,7 +38,7 @@
   box-sizing: border-box;
   margin: 0;
   text-decoration: none;
-  list-style: none;
+  --tc-font: "Segoe UI", system-ui, sans-serif;
 }
 
  body {

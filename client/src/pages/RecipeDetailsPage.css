@@ -34,12 +34,14 @@
   border-radius: 25px;
   color: var(--tc-white);
   margin: 25px auto 0;
+  box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
+  border: 1px solid var(--tc-yellow-madras);
 }
 
 .recipe-hero-info {
-    margin: 25px 0 25px 25px;
+  margin: 25px 0 25px 25px;
 }
 
 .recipe-preparation {
-    margin: 25px 0 25px;
+  margin: 25px 0 25px;
 }

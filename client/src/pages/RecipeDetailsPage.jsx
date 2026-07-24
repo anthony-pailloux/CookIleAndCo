@@ -32,13 +32,11 @@ function RecipeDetailsPage() {
     }
   }
 
-
   return (
     <div>
       {emptyMessage}
       {recipeDetails && (
         <>
-
           <section className="recipe-hero">
             <div className="recipe-card-photo-zone recipe-photo-zone-detail">
               <img
@@ -65,15 +63,18 @@ function RecipeDetailsPage() {
                   );
                 })}
               </ul>
-              
             </div>
 
             <div className="recipe-preparation">
               <h2 className="recipe-preparation-title">Préparation</h2>
               <p>Temps de cuisson: {recipeDetails.cookingTime}mn</p>
+              <ol className="recipe-step-list">
+                {recipeDetails.steps.map((step) => {
+                  <li key={step.id}>{step.description}</li>;
+                })}
+              </ol>
             </div>
           </section>
-
         </>
       )}
     </div>
