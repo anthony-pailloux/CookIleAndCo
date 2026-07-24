@@ -4,11 +4,17 @@
   width: 360px;
   padding: 0;
   overflow: hidden;
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 2px 4px 8px rgba(27, 58, 107, 0.08);
+
+  box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
 }
 
 .recipes-card:hover {
     border-color: var(--tc-yellow-madras);
-    box-shadow: 0 8px 20px rgba(27, 58, 107, 1.0);
+    cursor: pointer;
+    transform: scale(1.05);
   }
 
 .recipe-card-photo {
