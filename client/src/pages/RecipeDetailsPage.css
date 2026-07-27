@@ -1,3 +1,4 @@
+/* --- Hero --- */
 .recipe-hero {
   display: flex;
   flex-direction: column;
@@ -15,17 +16,12 @@
 
 .recipe-photo-zone-detail {
   width: 100%;
-  min-height: 200px;
   border-radius: 25px 25px 0 0;
   border-right: none;
   border-bottom: 1px solid var(--tc-yellow-madras);
 }
 
 .recipe-details-placeholder-photo {
-  width: 100%;
-  height: auto;
-  max-height: 220px;
-  object-fit: cover;
   border-radius: 25px 25px 0 0;
 }
 
@@ -41,16 +37,17 @@
   margin-bottom: 1rem;
 }
 
+/* --- Ingrédients + préparation --- */
 .recipe-content {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  gap: 1.5rem;
   background-color: var(--tc-green-madras);
-  display: flex;
   background-image: var(--tc-texture);
-  width: 85%;
+  width: 90%;
   border-radius: 25px;
   color: var(--tc-white);
-  margin: 60px auto 3rem;
+  margin: 2rem auto;
   box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
   border: 1px solid var(--tc-yellow-madras);
 }
@@ -79,64 +76,68 @@
   margin: 5px;
 }
 
+/* --- Conseils Tetelle --- */
 .recipe-advice {
   background-color: var(--tc-green-madras);
   color: var(--tc-white);
   border-radius: 25px;
-  width: 85%;
-  margin: 60px auto 3rem;
+  width: 90%;
+  margin: 2rem auto 3rem;
   background-image: var(--tc-texture);
   border: 1px solid var(--tc-yellow-madras);
   box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
   padding: 1.5rem 2rem;
 }
 
-.recipe-advice h2 {
-  margin: 0 0 5px;
-}
-
-.recipe-advice-title {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.recipe-advice-banner {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
   margin-bottom: 1rem;
 }
 
+/* --- Desktop --- */
+@media (min-width: 675px) {
+  .recipe-hero {
+    flex-direction: row;
+    width: 85%;
+    height: 300px;
+    margin: 25px auto 0;
+    overflow: hidden;
+  }
+
+  .recipe-photo-zone-detail {
+    width: 300px;
+    flex: 0 0 300px;
+    height: 100%;
+    border-radius: 25px 0 0 25px;
+    border-right: 1px solid var(--tc-yellow-madras);
+    border-bottom: none;
+  }
+
+  .recipe-details-placeholder-photo {
+    border-radius: 25px 0 0 25px;
+  }
+
+  .recipe-info {
+    flex: 1;
+    padding: 1rem 3rem;
+  }
+
+  .recipe-content {
+    flex-direction: row;
+    gap: 15rem;
+    width: 85%;
+    margin: 25px auto 3rem;
+  }
+
+  .recipe-advice {
+    width: 85%;
+    margin: 25px auto 3rem;
+  }
+
   .recipe-advice-banner {
-    width: 100%;
-    max-width: 280px;
-    height: auto;
-    display: block;
-    margin-bottom: 1rem;
+    max-width: 360px;
   }
-
-  @media (min-width: 768px) {
-    .recipe-advice-banner {
-      max-width: 360px;
-    }
-
-    .recipe-hero {
-      flex-direction: row;
-      width: 85%;
-      min-height: 300px;
-      margin: 60px auto 3rem;
-      overflow: hidden;
-    }
-    .recipe-photo-zone-detail {
-      width: 45%;
-      min-height: 300px;
-      border-radius: 25px 0 0 25px;
-      border-right: 1px solid var(--tc-yellow-madras);
-      border-bottom: none;
-    }
-    .recipe-details-placeholder-photo {
-      border-radius: 25px 0 0 25px;
-      max-height: none;
-      height: 100%;
-      object-fit: cover;
-    }
-    .recipe-info {
-      flex: 1;
-      padding: 1rem 3rem;
-    }
-  }
+}
