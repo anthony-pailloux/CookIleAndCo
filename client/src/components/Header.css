@@ -10,5 +10,14 @@
 }
 
 .logo {
-    width: 18%;
-}
+    width: 65%;
+    max-width: 280px;
+    height: auto;
+  }
+  
+  @media (min-width: 675px) {
+    .logo {
+      width: 18%;
+      max-width: none;
+    }
+  }

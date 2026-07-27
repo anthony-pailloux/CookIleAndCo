@@ -106,6 +106,17 @@
   margin-bottom: 1rem;
 }
 
+.meal-type-info {
+  background-color: var(--tc-yellow-madras);
+  padding: 6px 16px;
+  border-radius: 25px;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px solid var(--tc-navy);
+}
+
 /* --- Desktop --- */
 @media (min-width: 675px) {
   .recipe-hero {

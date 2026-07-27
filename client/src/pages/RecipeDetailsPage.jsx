@@ -53,6 +53,7 @@ function RecipeDetailsPage() {
             </div>
             <div className="recipe-info">
               <h1>{recipeDetails.title}</h1>
+              <span className="meal-type-info">{recipeDetails.mealType.name}</span>
               <p>Temps de cuisson: {recipeDetails.cookingTime}mn</p>
               <Button className="btnDetailsPage">Partager</Button>
             </div>

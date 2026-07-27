@@ -1,7 +1,7 @@
 .btn {
     width: 100%;
     padding: 10px;
-    border: 1px solid var(--tc-green-madras);
+    border: 1px solid var(--tc-navy);
     border-radius: var(--tc-radius);
     background: var(--tc-yellow-madras);
     color: var(--tc-white);
