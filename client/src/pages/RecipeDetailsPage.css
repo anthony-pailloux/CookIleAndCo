@@ -103,7 +103,7 @@
     flex-direction: row;
     width: 85%;
     height: 300px;
-    margin: 25px auto 0;
+    margin: 5rem auto 2rem;
     overflow: hidden;
   }
 
@@ -129,12 +129,12 @@
     flex-direction: row;
     gap: 15rem;
     width: 85%;
-    margin: 25px auto 3rem;
+    margin: 0 auto 2rem;
   }
 
   .recipe-advice {
     width: 85%;
-    margin: 25px auto 3rem;
+    margin: 0 auto 2rem;
   }
 
   .recipe-advice-banner {

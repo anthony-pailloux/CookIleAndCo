@@ -4,3 +4,7 @@
     flex-direction: column;
 }
 
+.app-main {
+    flex: 1;
+  }
+
