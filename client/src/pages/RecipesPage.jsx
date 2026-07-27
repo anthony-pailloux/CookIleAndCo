@@ -22,7 +22,7 @@ function RecipePage() {
   }
 
   return (
-    <div>
+    <div className="recipe-container">
       <h1>Catalogue des recettes</h1>
       {emptyMessage}
 

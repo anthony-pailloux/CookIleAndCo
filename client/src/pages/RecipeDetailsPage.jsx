@@ -3,6 +3,9 @@ import { getFromApi } from "../services/api";
 import { useParams } from "react-router-dom";
 import IngredientItem from "../components/IngredientItem";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
+import tipsIcon from "../assets/tipsandtricks.png";
+import Button from "../components/button";
+import "../components/Button.css";
 import "./RecipeDetailsPage.css";
 import "../components/RecipeCard.css";
 
@@ -48,16 +51,20 @@ function RecipeDetailsPage() {
                 }}
               />
             </div>
-            <h1>{recipeDetails.title}</h1>
+            <div className="recipe-info">
+              <h1>{recipeDetails.title}</h1>
+              <p>Temps de cuisson: {recipeDetails.cookingTime}mn</p>
+              <Button className="btnDetailsPage">Partager</Button>
+            </div>
           </section>
 
           <section className="recipe-content">
             <div className="recipe-hero-info">
               <h2>Ingrédients</h2>
-              <ul className="">
+              <ul>
                 {recipeDetails.ingredients.map((ingredient) => {
                   return (
-                    <li key={ingredient.id} className="">
+                    <li key={ingredient.id}>
                       <IngredientItem ingredient={ingredient} />
                     </li>
                   );
@@ -67,18 +74,30 @@ function RecipeDetailsPage() {
 
             <div className="recipe-preparation">
               <h2 className="recipe-preparation-title">Préparation</h2>
-              <p>Temps de cuisson: {recipeDetails.cookingTime}mn</p>
               <ol className="recipe-step-list">
                 {recipeDetails.steps.map((step) => {
-                  <li key={step.id}>{step.description}</li>;
+                  return <li key={step.id}>{step.description}</li>;
                 })}
               </ol>
             </div>
           </section>
+
+          {recipeDetails.tips && (
+            <section className="recipe-advice">
+            <img
+              src={tipsIcon}
+              alt="Astuces et conseils"
+              className="recipe-advice-banner"
+            />
+            <p>{recipeDetails.tips}</p>
+          </section>
+          )}
         </>
       )}
     </div>
   );
 }
+  
+
 
 export default RecipeDetailsPage;
