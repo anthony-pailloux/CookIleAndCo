@@ -27,6 +27,9 @@
 
 .recipe-info {
   padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .recipe-info h1 {
@@ -53,7 +56,10 @@
 }
 
 .recipe-hero-info {
-  margin: 25px 100px 25px 25px;
+  margin: 25px 100px 0px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .recipe-hero-info li {
@@ -65,7 +71,11 @@
 }
 
 .recipe-preparation {
-  margin: 25px 0 25px;
+  margin: 0 100px 25px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
 }
 
 .recipe-step-list {
@@ -90,7 +100,7 @@
 }
 
 .recipe-advice-banner {
-  width: 100%;
+  width: 60%;
   max-width: 280px;
   height: auto;
   display: block;
@@ -140,4 +150,6 @@
   .recipe-advice-banner {
     max-width: 200px;
   }
+
+  
 }
