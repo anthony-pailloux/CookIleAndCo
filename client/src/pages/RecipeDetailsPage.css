@@ -30,7 +30,7 @@
 }
 
 .recipe-info h1 {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .recipe-info p {
@@ -53,7 +53,7 @@
 }
 
 .recipe-hero-info {
-  margin: 25px 0 25px 25px;
+  margin: 25px 100px 25px 25px;
 }
 
 .recipe-hero-info li {
@@ -138,6 +138,6 @@
   }
 
   .recipe-advice-banner {
-    max-width: 360px;
+    max-width: 200px;
   }
 }
