@@ -71,7 +71,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
 .recipe-step-list {
@@ -92,7 +91,7 @@
   background-image: var(--tc-texture);
   border: 1px solid var(--tc-yellow-madras);
   box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
-  
+
   padding: 1.5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -126,6 +125,12 @@
     height: 300px;
     margin: 5rem auto 2rem;
     overflow: hidden;
+    transition: transform 0.35s ease;
+  }
+
+  .recipe-hero:hover {
+    transform: scale(1.02);
+    cursor: pointer;
   }
 
   .recipe-photo-zone-detail {
@@ -153,6 +158,12 @@
     margin: 0 auto 2rem;
     display: flex;
     justify-content: center;
+    transition: transform 0.35s ease;
+  }
+
+  .recipe-content:hover {
+    transform: scale(1.02);
+    cursor: pointer;
   }
 
   .recipe-advice {
@@ -162,6 +173,12 @@
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    transition: transform 0.35s ease;
+  }
+
+  .recipe-advice:hover {
+    transform: scale(1.02);
+    cursor: pointer;
   }
 
   .recipe-advice-banner {
@@ -171,7 +188,7 @@
   .recipe-preparation-title {
     margin: 0;
   }
-  
+
   .recipe-step-list {
     text-align: left;
     list-style-position: outside;
@@ -180,10 +197,10 @@
   .recipe-preparation {
     align-items: flex-start;
   }
-  
+
   .recipe-hero-info,
-.recipe-preparation {
-  margin: 25px auto 0 auto;
-  margin-bottom: 25px;
-}
+  .recipe-preparation {
+    margin: 25px auto 0 auto;
+    margin-bottom: 25px;
+  }
 }
