@@ -8,6 +8,9 @@ import errorHandler from './middlewares/errorHandler.js';
 
 import authRoutes from './routes/authRoutes.js';
 import recipeRoutes from './routes/recipeRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import originRoutes from './routes/originRoutes.js';
+import mealTypeRoutes from './routes/mealTypeRoute.js';
 
 
 const app = express();
@@ -42,11 +45,13 @@ app.get('/api/test-error', (req, res, next) => {
     next('Erreur 500');
 });
 
-// Routes auth
 app.use('/api/auth', authRoutes);
-
-// Routes recipe
 app.use('/api/recipes', recipeRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/origins', originRoutes);
+app.use('/api/mealTypes', mealTypeRoutes);
+
+
 
 // 404 puis gestion des erreurs
 app.use(notFound);
