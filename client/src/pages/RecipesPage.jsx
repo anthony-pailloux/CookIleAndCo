@@ -4,26 +4,13 @@ import { getFromApi } from "../services/api.js";
 import RecipeCard from "../components/RecipeCard.jsx";
 import { Link } from "react-router-dom";
 
-const mealTypeOptions = ["Petit-déjeuner", "Déjeuner", "Goûter", "Dîner"];
-const originOptions = ["Antille", "Asie"];
-const categoryOptions = [
-  "Boisson",
-  "Dessert",
-  "Gâteau",
-  "Beignets",
-  "Tarte",
-  "Crème",
-  "Fait maison",
-  "Glace",
-  "Friandise",
-  "Ptit dèj",
-  "Punch arrangé",
-  "Pâtisserie",
-  "Boulangerie",
-];
-
 function RecipePage() {
   const [recipes, setRecipes] = useState([]);
+
+  const [categories, setCategories] = useState([]);
+  const [origins, setOrigins] = useState([]);
+  const [mealTypes, setMealTypes] = useState([]);
+
   const [selectedMealType, setSelectedMealType] = useState("");
   const [selectedOrigin, setSelectedOrigin] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -71,6 +58,19 @@ function RecipePage() {
     loadRecipes();
   }, [currentPage]);
 
+  useEffect(() => {
+    async function loadCategory() {
+      const originsResponse = await getFromApi("/api/origins");
+      const mealTypesResponse = await getFromApi("/api/mealTypes");
+      const categoriesResponse = await getFromApi("/api/categories");
+
+      setOrigins(originsResponse.data);
+      setMealTypes(mealTypesResponse.data);
+      setCategories(categoriesResponse.data);
+    }
+    loadCategory();
+  }, []);
+
   let emptyMessage;
 
   if (recipes.length === 0) {
@@ -111,23 +111,23 @@ function RecipePage() {
               </button>
 
               <div className={mealTypeGroupClass}>
-                {mealTypeOptions.map((mealTypeName) => {
+                {mealTypes.map((mealType) => {
                   let filterBtnClass = "recipe-filter-btn";
 
-                  if (selectedMealType === mealTypeName) {
+                  if (selectedMealType === mealType.name) {
                     filterBtnClass = "recipe-filter-btn-active";
                   }
 
                   return (
                     <button
-                      key={mealTypeName}
+                      key={mealType.id}
                       type="button"
                       className={filterBtnClass}
                       onClick={() => {
-                        handleMealTypeClick(mealTypeName);
+                        handleMealTypeClick(mealType.name);
                       }}
                     >
-                      {mealTypeName}
+                      {mealType.name}
                     </button>
                   );
                 })}
@@ -146,23 +146,23 @@ function RecipePage() {
               </button>
 
               <div className={originGroupClass}>
-                {originOptions.map((originName) => {
+                {origins.map((origin) => {
                   let filterBtnClass = "recipe-filter-btn";
 
-                  if (selectedOrigin === originName) {
+                  if (selectedOrigin === origin.name) {
                     filterBtnClass = "recipe-filter-btn-active";
                   }
 
                   return (
                     <button
-                      key={originName}
+                      key={origin.id}
                       type="button"
                       className={filterBtnClass}
                       onClick={() => {
-                        handleOriginClick(originName);
+                        handleOriginClick(origin.name);
                       }}
                     >
-                      {originName}
+                      {origin.name}
                     </button>
                   );
                 })}
@@ -181,23 +181,23 @@ function RecipePage() {
               </button>
 
               <div className={categoryGroupClass}>
-                {categoryOptions.map((categoryName) => {
+                {categories.map((category) => {
                   let filterBtnClass = "recipe-filter-btn";
 
-                  if (selectedCategory === categoryName) {
+                  if (selectedCategory === category.name) {
                     filterBtnClass = "recipe-filter-btn-active";
                   }
 
                   return (
                     <button
-                      key={categoryName}
+                      key={category.id}
                       type="button"
                       className={filterBtnClass}
                       onClick={() => {
-                        handleCategoryClick(categoryName);
+                        handleCategoryClick(category.name);
                       }}
                     >
-                      {categoryName}
+                      {category.name}
                     </button>
                   );
                 })}
