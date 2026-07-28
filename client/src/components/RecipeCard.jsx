@@ -2,13 +2,18 @@ import { Link } from "react-router-dom";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./RecipeCard.css";
 
-function RecipeCard({ recipe }) {
+function RecipeCard({ recipe,isFirstCard  }) {
   let photoSource;
 
   if (recipe.photo) {
     photoSource = recipe.photo;
   } else {
     photoSource = placeholderPhoto;
+  }
+
+  let imageLoading = "lazy";
+  if (isFirstCard) {
+    imageLoading = "eager";
   }
 
   return (
@@ -18,6 +23,7 @@ function RecipeCard({ recipe }) {
           src={photoSource}
           alt="recette préparé"
           className="recipe-card-photo"
+          loading={imageLoading}
           onError={(event) => {
             event.currentTarget.src = placeholderPhoto;
           }}

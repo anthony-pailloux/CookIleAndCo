@@ -32,6 +32,9 @@ function RecipePage() {
   const [isOriginOpen, setIsOriginOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   function handleMealTypeClick(mealTypeName) {
     if (selectedMealType === mealTypeName) {
       setSelectedMealType("");
@@ -58,12 +61,15 @@ function RecipePage() {
 
   useEffect(() => {
     async function loadRecipes() {
-      const response = await getFromApi("/api/recipes?page=1&limit=12");
+      const path = "/api/recipes?page=" + currentPage + "&limit=12";
+      const response = await getFromApi(path);
+
       setRecipes(response.data);
+      setTotalPages(response.meta.totalPages);
     }
 
     loadRecipes();
-  }, []);
+  }, [currentPage]);
 
   let emptyMessage;
 
@@ -203,14 +209,44 @@ function RecipePage() {
         {emptyMessage}
 
         <ul className="recipes-list">
-          {recipes.map((recipe) => {
+          {recipes.map((recipe, index) => {
+            let isFirstCard = false;
+            if (index === 0) {
+              isFirstCard = true;
+            }
             return (
               <li key={recipe.id} className="recipes-list-item">
-                <RecipeCard recipe={recipe} />
+                <RecipeCard recipe={recipe} isFirstCard={isFirstCard} />
               </li>
             );
           })}
         </ul>
+
+        <nav className="recipes-pagination">
+          <button
+            type="button"
+            disabled={currentPage <= 1}
+            onClick={() => {
+              setCurrentPage(currentPage - 1);
+            }}
+          >
+            Précédent
+          </button>
+
+          <span>
+            Page {currentPage} / {totalPages}
+          </span>
+
+          <button
+            type="button"
+            disabled={currentPage >= totalPages}
+            onClick={() => {
+              setCurrentPage(currentPage + 1);
+            }}
+          >
+            Suivant
+          </button>
+        </nav>
       </div>
 
       <nav className="recipe-details-nav">
