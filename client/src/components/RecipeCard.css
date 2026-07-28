@@ -11,42 +11,41 @@
 }
 
 .recipes-card:hover {
-    border-color: var(--tc-yellow-madras);
-    cursor: pointer;
-    transform: scale(1.05);
-  }
+  border-color: var(--tc-yellow-madras);
+  cursor: pointer;
+  transform: scale(1.05);
+}
 
 .recipe-card-photo {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 25px 25px 0 0;
-    border: 1px solid var(--tc-navy);
-  }
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 25px 25px 0 0;
+  border: 1px solid var(--tc-navy);
+}
 
 .recipe-card-photo-zone {
-    
-    background-image: url("../assets/banniere-madras-antilles.webp");
-    background-size: 160%;
-    background-repeat: no-repeat;
-    background-position: center;
-    min-height: 120px;
-    padding: 1.5rem;
-    border-radius: 25px 25px 0 0;
-    border-bottom: 1px solid var(--tc-yellow-madras);
-  }
+  background-image: url("../assets/banniere-madras-antilles.webp");
+  background-size: 160%;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 120px;
+  padding: 1.5rem;
+  border-radius: 25px 25px 0 0;
+  border-bottom: 1px solid var(--tc-yellow-madras);
+}
 
-  .recipe-card-text {
-    padding: 1.5rem;
-  }
+.recipe-card-text {
+  padding: 1.5rem;
+}
 
-  .recipe-card-text span {
-    margin: 6px;
-  }
+.recipe-card-text span {
+  margin: 6px;
+}
 
-  .recipe-card-text p {
-    margin: 6px;
-  }
+.recipe-card-text p {
+  margin: 6px;
+}
 
-  .recipe-card-title {
-    margin: 6px;
-  }
+.recipe-card-title {
+  margin: 6px;
+}

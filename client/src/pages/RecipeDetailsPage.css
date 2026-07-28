@@ -40,6 +40,17 @@
   margin-bottom: 1rem;
 }
 
+.meal-type-info {
+  background-color: var(--tc-yellow-madras);
+  padding: 6px 16px;
+  border-radius: 25px;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px solid var(--tc-navy);
+}
+
 /* --- Ingrédients + préparation --- */
 .recipe-content {
   display: flex;
@@ -91,7 +102,6 @@
   background-image: var(--tc-texture);
   border: 1px solid var(--tc-yellow-madras);
   box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
-
   padding: 1.5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -106,29 +116,19 @@
   margin-bottom: 1rem;
 }
 
-.meal-type-info {
-  background-color: var(--tc-yellow-madras);
-  padding: 6px 16px;
-  border-radius: 25px;
-  display: inline-block;
-  white-space: nowrap;
-  text-align: center;
-  margin-bottom: 10px;
-  border: 1px solid var(--tc-navy);
-}
-
+/* --- Nav --- */
 .recipe-details-nav {
   width: 90%;
   margin: 2rem auto 3rem;
-  padding: 0 1.25rem;        
-  box-sizing: border-box; 
+  padding: 0 1.25rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
 .recipe-details-nav-link {
-  width: 100%;               
+  width: 100%;
   padding: 10px 16px;
   border: 1px solid var(--tc-navy);
   border-radius: var(--tc-radius);
@@ -147,7 +147,7 @@
 @media (min-width: 675px) {
   .recipe-hero {
     flex-direction: row;
-    width: 85%;
+    width: 70%;
     height: 300px;
     margin: 5rem auto 2rem;
     overflow: hidden;
@@ -180,7 +180,7 @@
   .recipe-content {
     flex-direction: row;
     gap: 15rem;
-    width: 85%;
+    width: 70%;
     margin: 0 auto 2rem;
     display: flex;
     justify-content: center;
@@ -193,7 +193,7 @@
   }
 
   .recipe-advice {
-    width: 85%;
+    width: 70%;
     margin: 0 auto 2rem;
     display: flex;
     justify-content: center;
@@ -220,6 +220,7 @@
     list-style-position: outside;
     padding-left: 1.2rem;
   }
+
   .recipe-preparation {
     align-items: flex-start;
   }
@@ -231,14 +232,14 @@
   }
 
   .recipe-details-nav {
-    width: 85%;              
-    flex-direction: row;     
-    padding: 0;              
+    width: 85%;
+    flex-direction: row;
+    padding: 0;
     margin: 0 auto 3rem;
   }
-  .recipe-details-nav-link {
-    width: auto;             
-    flex: 1;                 
-  }
 
+  .recipe-details-nav-link {
+    width: auto;
+    flex: 1;
+  }
 }
