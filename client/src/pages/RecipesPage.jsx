@@ -2,6 +2,7 @@ import "./RecipePage.css";
 import { useState, useEffect } from "react";
 import { getFromApi } from "../services/api.js";
 import RecipeCard from "../components/RecipeCard.jsx";
+import { Link } from "react-router-dom";
 
 function RecipePage() {
   const [recipes, setRecipes] = useState([]);
@@ -22,20 +23,31 @@ function RecipePage() {
   }
 
   return (
-    <div className="recipe-container">
-      <h1>Catalogue des recettes</h1>
-      {emptyMessage}
+    <>
+      <div className="recipe-container">
+        <h1>Catalogue des recettes</h1>
+        {emptyMessage}
 
-      <ul className="recipes-list">
-        {recipes.map((recipe) => {
-          return (
-            <li key={recipe.id} className="recipes-list-item">
-              <RecipeCard recipe={recipe} />
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+        <ul className="recipes-list">
+          {recipes.map((recipe) => {
+            return (
+              <li key={recipe.id} className="recipes-list-item">
+                <RecipeCard recipe={recipe} />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <nav className="recipe-details-nav">
+        <Link className="recipe-details-nav-link" to="/">
+          Accueil
+        </Link>
+        <Link className="recipe-details-nav-link" to="/recettes">
+          Liste des recettes
+        </Link>
+      </nav>
+    </>
   );
 }
 

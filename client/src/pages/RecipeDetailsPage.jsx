@@ -53,7 +53,9 @@ function RecipeDetailsPage() {
             </div>
             <div className="recipe-info">
               <h1>{recipeDetails.title}</h1>
-              <span className="meal-type-info">{recipeDetails.mealType.name}</span>
+              <span className="meal-type-info">
+                {recipeDetails.mealType.name}
+              </span>
               <p>Temps de cuisson: {recipeDetails.cookingTime}mn</p>
               <Button className="btnDetailsPage">Partager</Button>
             </div>
@@ -85,25 +87,27 @@ function RecipeDetailsPage() {
 
           {recipeDetails.tips && (
             <section className="recipe-advice">
-            <img
-              src={tipsIcon}
-              alt="Astuces et conseils"
-              className="recipe-advice-banner"
-            />
-            <p>{recipeDetails.tips}</p>
-          </section>
+              <img
+                src={tipsIcon}
+                alt="Astuces et conseils"
+                className="recipe-advice-banner"
+              />
+              <p>{recipeDetails.tips}</p>
+            </section>
           )}
 
           <nav className="recipe-details-nav">
-            <Link className="recipe-details-nav-link" to="/">Accueil</Link>
-            <Link className="recipe-details-nav-link" to="/recettes">Liste des recettes</Link>
+            <Link className="recipe-details-nav-link" to="/">
+              Accueil
+            </Link>
+            <Link className="recipe-details-nav-link" to="/recettes">
+              Liste des recettes
+            </Link>
           </nav>
         </>
       )}
     </div>
   );
 }
-  
-
 
 export default RecipeDetailsPage;
