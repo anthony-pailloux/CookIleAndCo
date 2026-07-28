@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import IngredientItem from "../components/IngredientItem";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import tipsIcon from "../assets/tipsandtricks.png";
@@ -93,6 +93,11 @@ function RecipeDetailsPage() {
             <p>{recipeDetails.tips}</p>
           </section>
           )}
+
+          <nav className="recipe-details-nav">
+            <Link className="recipe-details-nav-link" to="/">Accueil</Link>
+            <Link className="recipe-details-nav-link" to="/recettes">Liste des recettes</Link>
+          </nav>
         </>
       )}
     </div>
