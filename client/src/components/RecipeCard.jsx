@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./RecipeCard.css";
 
@@ -11,7 +12,7 @@ function RecipeCard({ recipe }) {
   }
 
   return (
-    <div className="recipes-card bg-green-textured">
+    <Link className="recipes-card bg-green-textured" to={`/recettes/${recipe.id}`}>
       <div className="recipe-card-photo-zone">
         <img
           src={photoSource}
@@ -31,7 +32,7 @@ function RecipeCard({ recipe }) {
         </p>
         
       </div>
-    </div>
+    </Link>
   );
 }
 

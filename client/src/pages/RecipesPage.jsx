@@ -217,9 +217,6 @@ function RecipePage() {
         <Link className="recipe-details-nav-link" to="/">
           Accueil
         </Link>
-        <Link className="recipe-details-nav-link" to="/recettes">
-          Liste des recettes
-        </Link>
       </nav>
     </>
   );
