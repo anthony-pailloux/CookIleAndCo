@@ -28,6 +28,7 @@ function RecipePage() {
     } else {
       setSelectedMealType(mealTypeName);
     }
+    setCurrentPage(1);
   }
 
   function handleOriginClick(originName) {
@@ -36,6 +37,7 @@ function RecipePage() {
     } else {
       setSelectedOrigin(originName);
     }
+    setCurrentPage(1);
   }
 
   function handleCategoryClick(categoryName) {
@@ -44,19 +46,35 @@ function RecipePage() {
     } else {
       setSelectedCategory(categoryName);
     }
+    setCurrentPage(1); 
   }
 
   useEffect(() => {
     async function loadRecipes() {
-      const path = "/api/recipes?page=" + currentPage + "&limit=12";
-      const response = await getFromApi(path);
+      const params = new URLSearchParams();
+      params.set("page", currentPage);
+      params.set("limit", 12);
 
+      if (selectedCategory !== "") {
+        params.set("categorie", selectedCategory);
+      }
+      if (selectedOrigin !== "") {
+        params.set("origine", selectedOrigin);
+      }
+      if (selectedMealType !== "") {
+        params.set("repas", selectedMealType);
+      }
+
+      const path = "/api/recipes?" + params.toString();
+      console.log("loadRecipes — path:", path);
+
+      const response = await getFromApi(path);
       setRecipes(response.data);
       setTotalPages(response.meta.totalPages);
     }
 
     loadRecipes();
-  }, [currentPage]);
+  }, [currentPage, selectedCategory, selectedOrigin, selectedMealType]);
 
   useEffect(() => {
     async function loadCategory() {
