@@ -110,6 +110,31 @@ function RecipePage() {
         params.set("q", activeSearch);
       }
 
+      // Synchronise les filtres avec l'url
+      useEffect(() => {
+        const categorieFromUrl = searchParams.get("categorie");
+        const origineFromUrl = searchParams.get("origine");
+        const repasFromUrl = searchParams.get("repas");
+
+        if (categorieFromUrl !== null) {
+          setSelectedCategory(categorieFromUrl);
+        } else {
+          setSelectedCategory("");
+        }
+
+        if (origineFromUrl !== null) {
+          setSelectedOrigin(origineFromUrl);
+        } else {
+          setSelectedOrigin("");
+        }
+
+        if (repasFromUrl !== null) {
+          setSelectedMealType(repasFromUrl);
+        } else {
+          setSelectedMealType("");
+        }
+      }, [searchParams]);
+
       const path = "/api/recipes?" + params.toString();
 
       try {
