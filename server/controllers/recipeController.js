@@ -1,4 +1,4 @@
-// Liste et détail des recettes (routes publiques).
+
 
 import Recipe from '../models/Recipe.js';
 import Category from '../models/Category.js';
@@ -8,7 +8,7 @@ import RecipeIngredient from '../models/RecipeIngredient.js';
 import RecipeStep from '../models/RecipeStep.js';
 
 export async function listRecipes(req, res) {
-    // On lit page et limit dans l'URL, avec 1 et 12 par défaut
+    // Pagination
     const rawPage = req.query.page;
     const rawLimit = req.query.limit;
 
@@ -26,7 +26,6 @@ export async function listRecipes(req, res) {
     const hasPage = rawPage !== undefined && rawPage !== '';
     const hasLimit = rawLimit !== undefined && rawLimit !== '';
 
-    // Si page ou limit est invalide, on renvoie une erreur 400
     if (
         (hasPage && (Number.isNaN(pageFromUrl) || pageFromUrl <= 0)) ||
         (hasLimit && (Number.isNaN(limitFromUrl) || limitFromUrl <= 0))
@@ -37,16 +36,51 @@ export async function listRecipes(req, res) {
 
     const offset = (pageFromUrl - 1) * limitFromUrl;
 
+    // filtres
+    const filterOrigin = req.query.origine;
+    const filterMealType = req.query.repas;
+    const filterCategory = req.query.categorie;
+    const categoryInclude = {
+        model: Category,
+        as: 'category',
+        attributes: ['id', 'name'],
+    };
+
+    if (filterCategory !== undefined && filterCategory !== '') {
+        categoryInclude.where = { name: filterCategory };
+        categoryInclude.required = true;
+    }
+
+    const originInclude = {
+        model: Origin,
+        as: 'origin',
+        attributes: ['id', 'name'],
+    };
+
+    if (filterOrigin !== undefined && filterOrigin !== '') {
+        originInclude.where = { name: filterOrigin };
+        originInclude.required = true;
+    }
+
+    const mealTypeInclude = {
+        model: MealType,
+        as: 'mealType',
+        attributes: ['id', 'name'],
+    };
+
+    if (filterMealType !== undefined && filterMealType !== '') {
+        mealTypeInclude.where = { name: filterMealType };
+        mealTypeInclude.required = true;
+    }
+
+    const includes = [categoryInclude, originInclude, mealTypeInclude];
+
     // On charge les recettes de la page, les plus récentes en premier, avec la catégorie
     const result = await Recipe.findAndCountAll({
         order: [['createdAt', 'DESC']],
         limit: limitFromUrl,
         offset,
-        include: {
-            model: Category,
-            as: 'category',
-            attributes: ['id', 'name'],
-        },
+        include: includes,
     });
 
     const totalRecipes = result.count;
