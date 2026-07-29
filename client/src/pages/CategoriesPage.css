@@ -1,15 +1,124 @@
 .categories-page {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  background-color: var(--tc-background);
+}
+
+.categories-page__header {
+  margin-bottom: 2rem;
+}
+
+.categories-page h1 {
+  font-size: 1.625rem;
+  margin: 0 0 0.75rem;
+  color: var(--tc-text);
+}
+
+.categories-page__intro {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--tc-text-muted);
+}
+
+.categories-page__section {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background-color: var(--tc-background-alt);
+  border: 1px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
+}
+
+.categories-page__section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1.25rem;
+  color: var(--tc-text);
+}
+
+.categories-page__section--origins h2 {
+  margin-bottom: 0.5rem;
+}
+
+.categories-page__subtitle {
+  margin: 0 0 1.25rem;
+  color: var(--tc-text-muted);
+  font-size: 0.9375rem;
+}
+
+.categories-page__empty {
+  text-align: center;
+  color: var(--tc-text-muted);
+  margin: 0;
+}
+
+.categories-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categories-page__card {
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--tc-text);
+  background-color: var(--tc-background);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius);
+}
+
+.categories-page__card:hover {
+  border-color: var(--tc-navy);
+  color: var(--tc-text);
+}
+
+.categories-page__photo {
+  background-color: var(--tc-background-alt);
+  border-bottom: 1px solid var(--tc-border);
+}
+
+.categories-page__photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.categories-page__body {
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.categories-page__name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .categories-page {
+    padding: 3rem 2rem 4rem;
   }
-  
+
   .categories-page h1 {
-    margin: 0 0 0.75rem;
-    color: var(--tc-text);
+    font-size: 2rem;
   }
-  
-  .categories-page__intro {
-    margin: 0 0 2rem;
-    color: var(--tc-text-muted);
+
+  .categories-page__section {
+    padding: 2rem;
   }
+
+  .categories-page__section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .categories-page__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+}
