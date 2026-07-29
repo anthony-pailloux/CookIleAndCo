@@ -1,9 +1,9 @@
+// Page catalogue paginée des recettes avec recherche et filtres.
 import "./RecipePage.css";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getFromApi } from "../services/api.js";
 import RecipeCard from "../components/RecipeCard.jsx";
-import Button from "../components/button";
 import "../components/Button.css";
 
 function RecipePage() {
@@ -64,11 +64,9 @@ function RecipePage() {
     resetPageInUrl();
   }
 
-  function handleSearchSubmit(event) {
-    event.preventDefault();
-
+  function applySearchToUrl(value) {
+    const trimmed = value.trim();
     const nextParams = new URLSearchParams(searchParams);
-    const trimmed = searchText.trim();
 
     if (trimmed === "") {
       nextParams.delete("q");
@@ -77,10 +75,20 @@ function RecipePage() {
     }
 
     nextParams.delete("page");
-    setSearchParams(nextParams);
+
+    if (nextParams.toString() === "") {
+      setSearchParams({});
+    } else {
+      setSearchParams(nextParams);
+    }
   }
 
-  // Charge les recettes selon page et filtres
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    applySearchToUrl(searchText);
+  }
+
+  // Charge les recettes selon page, recherche et filtres
   useEffect(() => {
     async function loadRecipes() {
       setLoading(true);
@@ -103,15 +111,12 @@ function RecipePage() {
       }
 
       const path = "/api/recipes?" + params.toString();
-      console.log("loadRecipes — path:", path);
 
       try {
         const response = await getFromApi(path);
-        console.log("loadRecipes — count:", response.data.length);
         setRecipes(response.data);
         setTotalPages(response.meta.totalPages);
       } catch (err) {
-        console.log("loadRecipes — erreur:", err.message);
         setRecipes([]);
         setTotalPages(1);
       } finally {
@@ -143,7 +148,7 @@ function RecipePage() {
     loadFiltersData();
   }, []);
 
-  // Boutons numéros de page (← Préc · 1 · 2 · 3 · Suiv →)
+  // Boutons numéros de page
   const pageButtons = [];
   for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
     let pageBtnClass = "catalog-pagination__page";
@@ -170,30 +175,43 @@ function RecipePage() {
   if (loading) {
     contentMessage = <p className="catalog__status">Chargement...</p>;
   } else if (recipes.length === 0) {
-    contentMessage = (
-      <p className="catalog__status">Aucune recette pour le moment.</p>
-    );
+    if (activeSearch !== "") {
+      contentMessage = (
+        <p className="catalog__status">
+          Aucune recette trouvée pour « {activeSearch} ».
+        </p>
+      );
+    } else {
+      contentMessage = (
+        <p className="catalog__status">Aucune recette pour le moment.</p>
+      );
+    }
   }
 
   return (
     <main className="catalog">
       <h1 className="catalog__title">Toutes les recettes</h1>
 
-      {/* Barre recherche — visuel wireframe ; logique API en TCK-402 */}
       <form className="catalog__search" onSubmit={handleSearchSubmit}>
         <input
-          className="input catalog__search-input"
+          className="catalog__search-input"
           type="search"
           placeholder="Rechercher une recette..."
           value={searchText}
           onChange={(event) => {
-            setSearchText(event.target.value);
+            const value = event.target.value;
+            setSearchText(value);
+
+            if (value.trim() === "") {
+              applySearchToUrl("");
+            }
           }}
         />
-        <Button className="btn--primary catalog__search-btn">Rechercher</Button>
+        <button type="submit" className="btn catalog__search-btn">
+          Rechercher
+        </button>
       </form>
 
-      {/* 3 filtres en ligne — selects comme le wireframe */}
       <div className="catalog__filters">
         <div className="field field--filter">
           <label htmlFor="filter-origin">Origine</label>
@@ -255,7 +273,6 @@ function RecipePage() {
 
       {contentMessage}
 
-      {/* Grille 3 colonnes desktop — 12 cartes max */}
       {!loading && recipes.length > 0 && (
         <ul className="catalog__grid">
           {recipes.map((recipe, index) => {
@@ -273,7 +290,6 @@ function RecipePage() {
         </ul>
       )}
 
-      {/* Pagination */}
       {!loading && totalPages > 1 && (
         <nav
           className="catalog-pagination"
