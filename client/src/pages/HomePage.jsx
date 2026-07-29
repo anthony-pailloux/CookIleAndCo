@@ -67,7 +67,7 @@ function HomePage() {
         <div className="home-about__text">
           <h2>À propos</h2>
           <p>
-            Tetelle Cook'île & Co, c'est le goût des Antilles et des saveurs du
+            La cuisine de Tetelle sur Cook'île & Co, c'est le goût des Antilles et des saveurs du
             monde, partagé en famille. Recettes traditionnelles, douceurs maison
             et coups de cœur de Tetelle à cuisiner à votre rythme.
           </p>
