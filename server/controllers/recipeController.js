@@ -6,6 +6,8 @@ import Origin from '../models/Origin.js';
 import MealType from '../models/MealType.js';
 import RecipeIngredient from '../models/RecipeIngredient.js';
 import RecipeStep from '../models/RecipeStep.js';
+import { Op } from 'sequelize';
+
 
 export async function listRecipes(req, res) {
     // Pagination
@@ -37,6 +39,15 @@ export async function listRecipes(req, res) {
     const offset = (pageFromUrl - 1) * limitFromUrl;
 
     // filtres
+    const searchQuery = req.query.q;
+    let recipeWhere = {};
+
+    if (searchQuery !== undefined && searchQuery !== '') {
+        recipeWhere.title = {
+            [Op.like]: '%' + searchQuery + '%',
+        };
+    }
+
     const filterOrigin = req.query.origine;
     const filterMealType = req.query.repas;
     const filterCategory = req.query.categorie;
@@ -77,6 +88,7 @@ export async function listRecipes(req, res) {
 
     // On charge les recettes de la page, les plus récentes en premier, avec la catégorie
     const result = await Recipe.findAndCountAll({
+        where: recipeWhere,
         order: [['createdAt', 'DESC']],
         limit: limitFromUrl,
         offset,

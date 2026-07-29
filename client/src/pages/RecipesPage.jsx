@@ -1,4 +1,3 @@
-// Page catalogue — liste paginée des recettes avec filtres (wireframe PAGE-02).
 import "./RecipePage.css";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -9,6 +8,7 @@ import "../components/Button.css";
 
 function RecipePage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const activeSearch = searchParams.get("q") || "";
 
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -18,7 +18,7 @@ function RecipePage() {
   const [selectedMealType, setSelectedMealType] = useState("");
   const [selectedOrigin, setSelectedOrigin] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(activeSearch);
 
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -66,12 +66,21 @@ function RecipePage() {
 
   function handleSearchSubmit(event) {
     event.preventDefault();
-    // TCK-402 : brancher le paramètre q sur l'API plus tard
-    console.log("Catalogue — recherche (TCK-402):", searchText);
-    resetPageInUrl();
+
+    const nextParams = new URLSearchParams(searchParams);
+    const trimmed = searchText.trim();
+
+    if (trimmed === "") {
+      nextParams.delete("q");
+    } else {
+      nextParams.set("q", trimmed);
+    }
+
+    nextParams.delete("page");
+    setSearchParams(nextParams);
   }
 
-  // Charge les recettes selon page + filtres
+  // Charge les recettes selon page et filtres
   useEffect(() => {
     async function loadRecipes() {
       setLoading(true);
@@ -88,6 +97,9 @@ function RecipePage() {
       }
       if (selectedMealType !== "") {
         params.set("repas", selectedMealType);
+      }
+      if (activeSearch !== "") {
+        params.set("q", activeSearch);
       }
 
       const path = "/api/recipes?" + params.toString();
@@ -108,7 +120,13 @@ function RecipePage() {
     }
 
     loadRecipes();
-  }, [currentPage, selectedCategory, selectedOrigin, selectedMealType]);
+  }, [
+    currentPage,
+    selectedCategory,
+    selectedOrigin,
+    selectedMealType,
+    activeSearch,
+  ]);
 
   // Charge origines, types de repas, catégories pour les selects
   useEffect(() => {
@@ -130,7 +148,8 @@ function RecipePage() {
   for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
     let pageBtnClass = "catalog-pagination__page";
     if (pageNum === currentPage) {
-      pageBtnClass = "catalog-pagination__page catalog-pagination__page--active";
+      pageBtnClass =
+        "catalog-pagination__page catalog-pagination__page--active";
     }
 
     pageButtons.push(
@@ -143,7 +162,7 @@ function RecipePage() {
         }}
       >
         {pageNum}
-      </button>
+      </button>,
     );
   }
 
@@ -151,7 +170,9 @@ function RecipePage() {
   if (loading) {
     contentMessage = <p className="catalog__status">Chargement...</p>;
   } else if (recipes.length === 0) {
-    contentMessage = <p className="catalog__status">Aucune recette pour le moment.</p>;
+    contentMessage = (
+      <p className="catalog__status">Aucune recette pour le moment.</p>
+    );
   }
 
   return (
@@ -254,7 +275,10 @@ function RecipePage() {
 
       {/* Pagination */}
       {!loading && totalPages > 1 && (
-        <nav className="catalog-pagination" aria-label="Pagination du catalogue">
+        <nav
+          className="catalog-pagination"
+          aria-label="Pagination du catalogue"
+        >
           <button
             type="button"
             className="catalog-pagination__nav"
