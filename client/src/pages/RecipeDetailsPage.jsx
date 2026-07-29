@@ -1,112 +1,145 @@
+// Page fiche recette — affiche une recette complète (hero, ingrédients, étapes, conseils, partage).
 import { useEffect, useState } from "react";
-import { getFromApi } from "../services/api";
 import { Link, useParams } from "react-router-dom";
+import { getFromApi } from "../services/api";
 import IngredientItem from "../components/IngredientItem";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
-import tipsIcon from "../assets/tipsandtricks.png";
 import Button from "../components/button";
 import "../components/Button.css";
 import "./RecipeDetailsPage.css";
-import "../components/RecipeCard.css";
 
 function RecipeDetailsPage() {
-  const [recipeDetails, setRecipesDetails] = useState();
+  const [recipeDetails, setRecipeDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
     async function loadRecipeDetails() {
-      const response = await getFromApi(`/api/recipes/${id}`);
+      setLoading(true);
+      setErrorMessage("");
 
-      setRecipesDetails(response);
+      try {
+        const response = await getFromApi(`/api/recipes/${id}`);
+        console.log("RecipeDetailsPage — recette chargée:", response);
+        setRecipeDetails(response);
+      } catch (err) {
+        console.log("RecipeDetailsPage — erreur:", err.message);
+        setRecipeDetails(null);
+        setErrorMessage(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
+
     loadRecipeDetails();
   }, [id]);
 
-  let emptyMessage;
-  let photoSource;
+  // État chargement
+  if (loading) {
+    return (
+      <main className="recipe-detail">
+        <p className="recipe-detail__status">Chargement...</p>
+      </main>
+    );
+  }
 
-  if (!recipeDetails) {
-    emptyMessage = <p>Chargement...</p>;
+  // État erreur (ex. id invalide → 404)
+  if (errorMessage) {
+    return (
+      <main className="recipe-detail">
+        <p className="recipe-detail__status">{errorMessage}</p>
+        <Link className="recipe-detail__back-link" to="/recettes">
+          Retour au catalogue
+        </Link>
+      </main>
+    );
+  }
+
+  // Photo : recette ou placeholder
+  let photoSource;
+  if (recipeDetails.photo) {
+    photoSource = recipeDetails.photo;
   } else {
-    if (recipeDetails.photo) {
-      photoSource = recipeDetails.photo;
-    } else {
-      photoSource = placeholderPhoto;
-    }
+    photoSource = placeholderPhoto;
   }
 
   return (
-    <div>
-      {emptyMessage}
-      {recipeDetails && (
-        <>
-          <section className="recipe-hero">
-            <div className="recipe-card-photo-zone recipe-photo-zone-detail">
-              <img
-                className="recipe-card-photo recipe-details-placeholder-photo"
-                src={photoSource}
-                alt="recette-préparer"
-                onError={(event) => {
-                  event.currentTarget.src = placeholderPhoto;
-                }}
-              />
-            </div>
-            <div className="recipe-info">
-              <h1>{recipeDetails.title}</h1>
-              <span className="meal-type-info">
-                {recipeDetails.mealType.name}
-              </span>
-              <p>Temps de cuisson: {recipeDetails.cookingTime}mn</p>
-              <Button className="btnDetailsPage">Partager</Button>
-            </div>
-          </section>
+    <main className="recipe-detail">
 
-          <section className="recipe-content">
-            <div className="recipe-hero-info">
-              <h2>Ingrédients</h2>
-              <ul>
-                {recipeDetails.ingredients.map((ingredient) => {
-                  return (
-                    <li key={ingredient.id}>
-                      <IngredientItem ingredient={ingredient} />
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+      {/* Hero : photo gauche + infos droite */}
+      <section className="recipe-detail__hero">
+        <div className="recipe-detail__photo">
+          <img
+            src={photoSource}
+            alt={recipeDetails.title}
+            onError={(event) => {
+              event.currentTarget.src = placeholderPhoto;
+            }}
+          />
+        </div>
 
-            <div className="recipe-preparation">
-              <h2 className="recipe-preparation-title">Préparation</h2>
-              <ol className="recipe-step-list">
-                {recipeDetails.steps.map((step) => {
-                  return <li key={step.id}>{step.description}</li>;
-                })}
-              </ol>
-            </div>
-          </section>
+        <div className="recipe-detail__intro">
+          <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
+          <span className="recipe-detail__badge">{recipeDetails.category.name}</span>
+          <p className="recipe-detail__time">⏱ {recipeDetails.cookingTime} minutes</p>
+          <Button className="btn--outline recipe-detail__share-btn">Partager</Button>
+        </div>
+      </section>
 
-          {recipeDetails.tips && (
-            <section className="recipe-advice">
-              <img
-                src={tipsIcon}
-                alt="Astuces et conseils"
-                className="recipe-advice-banner"
-              />
-              <p>{recipeDetails.tips}</p>
-            </section>
-          )}
+      {/* Ingrédients + Préparation — 2 colonnes */}
+      <section className="recipe-detail__body">
+        <div className="recipe-detail__ingredients">
+          <h2 className="recipe-detail__section-title">Ingrédients</h2>
+          <ul className="recipe-detail__ingredient-list">
+            {recipeDetails.ingredients.map((ingredient) => {
+              return (
+                <li key={ingredient.id}>
+                  <IngredientItem ingredient={ingredient} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
-          <nav className="recipe-details-nav">
-            <Link className="recipe-details-nav-link" to="/">
-              Accueil
-            </Link>
-            <Link className="recipe-details-nav-link" to="/recettes">
-              Liste des recettes
-            </Link>
-          </nav>
-        </>
+        <div className="recipe-detail__steps">
+          <h2 className="recipe-detail__section-title">Préparation</h2>
+          <ol className="recipe-detail__step-list">
+            {recipeDetails.steps.map((step) => {
+              return (
+                <li key={step.id}>
+                  <span className="recipe-detail__step-num">{step.stepNumber}</span>
+                  <p className="recipe-detail__step-text">{step.description}</p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
+
+      {/* Conseils de Tetelle */}
+      {recipeDetails.tips && (
+        <section className="recipe-detail__tips">
+          <h2 className="recipe-detail__section-title">Conseils de Tetelle</h2>
+          <p>{recipeDetails.tips}</p>
+        </section>
       )}
-    </div>
+
+      {/* Partage — logique réelle en TCK-504 */}
+      <section className="recipe-detail__share">
+        <Button className="btn--primary recipe-detail__share-main">
+          Partager cette recette
+        </Button>
+        <p className="recipe-detail__share-links">
+          <button type="button" className="recipe-detail__share-link">Facebook</button>
+          <span> · </span>
+          <button type="button" className="recipe-detail__share-link">WhatsApp</button>
+          <span> · </span>
+          <button type="button" className="recipe-detail__share-link">Copier le lien</button>
+        </p>
+      </section>
+
+    </main>
   );
 }
 

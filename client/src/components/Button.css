@@ -10,3 +10,14 @@
     justify-content: center;
     text-align: center;
   }
+
+  /* .btn--primary {
+    background: var(--tc-navy);
+    color: var(--tc-white);
+    border: 1px solid var(--tc-navy);
+  } */
+  
+  .btn--primary:hover {
+    background: var(--tc-green-madras);
+    opacity: 1;
+  }

@@ -1,55 +1,66 @@
-.recipes-card {
-  border-radius: 25px;
-  border: 1px solid var(--tc-yellow-madras);
-  width: 360px;
-  padding: 0;
-  overflow: hidden;
-  transition: transform 0.35s ease;
-  box-shadow: 4px 6px 14px rgba(27, 58, 107, 0.65);
-  width: 100%;
-  max-width: 360px;
+/* Carte recette — style wireframe COMP-05 */
+
+.recipe-card {
   display: block;
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius);
+  overflow: hidden;
+  background: var(--tc-white);
   text-decoration: none;
-  color: var(--tc-white);
+  color: var(--tc-text);
+  transition: box-shadow 0.2s ease;
 }
 
-.recipes-card:hover {
-  border-color: var(--tc-yellow-madras);
-  cursor: pointer;
-  transform: scale(1.05);
-  color: var(--tc-white);
+.recipe-card:hover {
+  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.15);
+  color: var(--tc-text);
 }
 
-.recipe-card-photo {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 25px 25px 0 0;
-  border: 1px solid var(--tc-navy);
+.recipe-card__photo {
+  background-color: var(--tc-background-alt);
+  border-bottom: 1px solid var(--tc-border);
 }
 
-.recipe-card-photo-zone {
-  background-image: url("../assets/banniere-madras-antilles.webp");
-  background-size: 160%;
-  background-repeat: no-repeat;
-  background-position: center;
-  min-height: 120px;
-  padding: 1.5rem;
-  border-radius: 25px 25px 0 0;
-  border-bottom: 1px solid var(--tc-yellow-madras);
+.recipe-card__photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
-.recipe-card-text {
-  padding: 1.5rem;
+.recipe-card__body {
+  padding: 0.75rem;
+  background-color: var(--tc-background-alt);
 }
 
-.recipe-card-text span {
-  margin: 6px;
+.recipe-card__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0 0 0.625rem;
+  line-height: 1.35;
 }
 
-.recipe-card-text p {
-  margin: 6px;
+.recipe-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.recipe-card-title {
-  margin: 6px;
+.recipe-card__badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
+    border: 1px solid var(--tc-navy);
+    border-radius: 999px;
+    background-color: var(--tc-yellow-madras);
+    color: var(--tc-white);
+    white-space: nowrap;
+  
+}
+
+.recipe-card__time {
+  font-size: 0.8125rem;
+  color: var(--tc-text-muted);
+  white-space: nowrap;
 }

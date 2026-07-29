@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./RecipeCard.css";
 
-function RecipeCard({ recipe,isFirstCard  }) {
+function RecipeCard({ recipe, isFirstCard }) {
   let photoSource;
-
   if (recipe.photo) {
     photoSource = recipe.photo;
   } else {
@@ -17,26 +16,24 @@ function RecipeCard({ recipe,isFirstCard  }) {
   }
 
   return (
-    <Link className="recipes-card bg-green-textured" to={`/recettes/${recipe.id}`}>
-      <div className="recipe-card-photo-zone">
+    <Link className="recipe-card" to={`/recettes/${recipe.id}`}>
+      <div className="recipe-card__photo">
         <img
           src={photoSource}
-          alt="recette préparé"
-          className="recipe-card-photo"
+          alt={recipe.title}
           loading={imageLoading}
           onError={(event) => {
             event.currentTarget.src = placeholderPhoto;
           }}
         />
       </div>
-      <div className="recipe-card-text">
-        <span className="recipe-card-category">{recipe.category.name}</span>
-        <h2 className="recipe-card-title">{recipe.title}</h2>
 
-        <p className="recipe-card-meta">
-          Temps de cuisson: {recipe.cookingTime}mn
-        </p>
-        
+      <div className="recipe-card__body">
+        <h2 className="recipe-card__title">{recipe.title}</h2>
+        <div className="recipe-card__meta">
+          <span className="recipe-card__badge">{recipe.category.name}</span>
+          <span className="recipe-card__time">⏱ {recipe.cookingTime} min</span>
+        </div>
       </div>
     </Link>
   );
