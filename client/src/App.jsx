@@ -6,6 +6,8 @@ import AdminPage from "./pages/AdminPage.jsx";
 import RecipePage from "./pages/RecipesPage.jsx";
 import RecipeDetailsPage from "./pages/RecipeDetailsPage.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
+import CategoriesPage from "./pages/CategoriesPage.jsx";
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
           </Route>
           <Route path="/recettes" element={<RecipePage />} />
           <Route path="/recettes/:id" element={<RecipeDetailsPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
         </Routes>
       </Layout>
     </>
