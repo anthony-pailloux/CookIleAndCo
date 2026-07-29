@@ -49,7 +49,7 @@ function HomePage() {
   style={{ backgroundImage: "url(" + heroBanner + ")" }}
 >
   <div className="home-hero__content">
-    <h1>Tetelle Cook'île & Co</h1>
+    <h1>Cook'île & Co</h1>
     <p className="home-hero__accroche">"An Nou Ay !"</p>
     <p className="home-hero__accroche">Des antilles aux saveurs du monde</p>
     <Link className="btn home-hero__cta" to="/recettes">
