@@ -88,6 +88,37 @@ function RecipePage() {
     applySearchToUrl(searchText);
   }
 
+  // Synchronise les filtres avec l'URL (?categorie=… & ?origine=… & ?repas=…)
+  useEffect(() => {
+    const categorieFromUrl = searchParams.get("categorie");
+    const origineFromUrl = searchParams.get("origine");
+    const repasFromUrl = searchParams.get("repas");
+
+    if (categorieFromUrl !== null) {
+      setSelectedCategory(categorieFromUrl);
+    } else {
+      setSelectedCategory("");
+    }
+
+    if (origineFromUrl !== null) {
+      setSelectedOrigin(origineFromUrl);
+    } else {
+      setSelectedOrigin("");
+    }
+
+    if (repasFromUrl !== null) {
+      setSelectedMealType(repasFromUrl);
+    } else {
+      setSelectedMealType("");
+    }
+
+    console.log("RecipesPage — filtres URL:", {
+      categorie: categorieFromUrl,
+      origine: origineFromUrl,
+      repas: repasFromUrl,
+    });
+  }, [searchParams]);
+
   // Charge les recettes selon page, recherche et filtres
   useEffect(() => {
     async function loadRecipes() {
@@ -109,31 +140,6 @@ function RecipePage() {
       if (activeSearch !== "") {
         params.set("q", activeSearch);
       }
-
-      // Synchronise les filtres avec l'url
-      useEffect(() => {
-        const categorieFromUrl = searchParams.get("categorie");
-        const origineFromUrl = searchParams.get("origine");
-        const repasFromUrl = searchParams.get("repas");
-
-        if (categorieFromUrl !== null) {
-          setSelectedCategory(categorieFromUrl);
-        } else {
-          setSelectedCategory("");
-        }
-
-        if (origineFromUrl !== null) {
-          setSelectedOrigin(origineFromUrl);
-        } else {
-          setSelectedOrigin("");
-        }
-
-        if (repasFromUrl !== null) {
-          setSelectedMealType(repasFromUrl);
-        } else {
-          setSelectedMealType("");
-        }
-      }, [searchParams]);
 
       const path = "/api/recipes?" + params.toString();
 

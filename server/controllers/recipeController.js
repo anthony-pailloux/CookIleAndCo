@@ -165,3 +165,68 @@ export async function getRecipeById(req, res) {
 
     res.status(200).json(recipe);
 }
+
+// Création d'une recette
+export async function createRecipe(req, res) {
+    const title = req.body.title;
+    const cookingTime = req.body.cookingTime;
+    const categoryId = req.body.categoryId;
+    const originId = req.body.originId;
+    const mealTypeId = req.body.mealTypeId;
+    let tips = null;
+    if (req.body.tips !== undefined && req.body.tips !== "") {
+        tips = req.body.tips;
+    }
+
+    const newRecipe = await Recipe.create({
+        title: title,
+        cookingTime: cookingTime,
+        categoryId: categoryId,
+        originId: originId,
+        mealTypeId: mealTypeId,
+        tips: tips,
+        photo: null,
+    });
+
+    // --- ingrédients ---
+    const ingredientsFromBody = req.body.ingredients;
+    const ingredientsToCreate = [];
+
+    for (let i = 0; i < ingredientsFromBody.length; i++) {
+        const item = ingredientsFromBody[i];
+
+        let unit = null;
+        if (item.unit !== undefined && item.unit !== "") {
+            unit = item.unit;
+        }
+
+        ingredientsToCreate.push({
+            recipeId: newRecipe.id,
+            quantity: item.quantity,
+            unit: unit,
+            name: item.name,
+            sortOrder: i + 1,
+        });
+    }
+
+    await RecipeIngredient.bulkCreate(ingredientsToCreate);
+
+    // --- étapes ---
+    const stepsFromBody = req.body.steps;
+    const stepsToCreate = [];
+
+    for (let i = 0; i < stepsFromBody.length; i++) {
+        const item = stepsFromBody[i];
+
+        stepsToCreate.push({
+            recipeId: newRecipe.id,
+            stepNumber: i + 1,
+            description: item.description,
+            sortOrder: i + 1,
+        });
+    }
+
+    await RecipeStep.bulkCreate(stepsToCreate);
+
+    res.status(201).json(newRecipe);
+}

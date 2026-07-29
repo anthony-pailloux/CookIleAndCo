@@ -10,3 +10,4 @@ export const loginRules = [
         .notEmpty()
         .withMessage('Mot de passe requis'),
 ];
+
