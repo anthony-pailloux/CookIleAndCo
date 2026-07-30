@@ -45,6 +45,8 @@ app.get('/api/test-error', (req, res, next) => {
     next('Erreur 500');
 });
 
+app.use('/uploads', express.static('uploads'));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/categories', categoryRoutes);

@@ -310,16 +310,15 @@ export async function updateRecipe(req, res) {
 // Suppression d'une recette
 export async function deleteRecipe(req, res) {
     const id = req.params.id;
-  
+
     const recipe = await Recipe.findByPk(id);
-  
+
     if (!recipe) {
-      res.status(404).json({ error: 'Recette introuvable' });
-      return;
+        res.status(404).json({ error: 'Recette introuvable' });
+        return;
     }
-  
-  
+
     await recipe.destroy();
-  
+
     res.status(200).json({ message: 'Recette supprimée' });
-  }
+}
