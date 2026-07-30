@@ -322,3 +322,13 @@ export async function deleteRecipe(req, res) {
 
     res.status(200).json({ message: 'Recette supprimée' });
 }
+
+// Ajoute une photo à une recette
+export async function addRecipePhoto(req, res) {
+    const id = req.params.id;
+    
+    res.status(200).json({
+      message: 'addRecipePhoto — squelette ok',
+      id: id,
+    });
+  }
