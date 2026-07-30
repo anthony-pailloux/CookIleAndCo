@@ -231,14 +231,95 @@ export async function createRecipe(req, res) {
     res.status(201).json(newRecipe);
 }
 
-// Modification d'une recette (admin) — squelette pour test HTTP
+// Modification d'une recette (admin)
 export async function updateRecipe(req, res) {
     const id = req.params.id;
 
-    console.log('PUT /api/recipes/' + id + 'body:', req.body);
+    const recipe = await Recipe.findByPk(id);
 
-    res.status(200).json({
-        message: 'updateRecipe — squelette ok',
-        id: id,
+    if (!recipe) {
+        res.status(404).json({ error: 'Recette introuvable' });
+        return;
+    }
+
+    const title = req.body.title;
+    const cookingTime = req.body.cookingTime;
+    const categoryId = req.body.categoryId;
+    const originId = req.body.originId;
+    const mealTypeId = req.body.mealTypeId;
+
+    let tips = null;
+    if (req.body.tips !== undefined && req.body.tips !== "") {
+        tips = req.body.tips;
+    }
+
+    await recipe.update({
+        title: title,
+        cookingTime: cookingTime,
+        categoryId: categoryId,
+        originId: originId,
+        mealTypeId: mealTypeId,
+        tips: tips,
     });
+
+    // Supprime les anciens ingrédients et étapes puis recrée 
+    await RecipeIngredient.destroy({ where: { recipeId: id } });
+    await RecipeStep.destroy({ where: { recipeId: id } });
+
+    const ingredientsFromBody = req.body.ingredients;
+    const ingredientsToCreate = [];
+
+    for (let i = 0; i < ingredientsFromBody.length; i++) {
+        const item = ingredientsFromBody[i];
+
+        let unit = null;
+        if (item.unit !== undefined && item.unit !== "") {
+            unit = item.unit;
+        }
+
+        ingredientsToCreate.push({
+            recipeId: id,
+            quantity: item.quantity,
+            unit: unit,
+            name: item.name,
+            sortOrder: i + 1,
+        });
+    }
+
+    await RecipeIngredient.bulkCreate(ingredientsToCreate);
+
+    const stepsFromBody = req.body.steps;
+    const stepsToCreate = [];
+
+    for (let i = 0; i < stepsFromBody.length; i++) {
+        const item = stepsFromBody[i];
+
+        stepsToCreate.push({
+            recipeId: id,
+            stepNumber: i + 1,
+            description: item.description,
+            sortOrder: i + 1,
+        });
+    }
+
+    await RecipeStep.bulkCreate(stepsToCreate);
+
+    res.status(200).json(recipe);
 }
+
+// Suppression d'une recette
+export async function deleteRecipe(req, res) {
+    const id = req.params.id;
+  
+    const recipe = await Recipe.findByPk(id);
+  
+    if (!recipe) {
+      res.status(404).json({ error: 'Recette introuvable' });
+      return;
+    }
+  
+  
+    await recipe.destroy();
+  
+    res.status(200).json({ message: 'Recette supprimée' });
+  }
