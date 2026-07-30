@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getFromApi } from "../services/api.js";
+import { getFromApi, deleteToApi } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
+import { Link } from "react-router-dom";
 import Button from "../components/button.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
@@ -31,6 +32,31 @@ function AdminPage() {
     loadAdminRecipes();
   }, []);
 
+  async function handleDeleteRecipe(recipeId, recipeTitle) {
+    const confirmed = window.confirm(
+      'Supprimer la recette "' + recipeTitle + '" ?',
+    );
+
+    if (confirmed === false) {
+      return;
+    }
+
+    try {
+      const result = await deleteToApi("/api/recipes/" + recipeId);
+      console.log("AdminPage — supprimée:", result);
+
+      const newRecipes = [];
+      for (let i = 0; i < recipes.length; i++) {
+        if (recipes[i].id !== recipeId) {
+          newRecipes.push(recipes[i]);
+        }
+      }
+      setRecipes(newRecipes);
+    } catch (err) {
+      console.log("AdminPage — erreur suppression:", err.message);
+    }
+  }
+
   return (
     <main className="admin-page">
       <header className="admin-page__header">
@@ -40,6 +66,9 @@ function AdminPage() {
 
       <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
+        <Link to="/admin/recettes/nouvelle" className="btn admin-page__add-btn">
+          + Ajouter une recette
+        </Link>
 
         {loadingRecipes === true && (
           <p className="admin-page__status">Chargement des recettes...</p>
@@ -90,10 +119,7 @@ function AdminPage() {
                       <Button
                         className="btn--danger"
                         onClick={function () {
-                          console.log(
-                            "AdminPage — supprimer recette id:",
-                            recipe.id,
-                          );
+                          handleDeleteRecipe(recipe.id, recipe.title);
                         }}
                       >
                         Supprimer

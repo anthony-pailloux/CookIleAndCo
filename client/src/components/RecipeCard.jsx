@@ -4,7 +4,7 @@ import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./RecipeCard.css";
 
 function RecipeCard({ recipe, isFirstCard }) {
-const photoSource = getRecipePhotoUrl(recipe.photo);
+  const photoSource = getRecipePhotoUrl(recipe.photo);
 
   let imageLoading = "lazy";
   if (isFirstCard) {
