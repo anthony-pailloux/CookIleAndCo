@@ -230,3 +230,15 @@ export async function createRecipe(req, res) {
 
     res.status(201).json(newRecipe);
 }
+
+// Modification d'une recette (admin) — squelette pour test HTTP
+export async function updateRecipe(req, res) {
+    const id = req.params.id;
+
+    console.log('PUT /api/recipes/' + id + 'body:', req.body);
+
+    res.status(200).json({
+        message: 'updateRecipe — squelette ok',
+        id: id,
+    });
+}
