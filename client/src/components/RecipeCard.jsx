@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom";
+import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./RecipeCard.css";
 
 function RecipeCard({ recipe, isFirstCard }) {
-  let photoSource;
-  if (recipe.photo) {
-    photoSource = recipe.photo;
-  } else {
-    photoSource = placeholderPhoto;
-  }
+const photoSource = getRecipePhotoUrl(recipe.photo);
 
   let imageLoading = "lazy";
   if (isFirstCard) {

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getFromApi } from "../services/api";
+import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import Button from "../components/button";
@@ -21,10 +22,8 @@ function RecipeDetailsPage() {
 
       try {
         const response = await getFromApi(`/api/recipes/${id}`);
-        console.log("RecipeDetailsPage — recette chargée:", response);
         setRecipeDetails(response);
       } catch (err) {
-        console.log("RecipeDetailsPage — erreur:", err.message);
         setRecipeDetails(null);
         setErrorMessage(err.message);
       } finally {
@@ -44,7 +43,7 @@ function RecipeDetailsPage() {
     );
   }
 
-  // État erreur (ex. id invalide → 404)
+  // État erreur
   if (errorMessage) {
     return (
       <main className="recipe-detail">
@@ -56,18 +55,11 @@ function RecipeDetailsPage() {
     );
   }
 
-  // Photo : recette ou placeholder
-  let photoSource;
-  if (recipeDetails.photo) {
-    photoSource = recipeDetails.photo;
-  } else {
-    photoSource = placeholderPhoto;
-  }
+  const photoSource = getRecipePhotoUrl(recipeDetails.photo);
 
   return (
     <main className="recipe-detail">
-
-      {/* Hero : photo gauche + infos droite */}
+      {/* Hero */}
       <section className="recipe-detail__hero">
         <div className="recipe-detail__photo">
           <img
@@ -81,13 +73,19 @@ function RecipeDetailsPage() {
 
         <div className="recipe-detail__intro">
           <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
-          <span className="recipe-detail__badge">{recipeDetails.category.name}</span>
-          <p className="recipe-detail__time">⏱ {recipeDetails.cookingTime} minutes</p>
-          <Button className="btn--outline recipe-detail__share-btn">Partager</Button>
+          <span className="recipe-detail__badge">
+            {recipeDetails.category.name}
+          </span>
+          <p className="recipe-detail__time">
+            ⏱ {recipeDetails.cookingTime} minutes
+          </p>
+          <Button className="btn--outline recipe-detail__share-btn">
+            Partager
+          </Button>
         </div>
       </section>
 
-      {/* Ingrédients + Préparation — 2 colonnes */}
+      {/* Ingrédients + Préparation */}
       <section className="recipe-detail__body">
         <div className="recipe-detail__ingredients">
           <h2 className="recipe-detail__section-title">Ingrédients</h2>
@@ -108,7 +106,9 @@ function RecipeDetailsPage() {
             {recipeDetails.steps.map((step) => {
               return (
                 <li key={step.id}>
-                  <span className="recipe-detail__step-num">{step.stepNumber}</span>
+                  <span className="recipe-detail__step-num">
+                    {step.stepNumber}
+                  </span>
                   <p className="recipe-detail__step-text">{step.description}</p>
                 </li>
               );
@@ -131,14 +131,19 @@ function RecipeDetailsPage() {
           Partager cette recette
         </Button>
         <p className="recipe-detail__share-links">
-          <button type="button" className="recipe-detail__share-link">Facebook</button>
+          <button type="button" className="recipe-detail__share-link">
+            Facebook
+          </button>
           <span> · </span>
-          <button type="button" className="recipe-detail__share-link">WhatsApp</button>
+          <button type="button" className="recipe-detail__share-link">
+            WhatsApp
+          </button>
           <span> · </span>
-          <button type="button" className="recipe-detail__share-link">Copier le lien</button>
+          <button type="button" className="recipe-detail__share-link">
+            Copier le lien
+          </button>
         </p>
       </section>
-
     </main>
   );
 }

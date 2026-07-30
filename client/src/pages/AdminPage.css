@@ -1,0 +1,93 @@
+/* Page dashboard admin */
+.admin-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+/* Bloc titre + email */
+.admin-page__header {
+  text-align: center;
+  padding: 1.5rem 1.25rem;
+  margin-bottom: 2rem;
+  background-color: var(--tc-white);
+  border: 2px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
+}
+
+.admin-page__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+}
+
+.admin-page__email {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--tc-text-muted);
+}
+
+/* Section liste recettes */
+.admin-page__section {
+  background-color: var(--tc-white);
+  border: 2px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.admin-page__section-title {
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--tc-green-madras);
+  border-bottom: 2px solid var(--tc-yellow-madras);
+}
+
+.admin-page__status {
+  margin: 0;
+  color: var(--tc-text-muted);
+  font-style: italic;
+}
+
+/* Tableau recettes */
+.admin-recipes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  border: 2px solid var(--tc-green-madras);
+  background-color: var(--tc-white);
+}
+
+.admin-recipes-table th,
+.admin-recipes-table td {
+  padding: 0.75rem;
+  border: 1px solid var(--tc-green-madras);
+  text-align: left;
+  vertical-align: middle;
+  color: var(--tc-text);
+}
+
+.admin-recipes-table thead th {
+  background-color: var(--tc-green-madras);
+  color: var(--tc-white);
+  font-weight: 600;
+}
+
+.admin-recipes-table tbody tr:nth-child(even) {
+  background-color: var(--tc-background-alt);
+}
+
+.admin-recipes-table img {
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .admin-page {
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .admin-page__title {
+    font-size: 2rem;
+  }
+}

@@ -1,9 +1,21 @@
-// En-tête du site — logo + navigation principale
 import { Link, NavLink } from "react-router-dom";
 import "./Header.css";
 import logoCookIle from "../assets/logo-cook-ile-co-cuisine-du-monde-horizontal.webp";
+import { useAuth } from "../context/AuthContext.jsx";
+import { logout } from "../services/authServices.js";
 
 function Header() {
+  const auth = useAuth();
+
+  async function handleLogout() {
+    await logout();
+    auth.setUser(null);
+  }
+
+  let showAdminLogout = false;
+  if (auth.user !== null && auth.user.role === "admin") {
+    showAdminLogout = true;
+  }
   return (
     <header className="site-header bg-green-textured">
       <div className="site-header__inner">
@@ -56,6 +68,16 @@ function Header() {
             Catégories
           </NavLink>
         </nav>
+
+        {showAdminLogout === true && (
+          <button
+            type="button"
+            className="site-header__logout-btn"
+            onClick={handleLogout}
+          >
+            Déconnexion
+          </button>
+        )}
       </div>
     </header>
   );

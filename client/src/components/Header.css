@@ -56,6 +56,25 @@
   border-bottom-color: var(--tc-white);
 }
 
+/* Bouton déconnexion admin */
+.site-header__logout-btn {
+  width: auto;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--tc-yellow-madras);
+  border-radius: var(--tc-radius);
+  background-color: var(--tc-red-madras);
+  color: var(--tc-white);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.site-header__logout-btn:hover {
+  background-color: var(--tc-primary-hover);
+}
+
 /* Mobile */
 @media (max-width: 767px) {
   .site-header {
@@ -90,6 +109,10 @@
   .site-header__link {
     font-size: 0.8125rem;
   }
+
+  .site-header__logout-btn {
+    margin-top: 0.25rem;
+  }
 }
 
 /* Desktop */
@@ -117,5 +140,12 @@
 
   .site-header__link {
     font-size: 1rem;
+  }
+
+  .site-header__logout-btn {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }

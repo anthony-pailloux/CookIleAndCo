@@ -326,22 +326,22 @@ export async function deleteRecipe(req, res) {
 // Ajoute une photo à une recette
 export async function addRecipePhoto(req, res) {
     const id = req.params.id;
-  
+
     const recipe = await Recipe.findByPk(id);
-  
+
     if (!recipe) {
-      res.status(404).json({ error: 'Recette introuvable' });
-      return;
+        res.status(404).json({ error: 'Recette introuvable' });
+        return;
     }
-  
+
     if (!req.file) {
-      res.status(400).json({ error: 'Photo requise' });
-      return;
+        res.status(400).json({ error: 'Photo requise' });
+        return;
     }
-  
+
     const photoPath = '/uploads/recipes/' + req.file.filename;
-  
+
     await recipe.update({ photo: photoPath });
-  
+
     res.status(200).json(recipe);
-  }
+}
