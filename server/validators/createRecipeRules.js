@@ -1,4 +1,8 @@
+// Règles express-validator pour créer ou modifier une recette (POST / PUT).
 import { body } from 'express-validator';
+import Category from '../models/Category.js';
+import Origin from '../models/Origin.js';
+import MealType from '../models/MealType.js';
 
 export const createRecipeRules = [
     // Titre obligatoire
@@ -6,20 +10,54 @@ export const createRecipeRules = [
         .trim()
         .notEmpty()
         .withMessage('Titre requis'),
+
     // Temps de cuisson : entier > 0
     body('cookingTime')
         .isInt({ min: 1 })
         .withMessage('Temps de cuisson invalide'),
-    // Les 3 FK obligatoires (catégorie, origine, type de repas)
+
+    // Catégorie : format + existence en BDD
     body('categoryId')
         .isInt({ min: 1 })
-        .withMessage('Catégorie requise'),
+        .withMessage('Catégorie requise')
+        .custom(async function (categoryId) {
+            const category = await Category.findByPk(categoryId);
+
+            if (!category) {
+                throw new Error('Catégorie introuvable');
+            } else {
+                return true;
+            }
+        }),
+
+    // Origine : format + existence en BDD
     body('originId')
         .isInt({ min: 1 })
-        .withMessage('Origine requise'),
+        .withMessage('Origine requise')
+        .custom(async function (originId) {
+            const origin = await Origin.findByPk(originId);
+
+            if (!origin) {
+                throw new Error('Origine introuvable');
+            } else {
+                return true;
+            }
+        }),
+
+    // Type de repas : format + existence en BDD
     body('mealTypeId')
         .isInt({ min: 1 })
-        .withMessage('Type de repas requis'),
+        .withMessage('Type de repas requis')
+        .custom(async function (mealTypeId) {
+            const mealType = await MealType.findByPk(mealTypeId);
+
+            if (!mealType) {
+                throw new Error('Type de repas introuvable');
+            } else {
+                return true;
+            }
+        }),
+
     body('ingredients')
         .isArray({ min: 1 })
         .withMessage('Au moins un ingrédient requis'),

@@ -111,12 +111,6 @@ function RecipePage() {
     } else {
       setSelectedMealType("");
     }
-
-    console.log("RecipesPage — filtres URL:", {
-      categorie: categorieFromUrl,
-      origine: origineFromUrl,
-      repas: repasFromUrl,
-    });
   }, [searchParams]);
 
   // Charge les recettes selon page, recherche et filtres

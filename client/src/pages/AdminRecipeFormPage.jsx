@@ -77,7 +77,6 @@ function AdminRecipeFormPage() {
 
         try {
           const recipe = await getFromApi("/api/recipes/" + recipeId);
-          console.log("AdminRecipeFormPage — recette chargée:", recipe.id);
 
           setTitle(recipe.title);
           setCookingTime(String(recipe.cookingTime));
@@ -252,7 +251,7 @@ function AdminRecipeFormPage() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-  
+
     const recipeBody = {
       title: title,
       cookingTime: Number(cookingTime),
@@ -263,10 +262,10 @@ function AdminRecipeFormPage() {
       steps: steps,
       tips: tips,
     };
-  
+
     try {
       let savedRecipeId = "";
-  
+
       if (isEditMode) {
         await putToApi("/api/recipes/" + recipeId, recipeBody);
         savedRecipeId = recipeId;
@@ -274,7 +273,7 @@ function AdminRecipeFormPage() {
         const createdRecipe = await postToApi("/api/recipes", recipeBody);
         savedRecipeId = String(createdRecipe.id);
       }
-  
+
       if (photoFile !== null && photoFile !== undefined) {
         try {
           await uploadRecipePhoto(savedRecipeId, photoFile);
@@ -283,13 +282,13 @@ function AdminRecipeFormPage() {
           return;
         }
       }
-  
+
       if (isEditMode) {
         showToast("Recette mise à jour.", "success");
       } else {
         showToast("Recette enregistrée.", "success");
       }
-  
+
       navigate("/admin");
     } catch (err) {
       showToast(err.message, "error");

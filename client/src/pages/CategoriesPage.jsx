@@ -16,9 +16,6 @@ function CategoriesPage() {
         const categoriesResponse = await getFromApi("/api/categories");
         const originsResponse = await getFromApi("/api/origins");
 
-        console.log("CategoriesPage — catégories:", categoriesResponse.data.length);
-        console.log("CategoriesPage — origines:", originsResponse.data.length);
-
         setCategories(categoriesResponse.data);
         setOrigins(originsResponse.data);
       } catch (err) {

@@ -15,10 +15,8 @@ function HomePage() {
     async function loadFeaturedRecipes() {
       try {
         const response = await getFromApi("/api/recipes?limit=3");
-        console.log("HomePage — recettes:", response.data.length);
         setFeaturedRecipes(response.data);
       } catch (err) {
-        console.log("HomePage — erreur recettes:", err.message);
         setFeaturedRecipes([]);
       }
     }

@@ -23,6 +23,8 @@ app.use(cors({
     credentials: true, // autorise les cookies
 }));
 
+const cookieSecure = process.env.COOKIE_SECURE === 'true';
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -30,7 +32,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         sameSite: 'lax',
-        secure: false,
+        secure: cookieSecure,
     },
 }));
 
@@ -38,11 +40,6 @@ app.use(session({
 // route de test pour voir si le serveur répond
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Route GET /api/health / Connecter' });
-});
-
-// route de test pour l'error handler
-app.get('/api/test-error', (req, res, next) => {
-    next('Erreur 500');
 });
 
 app.use('/uploads', express.static('uploads'));

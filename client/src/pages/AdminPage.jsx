@@ -21,10 +21,8 @@ function AdminPage() {
 
       try {
         const response = await getFromApi("/api/recipes?limit=50");
-        console.log("AdminPage — recettes:", response);
         setRecipes(response.data);
       } catch (err) {
-        console.log("AdminPage — erreur recettes:", err.message);
         setRecipes([]);
         showToast("Impossible de charger les recettes.", "error");
       } finally {
