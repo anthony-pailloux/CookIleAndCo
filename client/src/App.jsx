@@ -19,6 +19,10 @@ function App() {
           <Route path="/admin" element={<AdminRoute />}>
             <Route index element={<AdminPage />} />
             <Route path="recettes/nouvelle" element={<AdminRecipeFormPage />} />
+            <Route
+              path="recettes/:id/modifier"
+              element={<AdminRecipeFormPage />}
+            />
           </Route>
           <Route path="/recettes" element={<RecipePage />} />
           <Route path="/recettes/:id" element={<RecipeDetailsPage />} />

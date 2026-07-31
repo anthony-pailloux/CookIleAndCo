@@ -1,7 +1,9 @@
-// Formulaire admin — ligne 1 : Info / Ingrédients / Préparation · ligne 2 : Classification.
-import { Link, useNavigate } from "react-router-dom";
+// Formulaire admin — création et modification de recette.
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getFromApi, postToApi } from "../services/api.js";
+import { getFromApi, postToApi, putToApi } from "../services/api.js";
+import { useToast } from "../context/ToastContext.jsx";
+import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import AdminReferenceField from "../components/AdminReferenceField.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
@@ -11,10 +13,18 @@ const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 function AdminRecipeFormPage() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { id: recipeId } = useParams();
+
+  let isEditMode = false;
+  if (recipeId !== undefined) {
+    isEditMode = true;
+  }
 
   const [title, setTitle] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
+  const [currentPhotoUrl, setCurrentPhotoUrl] = useState("");
   const [tips, setTips] = useState("");
 
   const [categories, setCategories] = useState([]);
@@ -31,28 +41,102 @@ function AdminRecipeFormPage() {
 
   const [steps, setSteps] = useState([{ description: "" }]);
 
-  const [optionsError, setOptionsError] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [loadingRecipe, setLoadingRecipe] = useState(false);
+  const [recipeLoadFailed, setRecipeLoadFailed] = useState(false);
 
-  useEffect(function () {
-    async function loadFormOptions() {
-      setOptionsError("");
+  useEffect(
+    function () {
+      async function loadFormOptions() {
+        try {
+          const categoriesResponse = await getFromApi("/api/categories");
+          const originsResponse = await getFromApi("/api/origins");
+          const mealTypesResponse = await getFromApi("/api/mealTypes");
 
-      try {
-        const categoriesResponse = await getFromApi("/api/categories");
-        const originsResponse = await getFromApi("/api/origins");
-        const mealTypesResponse = await getFromApi("/api/mealTypes");
-
-        setCategories(categoriesResponse.data);
-        setOrigins(originsResponse.data);
-        setMealTypes(mealTypesResponse.data);
-      } catch (err) {
-        setOptionsError("Impossible de charger les listes du formulaire.");
+          setCategories(categoriesResponse.data);
+          setOrigins(originsResponse.data);
+          setMealTypes(mealTypesResponse.data);
+        } catch (err) {
+          showToast("Impossible de charger les listes du formulaire.", "error");
+        }
       }
-    }
 
-    loadFormOptions();
-  }, []);
+      loadFormOptions();
+    },
+    [showToast],
+  );
+
+  useEffect(
+    function () {
+      if (isEditMode === false) {
+        return;
+      }
+
+      async function loadRecipeForEdit() {
+        setLoadingRecipe(true);
+        setRecipeLoadFailed(false);
+
+        try {
+          const recipe = await getFromApi("/api/recipes/" + recipeId);
+          console.log("AdminRecipeFormPage — recette chargée:", recipe.id);
+
+          setTitle(recipe.title);
+          setCookingTime(String(recipe.cookingTime));
+          setCurrentPhotoUrl(getRecipePhotoUrl(recipe.photo));
+
+          if (recipe.tips !== null && recipe.tips !== undefined) {
+            setTips(recipe.tips);
+          } else {
+            setTips("");
+          }
+
+          setCategoryId(String(recipe.category.id));
+          setOriginId(String(recipe.origin.id));
+          setMealTypeId(String(recipe.mealType.id));
+
+          const loadedIngredients = [];
+          for (let i = 0; i < recipe.ingredients.length; i++) {
+            const item = recipe.ingredients[i];
+
+            let unitValue = "";
+            if (item.unit !== null && item.unit !== undefined) {
+              unitValue = item.unit;
+            }
+
+            loadedIngredients.push({
+              quantity: item.quantity,
+              unit: unitValue,
+              name: item.name,
+            });
+          }
+
+          if (loadedIngredients.length === 0) {
+            loadedIngredients.push({ quantity: "", unit: "", name: "" });
+          }
+          setIngredients(loadedIngredients);
+
+          const loadedSteps = [];
+          for (let j = 0; j < recipe.steps.length; j++) {
+            loadedSteps.push({
+              description: recipe.steps[j].description,
+            });
+          }
+
+          if (loadedSteps.length === 0) {
+            loadedSteps.push({ description: "" });
+          }
+          setSteps(loadedSteps);
+        } catch (err) {
+          setRecipeLoadFailed(true);
+          showToast("Impossible de charger la recette.", "error");
+        } finally {
+          setLoadingRecipe(false);
+        }
+      }
+
+      loadRecipeForEdit();
+    },
+    [recipeId, isEditMode, showToast],
+  );
 
   function addIngredient() {
     const newIngredients = [];
@@ -138,10 +222,37 @@ function AdminRecipeFormPage() {
     setSteps(newSteps);
   }
 
+  async function uploadRecipePhoto(targetRecipeId, file) {
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    const photoResponse = await fetch(
+      apiBaseUrl + "/api/recipes/" + targetRecipeId + "/photo",
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      },
+    );
+
+    const data = await photoResponse.json();
+
+    if (!photoResponse.ok) {
+      let message;
+      if (data && data.error) {
+        message = data.error;
+      } else {
+        message = "Erreur serveur";
+      }
+      throw new Error(message);
+    }
+
+    return true;
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
-    setErrorMessage("");
-
+  
     const recipeBody = {
       title: title,
       cookingTime: Number(cookingTime),
@@ -152,48 +263,72 @@ function AdminRecipeFormPage() {
       steps: steps,
       tips: tips,
     };
-
+  
     try {
-      const createdRecipe = await postToApi("/api/recipes", recipeBody);
-
+      let savedRecipeId = "";
+  
+      if (isEditMode) {
+        await putToApi("/api/recipes/" + recipeId, recipeBody);
+        savedRecipeId = recipeId;
+      } else {
+        const createdRecipe = await postToApi("/api/recipes", recipeBody);
+        savedRecipeId = String(createdRecipe.id);
+      }
+  
       if (photoFile !== null && photoFile !== undefined) {
-        const formData = new FormData();
-        formData.append("photo", photoFile);
-
-        const photoResponse = await fetch(
-          apiBaseUrl + "/api/recipes/" + createdRecipe.id + "/photo",
-          {
-            method: "POST",
-            credentials: "include",
-            body: formData,
-          },
-        );
-
-        if (!photoResponse.ok) {
-          setErrorMessage(
-            "Recette créée, mais la photo n'a pas pu être envoyée.",
-          );
+        try {
+          await uploadRecipePhoto(savedRecipeId, photoFile);
+        } catch (photoErr) {
+          showToast(photoErr.message, "error");
           return;
         }
       }
-
+  
+      if (isEditMode) {
+        showToast("Recette mise à jour.", "success");
+      } else {
+        showToast("Recette enregistrée.", "success");
+      }
+  
       navigate("/admin");
     } catch (err) {
-      setErrorMessage(err.message);
+      showToast(err.message, "error");
     }
+  }
+
+  let pageTitle = "Nouvelle recette";
+  if (isEditMode) {
+    pageTitle = "Modifier la recette";
+  }
+
+  let submitLabel = "Enregistrer la recette";
+  if (isEditMode) {
+    submitLabel = "Mettre à jour la recette";
+  }
+
+  if (isEditMode && loadingRecipe === true) {
+    return (
+      <main className="admin-page admin-recipe-form-page">
+        <p className="admin-page__status">Chargement de la recette...</p>
+      </main>
+    );
+  }
+
+  if (isEditMode && recipeLoadFailed === true) {
+    return (
+      <main className="admin-page admin-recipe-form-page">
+        <Link to="/admin" className="admin-recipe-form-page__back-link">
+          Retour au dashboard
+        </Link>
+      </main>
+    );
   }
 
   return (
     <main className="admin-page admin-recipe-form-page">
       <header className="admin-page__header">
-        <h1 className="admin-page__title">Nouvelle recette</h1>
+        <h1 className="admin-page__title">{pageTitle}</h1>
       </header>
-
-      {optionsError !== "" && (
-        <p className="admin-form__error admin-recipe-form-page__options-error">
-          {optionsError}
-        </p>
-      )}
 
       <form className="admin-form" onSubmit={handleSubmit}>
         <fieldset className="admin-form__section">
@@ -230,6 +365,13 @@ function AdminRecipeFormPage() {
 
           <div className="admin-form__field">
             <label htmlFor="recipe-photo">Photo</label>
+            {isEditMode && currentPhotoUrl !== "" && (
+              <img
+                className="admin-reference-field__preview"
+                src={currentPhotoUrl}
+                alt="Photo actuelle"
+              />
+            )}
             <input
               id="recipe-photo"
               className="input admin-form__file"
@@ -433,17 +575,11 @@ function AdminRecipeFormPage() {
           />
         </fieldset>
 
-        {errorMessage !== "" && (
-          <p className="admin-form__error admin-form__full-row">
-            {errorMessage}
-          </p>
-        )}
-
         <button
           type="submit"
           className="btn btn--primary admin-form__submit-btn admin-form__full-row"
         >
-          Enregistrer la recette
+          {submitLabel}
         </button>
       </form>
 

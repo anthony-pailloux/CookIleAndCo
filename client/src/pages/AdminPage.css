@@ -82,6 +82,14 @@
   display: block;
 }
 
+/* Colonne Actions — espace entre Modifier et Supprimer */
+.admin-recipes-table__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
 @media (min-width: 768px) {
   .admin-page {
     padding: 2.5rem 2rem 4rem;

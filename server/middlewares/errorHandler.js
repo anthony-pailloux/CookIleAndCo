@@ -3,12 +3,16 @@
 export default function errorHandler(err, req, res, next) {
     console.error(err);
 
-    const status = err.status || 500;
-
+    let status = err.status || 500;
     let message;
 
-    if (status === 500) {
-        
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        status = 400;
+        message = 'Image trop volumineuse (max 5 Mo)';
+    } else if (err.message === 'Format photo invalide (JPG, PNG ou WebP)') {
+        status = 400;
+        message = err.message;
+    } else if (status === 500) {
         message = 'Erreur serveur';
     } else {
         message = err.message;

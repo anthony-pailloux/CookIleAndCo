@@ -6,12 +6,15 @@ import {
   putToApi,
   deleteToApi,
 } from "../services/api.js";
+import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import "./AdminReferenceField.css";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 function AdminReferenceField(props) {
+  const { showToast } = useToast();
+
   const label = props.label;
   const selectId = props.selectId;
   const emptyOptionLabel = props.emptyOptionLabel;
@@ -27,7 +30,6 @@ function AdminReferenceField(props) {
   const [editName, setEditName] = useState("");
   const [newImageFile, setNewImageFile] = useState(null);
   const [editImageFile, setEditImageFile] = useState(null);
-  const [formError, setFormError] = useState("");
 
   const hasSelection = selectedId !== "";
 
@@ -91,14 +93,11 @@ function AdminReferenceField(props) {
     onSelectedIdChange(newSelectedId);
     setEditName(findItemName(newSelectedId));
     setEditImageFile(null);
-    setFormError("");
   }
 
   async function handleAdd() {
-    setFormError("");
-
     if (newName === "") {
-      setFormError("Saisis un nom.");
+      showToast("Saisis un nom.", "error");
       return;
     }
 
@@ -114,42 +113,40 @@ function AdminReferenceField(props) {
       setEditName(createdItem.name);
       setNewName("");
       setNewImageFile(null);
+      showToast("Ajout réussi.", "success");
     } catch (err) {
-      setFormError(err.message);
+      showToast(err.message, "error");
     }
   }
 
   async function handleUpdate() {
-    setFormError("");
-
     if (selectedId === "") {
-      setFormError("Choisis d'abord un élément à modifier.");
+      showToast("Choisis d'abord un élément à modifier.", "error");
       return;
     }
 
     if (editName === "") {
-      setFormError("Saisis un nom.");
+      showToast("Saisis un nom.", "error");
       return;
     }
 
     try {
       await putToApi(apiPath + "/" + selectedId, { name: editName });
       await refreshItems();
+      showToast("Modification réussie.", "success");
     } catch (err) {
-      setFormError(err.message);
+      showToast(err.message, "error");
     }
   }
 
   async function handleImageUpdate() {
-    setFormError("");
-
     if (selectedId === "") {
-      setFormError("Choisis d'abord une catégorie.");
+      showToast("Choisis d'abord une catégorie.", "error");
       return;
     }
 
     if (editImageFile === null) {
-      setFormError("Choisis une image.");
+      showToast("Choisis une image.", "error");
       return;
     }
 
@@ -157,16 +154,15 @@ function AdminReferenceField(props) {
       await uploadImage(selectedId, editImageFile);
       await refreshItems();
       setEditImageFile(null);
+      showToast("Image mise à jour.", "success");
     } catch (err) {
-      setFormError(err.message);
+      showToast(err.message, "error");
     }
   }
 
   async function handleDelete() {
-    setFormError("");
-
     if (selectedId === "") {
-      setFormError("Choisis d'abord un élément à supprimer.");
+      showToast("Choisis d'abord un élément à supprimer.", "error");
       return;
     }
 
@@ -185,8 +181,9 @@ function AdminReferenceField(props) {
       onSelectedIdChange("");
       setEditName("");
       setEditImageFile(null);
+      showToast("Suppression réussie.", "success");
     } catch (err) {
-      setFormError(err.message);
+      showToast(err.message, "error");
     }
   }
 
@@ -333,10 +330,6 @@ function AdminReferenceField(props) {
             Mettre à jour l&apos;image
           </button>
         </fieldset>
-      )}
-
-      {formError !== "" && (
-        <p className="admin-form__error">{formError}</p>
       )}
     </div>
   );

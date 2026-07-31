@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getFromApi, deleteToApi } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { Link } from "react-router-dom";
 import Button from "../components/button.jsx";
@@ -9,6 +10,7 @@ import "./AdminPage.css";
 
 function AdminPage() {
   const auth = useAuth();
+  const { showToast } = useToast();
 
   const [recipes, setRecipes] = useState([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
@@ -24,13 +26,14 @@ function AdminPage() {
       } catch (err) {
         console.log("AdminPage — erreur recettes:", err.message);
         setRecipes([]);
+        showToast("Impossible de charger les recettes.", "error");
       } finally {
         setLoadingRecipes(false);
       }
     }
 
     loadAdminRecipes();
-  }, []);
+  }, [showToast]);
 
   async function handleDeleteRecipe(recipeId, recipeTitle) {
     const confirmed = window.confirm(
@@ -42,8 +45,7 @@ function AdminPage() {
     }
 
     try {
-      const result = await deleteToApi("/api/recipes/" + recipeId);
-      console.log("AdminPage — supprimée:", result);
+      await deleteToApi("/api/recipes/" + recipeId);
 
       const newRecipes = [];
       for (let i = 0; i < recipes.length; i++) {
@@ -52,8 +54,9 @@ function AdminPage() {
         }
       }
       setRecipes(newRecipes);
+      showToast("Recette supprimée.", "success");
     } catch (err) {
-      console.log("AdminPage — erreur suppression:", err.message);
+      showToast(err.message, "error");
     }
   }
 
@@ -105,25 +108,24 @@ function AdminPage() {
                     <td>{recipe.title}</td>
                     <td>{recipe.category.name}</td>
                     <td>
-                      <Button
-                        className="btn--outline"
-                        onClick={function () {
-                          console.log(
-                            "AdminPage — modifier recette id:",
-                            recipe.id,
-                          );
-                        }}
-                      >
-                        Modifier
-                      </Button>
-                      <Button
-                        className="btn--danger"
-                        onClick={function () {
-                          handleDeleteRecipe(recipe.id, recipe.title);
-                        }}
-                      >
-                        Supprimer
-                      </Button>
+                      <div className="admin-recipes-table__actions">
+                        <Link
+                          to={
+                            "/admin/recettes/" + recipe.id + "/modifier"
+                          }
+                          className="btn btn--outline"
+                        >
+                          Modifier
+                        </Link>
+                        <Button
+                          className="btn--danger"
+                          onClick={function () {
+                            handleDeleteRecipe(recipe.id, recipe.title);
+                          }}
+                        >
+                          Supprimer
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 );
