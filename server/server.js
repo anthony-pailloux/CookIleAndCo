@@ -13,9 +13,15 @@ async function startServer() {
 
         console.log('Connexion à la DB mysql : ok');
 
-        app.listen(PORT, () => {
-            console.log(`Server demarré sur http://localhost:${PORT}`);
-        });
+        // o2switch, Passenger : pas de port manuel
+        if (typeof PhusionPassenger !== 'undefined') {
+            app.listen('passenger');
+            console.log('Server démarré via Passenger');
+        } else {
+            app.listen(PORT, () => {
+                console.log(`Server démarré sur http://localhost:${PORT}`);
+            });
+        }
 
     } catch (error) {
 

@@ -10,7 +10,7 @@ import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import "./AdminReferenceField.css";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL;
+const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 function AdminReferenceField(props) {
   const { showToast } = useToast();

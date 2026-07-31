@@ -1,6 +1,6 @@
 import { getFromApi, postToApi } from './api.js';
 
-const apiBaseUrl = import.meta.env.VITE_API_URL;
+const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 export async function getCurrentUser() {
     return await getFromApi('/api/auth/current-user');

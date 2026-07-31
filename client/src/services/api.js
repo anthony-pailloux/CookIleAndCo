@@ -1,7 +1,8 @@
 // Client HTTP centralisé — toutes les requêtes front → back passent par ici.
 
 // URL du back (ex. http://localhost:3000) — lue depuis client .env
-const apiBaseUrl = import.meta.env.VITE_API_URL;
+// Vide en prod (same origin) : requêtes relatives /api/...
+const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 // Construit le message d'erreur : détail des champs si validation 400, sinon error générique
 function buildApiErrorMessage(data) {

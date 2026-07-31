@@ -2,6 +2,9 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
@@ -50,7 +53,25 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
 
+// Front React buildé (prod) — static + fallback SPA pour React Router
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const clientDistPath = path.join(__dirname, '../client/dist');
+const indexHtmlPath = path.join(clientDistPath, 'index.html');
+const hasClientBuild = fs.existsSync(indexHtmlPath);
 
+if (hasClientBuild) {
+    app.use(express.static(clientDistPath));
+
+    app.use((req, res, next) => {
+        if (req.method !== 'GET') {
+            next();
+        } else if (req.path.startsWith('/api')) {
+            next();
+        } else {
+            res.sendFile(indexHtmlPath);
+        }
+    });
+}
 
 // 404 puis gestion des erreurs
 app.use(notFound);

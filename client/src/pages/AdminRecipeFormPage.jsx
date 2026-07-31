@@ -9,7 +9,7 @@ import "../components/Button.css";
 import "./AdminPage.css";
 import "./AdminRecipeFormPage.css";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL;
+const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 function AdminRecipeFormPage() {
   const navigate = useNavigate();
