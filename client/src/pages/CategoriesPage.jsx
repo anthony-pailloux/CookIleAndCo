@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getFromApi } from "../services/api.js";
+import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./CategoriesPage.css";
 
@@ -56,7 +57,10 @@ function CategoriesPage() {
                     to={"/recettes?categorie=" + category.name}
                   >
                     <div className="categories-page__photo">
-                      <img src={placeholderPhoto} alt={category.name} />
+                      <img
+                        src={getRecipePhotoUrl(category.image)}
+                        alt={category.name}
+                      />
                     </div>
                     <div className="categories-page__body">
                       <span className="categories-page__name">{category.name}</span>

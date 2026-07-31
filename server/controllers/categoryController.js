@@ -4,7 +4,7 @@ import Recipe from "../models/Recipe.js";
 export async function listCategory(req, res) {
     const result = await Category.findAll({
         order: [['createdAt', 'DESC']],
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'image'],
     });
 
     res.status(200).json({
@@ -55,6 +55,28 @@ export async function updateCategory(req, res) {
 
         res.status(200).json(category);
     }
+}
+
+export async function addCategoryImage(req, res) {
+    const id = req.params.id;
+
+    const category = await Category.findByPk(id);
+
+    if (!category) {
+        res.status(404).json({ error: 'Catégorie introuvable' });
+        return;
+    }
+
+    if (!req.file) {
+        res.status(400).json({ error: 'Image requise' });
+        return;
+    }
+
+    const imagePath = '/uploads/categories/' + req.file.filename;
+
+    await category.update({ image: imagePath });
+
+    res.status(200).json(category);
 }
 
 export async function deleteCategory(req, res) {

@@ -405,6 +405,7 @@ function AdminRecipeFormPage() {
             onItemsChange={setCategories}
             selectedId={categoryId}
             onSelectedIdChange={setCategoryId}
+            supportsImage={true}
           />
 
           <AdminReferenceField

@@ -6,7 +6,10 @@ import {
   putToApi,
   deleteToApi,
 } from "../services/api.js";
+import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import "./AdminReferenceField.css";
+
+const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 function AdminReferenceField(props) {
   const label = props.label;
@@ -18,9 +21,12 @@ function AdminReferenceField(props) {
   const onItemsChange = props.onItemsChange;
   const selectedId = props.selectedId;
   const onSelectedIdChange = props.onSelectedIdChange;
+  const supportsImage = props.supportsImage === true;
 
   const [newName, setNewName] = useState("");
   const [editName, setEditName] = useState("");
+  const [newImageFile, setNewImageFile] = useState(null);
+  const [editImageFile, setEditImageFile] = useState(null);
   const [formError, setFormError] = useState("");
 
   const hasSelection = selectedId !== "";
@@ -35,15 +41,56 @@ function AdminReferenceField(props) {
     return foundName;
   }
 
+  function findItemImage(itemId) {
+    let foundImage = "";
+    for (let i = 0; i < items.length; i++) {
+      if (String(items[i].id) === String(itemId)) {
+        if (items[i].image) {
+          foundImage = items[i].image;
+        }
+      }
+    }
+    return foundImage;
+  }
+
   async function refreshItems() {
     const response = await getFromApi(apiPath);
     onItemsChange(response.data);
+  }
+
+  async function uploadImage(itemId, file) {
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    const response = await fetch(
+      apiBaseUrl + apiPath + "/" + itemId + "/image",
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      let message;
+      if (data && data.error) {
+        message = data.error;
+      } else {
+        message = "Erreur serveur";
+      }
+      throw new Error(message);
+    }
+
+    return data;
   }
 
   function handleSelectChange(event) {
     const newSelectedId = event.target.value;
     onSelectedIdChange(newSelectedId);
     setEditName(findItemName(newSelectedId));
+    setEditImageFile(null);
     setFormError("");
   }
 
@@ -57,10 +104,16 @@ function AdminReferenceField(props) {
 
     try {
       const createdItem = await postToApi(apiPath, { name: newName });
+
+      if (supportsImage && newImageFile !== null) {
+        await uploadImage(createdItem.id, newImageFile);
+      }
+
       await refreshItems();
       onSelectedIdChange(String(createdItem.id));
       setEditName(createdItem.name);
       setNewName("");
+      setNewImageFile(null);
     } catch (err) {
       setFormError(err.message);
     }
@@ -82,6 +135,28 @@ function AdminReferenceField(props) {
     try {
       await putToApi(apiPath + "/" + selectedId, { name: editName });
       await refreshItems();
+    } catch (err) {
+      setFormError(err.message);
+    }
+  }
+
+  async function handleImageUpdate() {
+    setFormError("");
+
+    if (selectedId === "") {
+      setFormError("Choisis d'abord une catégorie.");
+      return;
+    }
+
+    if (editImageFile === null) {
+      setFormError("Choisis une image.");
+      return;
+    }
+
+    try {
+      await uploadImage(selectedId, editImageFile);
+      await refreshItems();
+      setEditImageFile(null);
     } catch (err) {
       setFormError(err.message);
     }
@@ -109,6 +184,7 @@ function AdminReferenceField(props) {
       await refreshItems();
       onSelectedIdChange("");
       setEditName("");
+      setEditImageFile(null);
     } catch (err) {
       setFormError(err.message);
     }
@@ -117,6 +193,11 @@ function AdminReferenceField(props) {
   let selectedLabel = "";
   if (hasSelection) {
     selectedLabel = findItemName(selectedId);
+  }
+
+  let selectedImageUrl = "";
+  if (hasSelection && supportsImage) {
+    selectedImageUrl = getRecipePhotoUrl(findItemImage(selectedId));
   }
 
   return (
@@ -157,6 +238,17 @@ function AdminReferenceField(props) {
               setNewName(event.target.value);
             }}
           />
+          {supportsImage && (
+            <input
+              className="input admin-reference-field__file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={function (event) {
+                const selectedFile = event.target.files[0];
+                setNewImageFile(selectedFile);
+              }}
+            />
+          )}
           <button
             type="button"
             className="btn admin-form__add-btn"
@@ -215,6 +307,33 @@ function AdminReferenceField(props) {
           </button>
         </fieldset>
       </div>
+
+      {supportsImage && hasSelection && (
+        <fieldset className="admin-reference-field__panel admin-reference-field__panel--image">
+          <legend>Image</legend>
+          <img
+            className="admin-reference-field__preview"
+            src={selectedImageUrl}
+            alt={selectedLabel}
+          />
+          <input
+            className="input admin-reference-field__file"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={function (event) {
+              const selectedFile = event.target.files[0];
+              setEditImageFile(selectedFile);
+            }}
+          />
+          <button
+            type="button"
+            className="btn admin-form__add-btn"
+            onClick={handleImageUpdate}
+          >
+            Mettre à jour l&apos;image
+          </button>
+        </fieldset>
+      )}
 
       {formError !== "" && (
         <p className="admin-form__error">{formError}</p>

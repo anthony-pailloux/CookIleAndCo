@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getFromApi } from "../services/api.js";
+import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import RecipeCard from "../components/RecipeCard.jsx";
 import "./HomePage.css";
 import "../components/Button.css";
 import aboutImage from "../assets/table-familiale-cuisine-du-monde-nappe-madras-rhum.webp";
-import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import heroBanner from "../assets/banniere-madras-antilles.webp";
 
 function HomePage() {
@@ -45,18 +45,18 @@ function HomePage() {
   return (
     <main className="home">
       <section
-  className="home-hero"
-  style={{ backgroundImage: "url(" + heroBanner + ")" }}
->
-  <div className="home-hero__content">
-    <h1>Cook'île & Co</h1>
-    <p className="home-hero__accroche">"An Nou Ay !"</p>
-    <p className="home-hero__accroche">Des antilles aux saveurs du monde</p>
-    <Link className="btn home-hero__cta" to="/recettes">
-      Voir le catalogue
-    </Link>
-  </div>
-</section>
+        className="home-hero"
+        style={{ backgroundImage: "url(" + heroBanner + ")" }}
+      >
+        <div className="home-hero__content">
+          <h1>Cook'île & Co</h1>
+          <p className="home-hero__accroche">"An Nou Ay !"</p>
+          <p className="home-hero__accroche">Des antilles aux saveurs du monde</p>
+          <Link className="btn home-hero__cta" to="/recettes">
+            Voir le catalogue
+          </Link>
+        </div>
+      </section>
 
       <section className="home-about">
         <img
@@ -122,7 +122,10 @@ function HomePage() {
                     to={"/recettes?categorie=" + category.name}
                   >
                     <div className="home-categories__photo">
-                      <img src={placeholderPhoto} alt={category.name} />
+                      <img
+                        src={getRecipePhotoUrl(category.image)}
+                        alt={category.name}
+                      />
                     </div>
                     <span className="home-categories__name">
                       {category.name}
