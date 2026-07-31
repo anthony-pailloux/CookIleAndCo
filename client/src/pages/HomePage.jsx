@@ -51,10 +51,9 @@ function HomePage() {
         <div className="home-hero__content">
           <h1>Cook'île & Co</h1>
           <p className="home-hero__accroche">"An Nou Ay !"</p>
-          <p className="home-hero__accroche">Des antilles aux saveurs du monde</p>
-          <Link className="btn home-hero__cta" to="/recettes">
-            Voir le catalogue
-          </Link>
+          <p className="home-hero__accroche">
+            Des antilles aux saveurs du monde
+          </p>
         </div>
       </section>
 
@@ -67,9 +66,10 @@ function HomePage() {
         <div className="home-about__text">
           <h2>À propos</h2>
           <p>
-            La cuisine de Tetelle sur Cook'île & Co, c'est le goût des Antilles et des saveurs du
-            monde, partagé en famille. Recettes traditionnelles, douceurs maison
-            et coups de cœur de Tetelle à cuisiner à votre rythme.
+            La cuisine de Tetelle sur Cook'île & Co, c'est le goût des Antilles
+            et des saveurs du monde, partagé en famille. Recettes
+            traditionnelles, douceurs maison et coups de cœur de Tetelle à
+            cuisiner à votre rythme.
           </p>
         </div>
       </section>
