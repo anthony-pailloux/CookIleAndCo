@@ -1,7 +1,8 @@
-// Formulaire admin — création et édition d'une recette.
+// Formulaire admin — ligne 1 : Info / Ingrédients / Préparation · ligne 2 : Classification.
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getFromApi, postToApi } from "../services/api.js";
+import AdminReferenceField from "../components/AdminReferenceField.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
 import "./AdminRecipeFormPage.css";
@@ -33,7 +34,7 @@ function AdminRecipeFormPage() {
   const [optionsError, setOptionsError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
+  useEffect(function () {
     async function loadFormOptions() {
       setOptionsError("");
 
@@ -165,12 +166,12 @@ function AdminRecipeFormPage() {
             method: "POST",
             credentials: "include",
             body: formData,
-          }
+          },
         );
 
         if (!photoResponse.ok) {
           setErrorMessage(
-            "Recette créée, mais la photo n'a pas pu être envoyée."
+            "Recette créée, mais la photo n'a pas pu être envoyée.",
           );
           return;
         }
@@ -183,17 +184,21 @@ function AdminRecipeFormPage() {
   }
 
   return (
-    <main className="admin-page">
+    <main className="admin-page admin-recipe-form-page">
       <header className="admin-page__header">
         <h1 className="admin-page__title">Nouvelle recette</h1>
       </header>
 
-      <section className="admin-page__section">
-        {optionsError !== "" && (
-          <p className="admin-form__error">{optionsError}</p>
-        )}
+      {optionsError !== "" && (
+        <p className="admin-form__error admin-recipe-form-page__options-error">
+          {optionsError}
+        </p>
+      )}
 
-        <form className="admin-form" onSubmit={handleSubmit}>
+      <form className="admin-form" onSubmit={handleSubmit}>
+        <fieldset className="admin-form__section">
+          <legend>Informations générales</legend>
+
           <div className="admin-form__field">
             <label htmlFor="recipe-title">Titre *</label>
             <input
@@ -236,69 +241,10 @@ function AdminRecipeFormPage() {
               }}
             />
           </div>
+        </fieldset>
 
-          <div className="admin-form__field">
-            <label htmlFor="recipe-category">Catégorie *</label>
-            <select
-              id="recipe-category"
-              className="input"
-              value={categoryId}
-              onChange={function (event) {
-                setCategoryId(event.target.value);
-              }}
-            >
-              <option value="">Choisir une catégorie</option>
-              {categories.map(function (category) {
-                return (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="admin-form__field">
-            <label htmlFor="recipe-origin">Origine *</label>
-            <select
-              id="recipe-origin"
-              className="input"
-              value={originId}
-              onChange={function (event) {
-                setOriginId(event.target.value);
-              }}
-            >
-              <option value="">Choisir une origine</option>
-              {origins.map(function (origin) {
-                return (
-                  <option key={origin.id} value={origin.id}>
-                    {origin.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="admin-form__field">
-            <label htmlFor="recipe-meal-type">Type de repas *</label>
-            <select
-              id="recipe-meal-type"
-              className="input"
-              value={mealTypeId}
-              onChange={function (event) {
-                setMealTypeId(event.target.value);
-              }}
-            >
-              <option value="">Choisir un type de repas</option>
-              {mealTypes.map(function (mealType) {
-                return (
-                  <option key={mealType.id} value={mealType.id}>
-                    {mealType.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+        <fieldset className="admin-form__section">
+          <legend>Ingrédients</legend>
 
           {ingredients.map(function (ingredient, ingredientIndex) {
             return (
@@ -318,7 +264,7 @@ function AdminRecipeFormPage() {
                       updateIngredient(
                         ingredientIndex,
                         "quantity",
-                        event.target.value
+                        event.target.value,
                       );
                     }}
                   />
@@ -337,7 +283,7 @@ function AdminRecipeFormPage() {
                       updateIngredient(
                         ingredientIndex,
                         "unit",
-                        event.target.value
+                        event.target.value,
                       );
                     }}
                   />
@@ -356,7 +302,7 @@ function AdminRecipeFormPage() {
                       updateIngredient(
                         ingredientIndex,
                         "name",
-                        event.target.value
+                        event.target.value,
                       );
                     }}
                   />
@@ -384,6 +330,10 @@ function AdminRecipeFormPage() {
           >
             + Ajouter un ingrédient
           </button>
+        </fieldset>
+
+        <fieldset className="admin-form__section">
+          <legend>Préparation</legend>
 
           {steps.map(function (step, stepIndex) {
             return (
@@ -440,23 +390,65 @@ function AdminRecipeFormPage() {
               }}
             />
           </div>
+        </fieldset>
 
-          {errorMessage !== "" && (
-            <p className="admin-form__error">{errorMessage}</p>
-          )}
+        <fieldset className="admin-form__section admin-form__section--full-width">
+          <legend>Classification</legend>
 
-          <button
-            type="submit"
-            className="btn btn--primary admin-form__submit-btn"
-          >
-            Enregistrer la recette
-          </button>
-        </form>
+          <AdminReferenceField
+            label="Catégorie"
+            selectId="recipe-category"
+            emptyOptionLabel="Choisir une catégorie"
+            apiPath="/api/categories"
+            entityLabel="catégorie"
+            items={categories}
+            onItemsChange={setCategories}
+            selectedId={categoryId}
+            onSelectedIdChange={setCategoryId}
+          />
 
-        <Link to="/admin" className="admin-page__back-link">
-          Retour au dashboard
-        </Link>
-      </section>
+          <AdminReferenceField
+            label="Origine"
+            selectId="recipe-origin"
+            emptyOptionLabel="Choisir une origine"
+            apiPath="/api/origins"
+            entityLabel="origine"
+            items={origins}
+            onItemsChange={setOrigins}
+            selectedId={originId}
+            onSelectedIdChange={setOriginId}
+          />
+
+          <AdminReferenceField
+            label="Type de repas"
+            selectId="recipe-meal-type"
+            emptyOptionLabel="Choisir un type de repas"
+            apiPath="/api/mealTypes"
+            entityLabel="type de repas"
+            items={mealTypes}
+            onItemsChange={setMealTypes}
+            selectedId={mealTypeId}
+            onSelectedIdChange={setMealTypeId}
+          />
+        </fieldset>
+
+        {errorMessage !== "" && (
+          <p className="admin-form__error admin-form__full-row">
+            {errorMessage}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          className="btn btn--primary admin-form__submit-btn admin-form__full-row"
+        >
+          Enregistrer la recette
+        </button>
+      </form>
+
+      <Link to="/admin" className="admin-recipe-form-page__back-link">
+        Retour au dashboard
+      </Link>
     </main>
   );
 }
