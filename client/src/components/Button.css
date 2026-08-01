@@ -1,17 +1,17 @@
 .btn {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--tc-navy);
-    border-radius: var(--tc-radius);
-    background: var(--tc-yellow-madras);
-    color: var(--tc-white);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .btn--primary:hover {
-    background: var(--tc-green-madras);
-    opacity: 1;
-  }
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-yellow-madras);
+  color: var(--tc-white);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn--primary:hover {
+  background: var(--tc-green-madras);
+  opacity: 1;
+}

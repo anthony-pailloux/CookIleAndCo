@@ -10,21 +10,27 @@ import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import "./AdminReferenceField.css";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL || '';
+const apiBaseUrl = import.meta.env.VITE_API_URL || "";
 
-function AdminReferenceField(props) {
+function AdminReferenceField({
+  label,
+  selectId,
+  emptyOptionLabel,
+  apiPath,
+  entityLabel,
+  items,
+  onItemsChange,
+  selectedId,
+  onSelectedIdChange,
+  supportsImage,
+}) {
   const { showToast } = useToast();
 
-  const label = props.label;
-  const selectId = props.selectId;
-  const emptyOptionLabel = props.emptyOptionLabel;
-  const apiPath = props.apiPath;
-  const entityLabel = props.entityLabel;
-  const items = props.items;
-  const onItemsChange = props.onItemsChange;
-  const selectedId = props.selectedId;
-  const onSelectedIdChange = props.onSelectedIdChange;
-  const supportsImage = props.supportsImage === true;
+  // supportsImage est optionnel : true seulement si le parent passe supportsImage={true}
+  let imageSupported = false;
+  if (supportsImage === true) {
+    imageSupported = true;
+  }
 
   const [newName, setNewName] = useState("");
   const [editName, setEditName] = useState("");
@@ -104,7 +110,7 @@ function AdminReferenceField(props) {
     try {
       const createdItem = await postToApi(apiPath, { name: newName });
 
-      if (supportsImage && newImageFile !== null) {
+      if (imageSupported && newImageFile !== null) {
         await uploadImage(createdItem.id, newImageFile);
       }
 
@@ -193,7 +199,7 @@ function AdminReferenceField(props) {
   }
 
   let selectedImageUrl = "";
-  if (hasSelection && supportsImage) {
+  if (hasSelection && imageSupported) {
     selectedImageUrl = getRecipePhotoUrl(findItemImage(selectedId));
   }
 
@@ -235,7 +241,7 @@ function AdminReferenceField(props) {
               setNewName(event.target.value);
             }}
           />
-          {supportsImage && (
+          {imageSupported && (
             <input
               className="input admin-reference-field__file"
               type="file"
@@ -305,7 +311,7 @@ function AdminReferenceField(props) {
         </fieldset>
       </div>
 
-      {supportsImage && hasSelection && (
+      {imageSupported && hasSelection && (
         <fieldset className="admin-reference-field__panel admin-reference-field__panel--image">
           <legend>Image</legend>
           <img

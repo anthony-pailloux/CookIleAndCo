@@ -1,8 +1,8 @@
 .site-footer {
-    border-top: 3px solid var(--tc-yellow-madras);
-    color: var(--tc-yellow-madras);
-    padding: 22px 24px;
-    text-align: center;
-    font-size: 18px;
-    margin-top: 0rem;
+  border-top: 3px solid var(--tc-yellow-madras);
+  color: var(--tc-yellow-madras);
+  padding: 22px 24px;
+  text-align: center;
+  font-size: 18px;
+  margin-top: 0rem;
 }
