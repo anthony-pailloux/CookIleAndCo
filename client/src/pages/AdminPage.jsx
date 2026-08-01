@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { Link } from "react-router-dom";
-import Button from "../components/button.jsx";
+import Button from "../components/Button.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
 

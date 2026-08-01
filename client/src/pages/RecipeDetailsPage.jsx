@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getFromApi } from "../services/api";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
-import IngredientItem from "../components/IngredientItem";
+import IngredientItem from "../components/IngredientItem.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
-import Button from "../components/button";
+import Button from "../components/Button.jsx";
 import "../components/Button.css";
 import "./RecipeDetailsPage.css";
 
