@@ -28,6 +28,8 @@ app.use(cors({
 
 const cookieSecure = process.env.COOKIE_SECURE === 'true';
 
+app.set('trust proxy', 1);
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
