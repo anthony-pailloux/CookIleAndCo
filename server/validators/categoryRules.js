@@ -1,4 +1,4 @@
-// Règles express-validator pour créer ou modifier une catégorie (POST / PUT).
+// créer ou modifier une catégorie (POST / PUT).
 import { body } from 'express-validator';
 
 export const categoryRules = [

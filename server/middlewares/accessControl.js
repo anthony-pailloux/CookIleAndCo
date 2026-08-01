@@ -1,4 +1,4 @@
-// Contrôle d'accès v1 : seul l'admin (Estelle) accède aux routes protégées.
+// Contrôle d'accès seul l'admin accède aux routes protégées.
 
 export function requireAdmin(req, res, next) {
     const userId = req.session.userId;

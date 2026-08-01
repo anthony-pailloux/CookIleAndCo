@@ -5,7 +5,7 @@ import sequelize from "../config/database.js";
 
 class Category extends Model {
     static associate(models) {
-        // une catégorie a plein de recettes
+        // une catégorie a plusieurs de recettes
         Category.hasMany(models.Recipe, {
             foreignKey: 'categoryId',
             as: 'recipes',

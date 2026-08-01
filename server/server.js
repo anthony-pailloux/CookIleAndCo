@@ -13,7 +13,7 @@ async function startServer() {
 
         console.log('Connexion à la DB mysql : ok');
 
-        // o2switch, Passenger : pas de port manuel
+        // o2switch, Passenger pas de port manuel
         if (typeof PhusionPassenger !== 'undefined') {
             app.listen('passenger');
             console.log('Server démarré via Passenger');

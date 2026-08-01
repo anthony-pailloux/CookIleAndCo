@@ -18,7 +18,7 @@ import mealTypeRoutes from './routes/mealTypeRoute.js';
 
 const app = express();
 
-app.use(express.json()); // lit le json des requêtes
+app.use(express.json());
 
 // autorise le front à appeler l'api
 app.use(cors({
@@ -53,7 +53,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
 
-// Front React buildé (prod) — static + fallback SPA pour React Router
+// Front React buildé (prod)/ static + fallback SPA pour React Router
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const clientDistPath = path.join(__dirname, '../client/dist');
 const indexHtmlPath = path.join(clientDistPath, 'index.html');

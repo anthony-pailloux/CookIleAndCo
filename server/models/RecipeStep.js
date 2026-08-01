@@ -5,7 +5,7 @@ import sequelize from "../config/database.js";
 
 class RecipeStep extends Model {
     static associate(models) {
-        // lié à une recette
+        // liste des etapes appartient à une recette
         RecipeStep.belongsTo(models.Recipe, {
             foreignKey: 'recipeId'
         });

@@ -5,7 +5,6 @@ import sequelize from '../config/database.js';
 
 class User extends Model {
     static associate(models) {
-
     }
 }
 

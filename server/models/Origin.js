@@ -5,7 +5,7 @@ import sequelize from "../config/database.js";
 
 class Origin extends Model {
     static associate(models) {
-        // une origine a plein de recettes
+        // une origine a plusieurs de recettes
         Origin.hasMany(models.Recipe, {
             foreignKey: 'originId',
             as: 'recipes',

@@ -1,4 +1,4 @@
-// Règles express-validator pour créer ou modifier un type de repas (POST / PUT).
+// créer ou modifier un type de repas (POST / PUT).
 import { body } from 'express-validator';
 
 export const mealTypeRules = [
