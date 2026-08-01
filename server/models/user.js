@@ -22,7 +22,7 @@ User.init(
         role: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 'user', // user ou admin
+            defaultValue: 'user', 
             validate: {
                 isIn: [['user', 'admin']],
             },
