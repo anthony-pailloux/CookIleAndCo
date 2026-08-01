@@ -1,5 +1,3 @@
-// regroupe tous les modèles et leurs liens
-
 import sequelize from "../config/database.js";
 import User from './User.js';
 import Category from './Category.js';
@@ -20,8 +18,8 @@ const models = {
 };
 
 Object.values(models).forEach(function (model) {
-    // branche les liens entre modèles (catégorie, recette, etc.)
-    if (typeof model.associate) {
+    // n'appelle associate que si la méthode existe vraiment
+    if (typeof model.associate === 'function') {
         model.associate(models);
     }
 });
