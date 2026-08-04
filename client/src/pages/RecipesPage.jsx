@@ -161,15 +161,21 @@ function RecipePage() {
   // Charge origines, types de repas, catégories pour les selects
   useEffect(() => {
     async function loadFiltersData() {
-      const originsResponse = await getFromApi("/api/origins");
-      const mealTypesResponse = await getFromApi("/api/mealTypes");
-      const categoriesResponse = await getFromApi("/api/categories");
-
-      setOrigins(originsResponse.data);
-      setMealTypes(mealTypesResponse.data);
-      setCategories(categoriesResponse.data);
+      try {
+        const originsResponse = await getFromApi("/api/origins");
+        const mealTypesResponse = await getFromApi("/api/mealTypes");
+        const categoriesResponse = await getFromApi("/api/categories");
+    
+        setOrigins(originsResponse.data);
+        setMealTypes(mealTypesResponse.data);
+        setCategories(categoriesResponse.data);
+      } catch (err) {
+        // Page publique : pas de toast, selects vides comme si aucune donnée
+        setOrigins([]);
+        setMealTypes([]);
+        setCategories([]);
+      }
     }
-
     loadFiltersData();
   }, []);
 
