@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, logout, getCurrentUser, createAdmin, listAdmins, deleteAdmin } from '../controllers/authController.js';
+import { login, logout, getCurrentUser, createAdmin, listAdmins, deleteAdmin, updateAdmin } from '../controllers/authController.js';
 import validate from '../middlewares/validate.js';
 import { loginRules } from '../validators/loginRules.js';
 import { requireAdmin } from '../middlewares/accessControl.js';
@@ -14,6 +14,8 @@ router.get('/current-user', requireAdmin, getCurrentUser);
 router.post('/admins', requireAdmin, createAdminRules, validate, createAdmin);
 router.post('/login', loginRules, validate, login);
 router.post('/logout', logout);
+
+router.put('/admins/:id', requireAdmin, updateAdmin);
 
 router.delete('/admins/:id', requireAdmin, deleteAdmin);
 

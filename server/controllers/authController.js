@@ -140,3 +140,44 @@ export async function deleteAdmin(req, res) {
 
     return res.status(200).json({ message: 'Administrateur supprimé' });
 }
+
+// Modification d'un compte admin (admin principal protégé via ADMIN_EMAIL)
+export async function updateAdmin(req, res) {
+    const id = req.params.id;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const admin = await User.findOne({
+        where: { id: id, role: 'admin' },
+    });
+
+    if (!admin) {
+        return res.status(404).json({ error: 'Administrateur introuvable' });
+    }
+
+    const mainAdminEmail = process.env.ADMIN_EMAIL;
+
+    if (admin.email === mainAdminEmail) {
+        return res.status(403).json({
+            error: 'Impossible de modifier l\'administrateur principal',
+        });
+    }
+
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser && existingUser.id !== admin.id) {
+        return res.status(409).json({ error: 'Cet email est déjà utilisé' });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    admin.email = email;
+    admin.passwordHash = passwordHash;
+    await admin.save();
+
+    return res.status(200).json({
+        id: admin.id,
+        email: admin.email,
+        role: admin.role,
+    });
+}
