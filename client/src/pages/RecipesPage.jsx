@@ -176,10 +176,10 @@ function RecipePage() {
   // Boutons numéros de page
   const pageButtons = [];
   for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-    let pageBtnClass = "catalog-pagination__page";
+    let pageBtnClass = "recipes-page__pagination-page";
     if (pageNum === currentPage) {
       pageBtnClass =
-        "catalog-pagination__page catalog-pagination__page--active";
+        "recipes-page__pagination-page recipes-page__pagination-page--active";
     }
 
     pageButtons.push(
@@ -198,28 +198,28 @@ function RecipePage() {
 
   let contentMessage;
   if (loading) {
-    contentMessage = <p className="catalog__status">Chargement...</p>;
+    contentMessage = <p className="recipes-page__status">Chargement...</p>;
   } else if (recipes.length === 0) {
     if (activeSearch !== "") {
       contentMessage = (
-        <p className="catalog__status">
+        <p className="recipes-page__status">
           Aucune recette trouvée pour « {activeSearch} ».
         </p>
       );
     } else {
       contentMessage = (
-        <p className="catalog__status">Aucune recette pour le moment.</p>
+        <p className="recipes-page__status">Aucune recette pour le moment.</p>
       );
     }
   }
 
   return (
-    <main className="catalog">
-      <h1 className="catalog__title">Toutes les recettes</h1>
+    <main className="recipes-page">
+      <h1 className="recipes-page__title">Toutes les recettes</h1>
 
-      <form className="catalog__search" onSubmit={handleSearchSubmit}>
+      <form className="recipes-page__search" onSubmit={handleSearchSubmit}>
         <input
-          className="catalog__search-input"
+          className="recipes-page__search-input"
           type="search"
           placeholder="Rechercher une recette..."
           value={searchText}
@@ -232,12 +232,12 @@ function RecipePage() {
             }
           }}
         />
-        <button type="submit" className="btn catalog__search-btn">
+        <button type="submit" className="btn recipes-page__search-btn">
           Rechercher
         </button>
       </form>
 
-      <div className="catalog__filters">
+      <div className="recipes-page__filters">
         <div className="field field--filter">
           <label htmlFor="filter-origin">Origine</label>
           <select
@@ -299,7 +299,7 @@ function RecipePage() {
       {contentMessage}
 
       {!loading && recipes.length > 0 && (
-        <ul className="catalog__grid">
+        <ul className="recipes-page__grid">
           {recipes.map((recipe, index) => {
             let isFirstCard = false;
             if (index === 0) {
@@ -307,7 +307,7 @@ function RecipePage() {
             }
 
             return (
-              <li key={recipe.id} className="catalog__grid-item">
+              <li key={recipe.id} className="recipes-page__grid-item">
                 <RecipeCard recipe={recipe} isFirstCard={isFirstCard} />
               </li>
             );
@@ -317,12 +317,12 @@ function RecipePage() {
 
       {!loading && totalPages > 1 && (
         <nav
-          className="catalog-pagination"
+          className="recipes-page__pagination"
           aria-label="Pagination du catalogue"
         >
           <button
             type="button"
-            className="catalog-pagination__nav"
+            className="recipes-page__pagination-nav"
             disabled={currentPage <= 1}
             onClick={() => {
               goToPage(currentPage - 1);
@@ -335,7 +335,7 @@ function RecipePage() {
 
           <button
             type="button"
-            className="catalog-pagination__nav"
+            className="recipes-page__pagination-nav"
             disabled={currentPage >= totalPages}
             onClick={() => {
               goToPage(currentPage + 1);

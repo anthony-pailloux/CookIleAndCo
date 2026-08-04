@@ -32,7 +32,7 @@ function LoginPage() {
       <section className="login-page">
         <h2>Formulaire de connexion</h2>
 
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit} className="login-page__form">
           <div className="field">
             <label htmlFor="email">Email*</label>
             <input

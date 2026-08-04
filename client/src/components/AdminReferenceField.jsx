@@ -254,7 +254,7 @@ function AdminReferenceField({
           )}
           <button
             type="button"
-            className="btn admin-form__add-btn"
+            className="btn admin-reference-field__add-btn"
             onClick={handleAdd}
           >
             + Ajouter
@@ -280,7 +280,7 @@ function AdminReferenceField({
           />
           <button
             type="button"
-            className="btn btn--outline admin-form__add-btn"
+            className="btn btn--outline admin-reference-field__add-btn"
             disabled={!hasSelection}
             onClick={handleUpdate}
           >
@@ -330,7 +330,7 @@ function AdminReferenceField({
           />
           <button
             type="button"
-            className="btn admin-form__add-btn"
+            className="btn admin-reference-field__add-btn"
             onClick={handleImageUpdate}
           >
             Mettre à jour l&apos;image

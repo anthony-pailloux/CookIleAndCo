@@ -1,25 +1,25 @@
-.catalog {
+.recipes-page {
   max-width: 1180px;
   margin: 0 auto;
   padding: 2rem 1.5rem 3rem;
   background-color: var(--tc-background);
 }
 
-.catalog__title {
+.recipes-page__title {
   font-size: 1.625rem;
   margin: 0 0 1rem;
   color: var(--tc-text);
 }
 
 /* Recherche */
-.catalog__search {
+.recipes-page__search {
   display: flex;
   align-items: center;
   gap: 0.625rem;
   margin: 1rem 0 0.75rem;
 }
 
-.catalog__search-input {
+.recipes-page__search-input {
   flex: 1;
   min-width: 0;
   padding: 10px 12px;
@@ -31,7 +31,7 @@
   color: var(--tc-text);
 }
 
-.catalog__search .btn {
+.recipes-page__search .btn {
   width: auto;
   flex-shrink: 0;
   padding: 10px 16px;
@@ -39,7 +39,7 @@
 }
 
 /* Filtres */
-.catalog__filters {
+.recipes-page__filters {
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -73,14 +73,14 @@
 }
 
 /* États */
-.catalog__status {
+.recipes-page__status {
   text-align: center;
   color: var(--tc-text-muted);
   margin: 2rem 0;
 }
 
 /* Grille recettes */
-.catalog__grid {
+.recipes-page__grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
@@ -89,12 +89,12 @@
   margin: 0 0 1.625rem;
 }
 
-.catalog__grid-item {
+.recipes-page__grid-item {
   min-width: 0;
 }
 
 /* Pagination */
-.catalog-pagination {
+.recipes-page__pagination {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -102,8 +102,8 @@
   margin-top: 1.625rem;
 }
 
-.catalog-pagination__nav,
-.catalog-pagination__page {
+.recipes-page__pagination-nav,
+.recipes-page__pagination-page {
   padding: 10px 16px;
   border: 1px solid var(--tc-navy);
   border-radius: var(--tc-radius);
@@ -114,30 +114,30 @@
   font-size: 0.875rem;
 }
 
-.catalog-pagination__nav:hover,
-.catalog-pagination__page:hover {
+.recipes-page__pagination-nav:hover,
+.recipes-page__pagination-page:hover {
   background: var(--tc-green-madras);
   border: 1px solid var(--tc-yellow-madras);
   opacity: 0.9;
 }
 
-.catalog-pagination__page--active {
+.recipes-page__pagination-page--active {
   background: var(--tc-green-madras);
   color: var(--tc-white);
   border: 1px solid var(--tc-navy);
 }
 
-.catalog-pagination__page--active:hover {
+.recipes-page__pagination-page--active:hover {
   background: var(--tc-green-madras);
   opacity: 1;
 }
 
-.catalog-pagination__nav:disabled {
+.recipes-page__pagination-nav:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
-.catalog-pagination__nav:disabled:hover {
+.recipes-page__pagination-nav:disabled:hover {
   background: var(--tc-yellow-madras);
   border: 1px solid var(--tc-navy);
   opacity: 0.45;
@@ -145,27 +145,27 @@
 
 /* Desktop */
 @media (min-width: 768px) {
-  .catalog__grid {
+  .recipes-page__grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* Mobile recherche + filtres */
 @media (max-width: 767px) {
-  .catalog__search {
+  .recipes-page__search {
     flex-direction: column;
   }
 
-  .catalog__search-btn {
+  .recipes-page__search-btn {
     width: 100%;
   }
 
-  .catalog__filters {
+  .recipes-page__filters {
     flex-direction: column;
   }
 
   /* Wireframe mobile : 6 cartes visibles max */
-  .catalog__grid-item:nth-child(n + 7) {
+  .recipes-page__grid-item:nth-child(n + 7) {
     display: none;
   }
 }

@@ -48,6 +48,13 @@
   color: var(--tc-navy);
 }
 
+.admin-reference-field__add-btn {
+  width: 100%;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: center;
+}
+
 .admin-reference-field__delete-btn {
   width: 100%;
   margin-top: auto;
