@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFromApi, deleteToApi } from "../services/api.js";
+import { createAdmin } from "../services/authServices.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
@@ -14,6 +15,10 @@ function AdminPage() {
 
   const [recipes, setRecipes] = useState([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
+
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [newAdminPassword, setNewAdminPassword] = useState("");
+  const [adminFormError, setAdminFormError] = useState("");
 
   useEffect(() => {
     async function loadAdminRecipes() {
@@ -58,12 +63,70 @@ function AdminPage() {
     }
   }
 
+  async function handleCreateAdminSubmit(event) {
+    event.preventDefault();
+    setAdminFormError("");
+
+    try {
+      await createAdmin(newAdminEmail, newAdminPassword);
+      showToast("Administrateur créé avec succès.", "success");
+      setNewAdminEmail("");
+      setNewAdminPassword("");
+    } catch (err) {
+      setAdminFormError(err.message);
+    }
+  }
+
   return (
     <main className="admin-page">
       <header className="admin-page__header">
         <h1 className="admin-page__title">Le Dashboard de Tetelle</h1>
         <p className="admin-page__email">{auth.user.email}</p>
       </header>
+
+      <section className="admin-page__section admin-page__section--admins">
+        <h2 className="admin-page__section-title">Ajouter un administrateur</h2>
+
+        <form className="admin-page__form" onSubmit={handleCreateAdminSubmit}>
+          <div className="field">
+            <label htmlFor="new-admin-email">Email*</label>
+            <input
+              id="new-admin-email"
+              className="input"
+              type="email"
+              name="email"
+              placeholder="Email du nouvel admin"
+              value={newAdminEmail}
+              onChange={function (event) {
+                setNewAdminEmail(event.target.value);
+              }}
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="new-admin-password">Mot de passe*</label>
+            <input
+              id="new-admin-password"
+              className="input"
+              type="password"
+              name="password"
+              placeholder="Mot de passe"
+              value={newAdminPassword}
+              onChange={function (event) {
+                setNewAdminPassword(event.target.value);
+              }}
+            />
+          </div>
+
+          {adminFormError !== "" && (
+            <p className="alert-error">{adminFormError}</p>
+          )}
+
+          <button type="submit" className="btn">
+            Créer l'administrateur
+          </button>
+        </form>
+      </section>
 
       <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
@@ -108,9 +171,7 @@ function AdminPage() {
                     <td>
                       <div className="admin-recipes-table__actions">
                         <Link
-                          to={
-                            "/admin/recettes/" + recipe.id + "/modifier"
-                          }
+                          to={"/admin/recettes/" + recipe.id + "/modifier"}
                           className="btn btn--outline"
                         >
                           Modifier

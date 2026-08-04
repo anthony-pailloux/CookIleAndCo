@@ -21,3 +21,8 @@ export async function logout() {
         throw new Error('Erreur serveur');
     }
 }
+
+// Crée un compte admin (admin connecté requis — cookie envoyé par postToApi)
+export async function createAdmin(email, password) {
+    return await postToApi('/api/auth/admins', { email, password });
+}

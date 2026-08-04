@@ -65,21 +65,19 @@ export function getCurrentUser(req, res) {
 // Création d'un compte admin (réservé à un admin connecté)
 export async function createAdmin(req, res) {
     const email = req.body.email;
-    const password = req.body.password;
-    console.log('POST /api/auth/admins — email:', email);
-    // Vérifie si l'email existe déjà
+    const password = req.body.password;   
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
         return res.status(409).json({ error: 'Cet email est déjà utilisé' });
     }
-    // Hash du mot de passe (jamais stocké en clair)
+    // Hash du mot de passe
     const passwordHash = await bcrypt.hash(password, 10);
     const newAdmin = await User.create({
         email: email,
         passwordHash: passwordHash,
         role: 'admin',
     });
-    console.log('POST /api/auth/admins — admin créé, id:', newAdmin.id);
+    
     return res.status(201).json({
         id: newAdmin.id,
         email: newAdmin.email,
