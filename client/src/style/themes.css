@@ -28,7 +28,8 @@
   --tc-radius: 6px;
   --tc-spacing: 1rem;
   --tc-spacing-lg: 10rem;
-  --tc-font: "Segoe UI", system-ui, sans-serif;
+  --tc-font: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --tc-font-heading: "Libre Baskerville", Georgia, serif;
 }
 
 *,
@@ -37,7 +38,6 @@
   box-sizing: border-box;
   margin: 0;
   text-decoration: none;
-  --tc-font: "Segoe UI", system-ui, sans-serif;
 }
 
 body {
@@ -45,6 +45,12 @@ body {
   font-size: 16px;
   color: var(--tc-text);
   background-color: var(--tc-background);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--tc-font-heading);
 }
 
 a {

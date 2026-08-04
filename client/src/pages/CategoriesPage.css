@@ -94,6 +94,7 @@
 
 .categories-page__name {
   display: block;
+  font-family: var(--tc-font-heading);
   font-weight: 600;
   font-size: 0.9375rem;
 }

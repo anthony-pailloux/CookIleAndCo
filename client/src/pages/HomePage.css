@@ -179,6 +179,7 @@
 .home__categories-name {
   display: block;
   padding: 0.75rem;
+  font-family: var(--tc-font-heading);
   font-weight: 600;
   font-size: 0.9375rem;
   background-color: var(--tc-background);

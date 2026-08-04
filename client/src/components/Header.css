@@ -41,6 +41,7 @@
 .site-header__link {
   text-decoration: none;
   color: var(--tc-white);
+  font-family: var(--tc-font-heading);
   font-weight: 600;
   font-size: 0.875rem;
   padding-bottom: 0.15rem;
@@ -64,6 +65,7 @@
   border-radius: var(--tc-radius);
   background-color: var(--tc-red-madras);
   color: var(--tc-white);
+  font-family: var(--tc-font-heading);
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
