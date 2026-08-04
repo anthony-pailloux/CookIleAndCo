@@ -4,6 +4,7 @@ import {
   createAdmin,
   listAdmins,
   deleteAdmin,
+  updateAdmin,
 } from "../services/authServices.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
@@ -26,6 +27,11 @@ function AdminPage() {
   const [newAdminEmail, setNewAdminEmail] = useState("");
   const [newAdminPassword, setNewAdminPassword] = useState("");
   const [adminFormError, setAdminFormError] = useState("");
+
+  const [editingAdminId, setEditingAdminId] = useState(null);
+  const [editAdminEmail, setEditAdminEmail] = useState("");
+  const [editAdminPassword, setEditAdminPassword] = useState("");
+  const [editAdminFormError, setEditAdminFormError] = useState("");
 
   async function loadAdminsList() {
     setLoadingAdmins(true);
@@ -59,6 +65,35 @@ function AdminPage() {
     loadAdminRecipes();
     loadAdminsList();
   }, [showToast]);
+
+  function handleStartEditAdmin(admin) {
+    setEditingAdminId(admin.id);
+    setEditAdminEmail(admin.email);
+    setEditAdminPassword("");
+    setEditAdminFormError("");
+    setAdminFormError("");
+  }
+
+  function handleCancelEditAdmin() {
+    setEditingAdminId(null);
+    setEditAdminEmail("");
+    setEditAdminPassword("");
+    setEditAdminFormError("");
+  }
+
+  async function handleUpdateAdminSubmit(event) {
+    event.preventDefault();
+    setEditAdminFormError("");
+
+    try {
+      await updateAdmin(editingAdminId, editAdminEmail, editAdminPassword);
+      showToast("Administrateur modifié avec succès.", "success");
+      handleCancelEditAdmin();
+      await loadAdminsList();
+    } catch (err) {
+      setEditAdminFormError(err.message);
+    }
+  }
 
   async function handleDeleteRecipe(recipeId, recipeTitle) {
     const confirmed = window.confirm(
@@ -102,7 +137,7 @@ function AdminPage() {
 
   async function handleDeleteAdmin(adminId, adminEmail) {
     const confirmed = window.confirm(
-      'Supprimer l\'administrateur "' + adminEmail + '" ?',
+      "Supprimer l'administrateur \"" + adminEmail + '" ?',
     );
 
     if (confirmed === false) {
@@ -111,6 +146,10 @@ function AdminPage() {
 
     try {
       await deleteAdmin(adminId);
+
+      if (editingAdminId === adminId) {
+        handleCancelEditAdmin();
+      }
 
       const newAdmins = [];
       for (let i = 0; i < admins.length; i++) {
@@ -129,14 +168,15 @@ function AdminPage() {
     <main className="admin-page">
       <header className="admin-page__header">
         <h1 className="admin-page__title">Le Dashboard de Tetelle</h1>
-        <p className="admin-page__email">{auth.user.email}</p>
       </header>
 
       <section className="admin-page__section admin-page__section--admins">
         <h2 className="admin-page__section-title">Administrateurs</h2>
 
         {loadingAdmins === true && (
-          <p className="admin-page__status">Chargement des administrateurs...</p>
+          <p className="admin-page__status">
+            Chargement des administrateurs...
+          </p>
         )}
 
         {loadingAdmins === false && admins.length === 0 && (
@@ -167,14 +207,24 @@ function AdminPage() {
                     </td>
                     <td>
                       {admin.isProtected === false && (
-                        <Button
-                          className="btn--danger"
-                          onClick={function () {
-                            handleDeleteAdmin(admin.id, admin.email);
-                          }}
-                        >
-                          Supprimer
-                        </Button>
+                        <div className="admin-admins-table__actions">
+                          <Button
+                            className="btn--outline"
+                            onClick={function () {
+                              handleStartEditAdmin(admin);
+                            }}
+                          >
+                            Modifier
+                          </Button>
+                          <Button
+                            className="btn--danger"
+                            onClick={function () {
+                              handleDeleteAdmin(admin.id, admin.email);
+                            }}
+                          >
+                            Supprimer
+                          </Button>
+                        </div>
                       )}
                       {admin.isProtected === true && (
                         <span className="admin-page__status">—</span>
@@ -187,7 +237,68 @@ function AdminPage() {
           </table>
         )}
 
-        <h3 className="admin-page__subsection-title">Ajouter un administrateur</h3>
+        {editingAdminId !== null && (
+          <>
+            <h3 className="admin-page__subsection-title">
+              Modifier l'administrateur
+            </h3>
+
+            <form
+              className="admin-page__form"
+              onSubmit={handleUpdateAdminSubmit}
+            >
+              <div className="field">
+                <label htmlFor="edit-admin-email">Email*</label>
+                <input
+                  id="edit-admin-email"
+                  className="input"
+                  type="email"
+                  name="email"
+                  value={editAdminEmail}
+                  onChange={function (event) {
+                    setEditAdminEmail(event.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="edit-admin-password">Mot de passe*</label>
+                <input
+                  id="edit-admin-password"
+                  className="input"
+                  type="password"
+                  name="password"
+                  placeholder="Nouveau mot de passe"
+                  value={editAdminPassword}
+                  onChange={function (event) {
+                    setEditAdminPassword(event.target.value);
+                  }}
+                />
+              </div>
+
+              {editAdminFormError !== "" && (
+                <p className="alert-error">{editAdminFormError}</p>
+              )}
+
+              <div className="admin-page__form-actions">
+                <button type="submit" className="btn">
+                  Enregistrer
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--outline"
+                  onClick={handleCancelEditAdmin}
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </>
+        )}
+
+        <h3 className="admin-page__subsection-title">
+          Ajouter un administrateur
+        </h3>
 
         <form className="admin-page__form" onSubmit={handleCreateAdminSubmit}>
           <div className="field">

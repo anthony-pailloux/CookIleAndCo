@@ -1,4 +1,4 @@
-import { getFromApi, postToApi, deleteToApi } from './api.js';
+import { getFromApi, postToApi, putToApi, deleteToApi } from './api.js';
 
 const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
@@ -32,4 +32,8 @@ export async function listAdmins() {
 
 export async function deleteAdmin(adminId) {
     return await deleteToApi('/api/auth/admins/' + adminId);
+}
+
+export async function updateAdmin(adminId, email, password) {
+    return await putToApi('/api/auth/admins/' + adminId, { email, password });
 }

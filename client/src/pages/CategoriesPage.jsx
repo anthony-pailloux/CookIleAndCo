@@ -40,7 +40,9 @@ function CategoriesPage() {
         <h2>Catégories</h2>
 
         {categories.length === 0 && (
-          <p className="categories-page__empty">Aucune catégorie pour le moment.</p>
+          <p className="categories-page__empty">
+            Aucune catégorie pour le moment.
+          </p>
         )}
 
         {categories.length > 0 && (
@@ -59,7 +61,9 @@ function CategoriesPage() {
                       />
                     </div>
                     <div className="categories-page__body">
-                      <span className="categories-page__name">{category.name}</span>
+                      <span className="categories-page__name">
+                        {category.name}
+                      </span>
                     </div>
                   </Link>
                 </li>
@@ -76,7 +80,9 @@ function CategoriesPage() {
         </p>
 
         {origins.length === 0 && (
-          <p className="categories-page__empty">Aucune origine pour le moment.</p>
+          <p className="categories-page__empty">
+            Aucune origine pour le moment.
+          </p>
         )}
 
         {origins.length > 0 && (
@@ -92,7 +98,9 @@ function CategoriesPage() {
                       <img src={placeholderPhoto} alt={origin.name} />
                     </div>
                     <div className="categories-page__body">
-                      <span className="categories-page__name">{origin.name}</span>
+                      <span className="categories-page__name">
+                        {origin.name}
+                      </span>
                     </div>
                   </Link>
                 </li>

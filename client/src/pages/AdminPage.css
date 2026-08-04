@@ -58,7 +58,7 @@
   font-style: italic;
 }
 
-/* Formulaire ajout admin */
+/* Formulaires admin (ajout + modification) */
 .admin-page__form {
   max-width: 420px;
   display: flex;
@@ -71,6 +71,12 @@
   flex-direction: column;
   gap: 0.35rem;
   text-align: left;
+}
+
+.admin-page__form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 /* Tableaux (recettes + admins) */
@@ -128,6 +134,13 @@
   color: var(--tc-text);
   font-size: 0.875rem;
   font-weight: 600;
+}
+
+.admin-admins-table__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
 }
 
 @media (min-width: 768px) {
