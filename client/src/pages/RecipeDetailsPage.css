@@ -5,7 +5,6 @@
   background-color: var(--tc-background-alt);
   border-radius: 25px;
   border: 1px solid var(--tc-green-madras);
-  
 }
 
 /* États chargement / erreur */
@@ -58,15 +57,13 @@
 }
 
 .recipe-detail__badge {
-
-    display: inline-block;
-    font-size: 0.75rem;
-    padding: 0.2rem 0.65rem;
-    border: 1px solid var(--tc-navy);
-    border-radius: 999px;
-    background-color: var(--tc-green-madras);
-    color: var(--tc-white);
-  
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--tc-navy);
+  border-radius: 999px;
+  background-color: var(--tc-green-madras);
+  color: var(--tc-white);
 }
 
 .recipe-detail__time {
@@ -88,7 +85,7 @@
   border: 1px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
   background-color: var(--tc-background);
-  padding: 1.25rem 1.5rem; /* ← décolle ingrédients et préparation du bord */
+  padding: 1.25rem 1.5rem;
 }
 
 .recipe-detail__section-title {
@@ -163,6 +160,45 @@
 .recipe-detail__tips p {
   margin: 0;
   line-height: 1.6;
+}
+
+/* Commentaires */
+.recipe-detail__comments {
+  background-color: var(--tc-background);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius);
+  padding: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+.recipe-detail__comments-empty {
+  margin: 0 0 1rem;
+  color: var(--tc-text-muted);
+  font-size: 0.9375rem;
+}
+
+.recipe-detail__comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.recipe-detail__comment-form label {
+  font-weight: 600;
+  color: var(--tc-text);
+}
+
+.recipe-detail__comment-form input,
+.recipe-detail__comment-form textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.recipe-detail__comment-form textarea {
+  resize: vertical;
 }
 
 /* Partage */

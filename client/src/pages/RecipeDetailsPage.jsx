@@ -125,7 +125,7 @@ function RecipeDetailsPage() {
         </section>
       )}
 
-      {/* Partage — logique réelle en TCK-504 */}
+      {/* Btn partage */}
       <section className="recipe-detail__share">
         <Button className="btn--primary recipe-detail__share-main">
           Partager cette recette
@@ -144,8 +144,44 @@ function RecipeDetailsPage() {
           </button>
         </p>
       </section>
+
+      {/* Commentaires */}
+<section className="recipe-detail__comments">
+  <h2 className="recipe-detail__section-title">Commentaires</h2>
+
+  <p className="recipe-detail__comments-empty">
+    Aucun commentaire pour l'instant. Soyez le premier à réagir !
+  </p>
+
+  {/* Formulaire */}
+<form className="recipe-detail__comment-form">
+  <label htmlFor="comment-pseudo">Votre pseudo</label>
+  <input
+    id="comment-pseudo"
+    name="pseudo"
+    type="text"
+    maxLength={30}
+    placeholder="Ex. Marie, Christophe"
+    autoComplete="nickname"
+  />
+
+  <label htmlFor="comment-content">Votre commentaire</label>
+  <textarea
+    id="comment-content"
+    name="content"
+    rows="3"
+    placeholder="Partagez votre avis sur cette recette…"
+  />
+
+  <Button type="submit" className="btn--primary">
+    Publier
+  </Button>
+  </form>
+    </section>
     </main>
   );
 }
 
 export default RecipeDetailsPage;
+
+
