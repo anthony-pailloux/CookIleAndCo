@@ -20,8 +20,6 @@ class Recipe extends Model {
             foreignKey: 'mealTypeId',
             as: 'mealType',
         });
-
-        // ingrédients et étapes de la recette
         Recipe.hasMany(models.RecipeIngredient, {
             foreignKey: 'recipeId',
             as: 'ingredients',
@@ -29,6 +27,10 @@ class Recipe extends Model {
         Recipe.hasMany(models.RecipeStep, {
             foreignKey: 'recipeId',
             as: 'steps',
+        });
+        Recipe.hasMany(models.Comment, {
+            foreignKey: 'recipeId',
+            as: 'comments',
         });
     }
 }
