@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { getFromApi, deleteToApi } from "../services/api.js";
-import { createAdmin } from "../services/authServices.js";
+import {
+  createAdmin,
+  listAdmins,
+  deleteAdmin,
+} from "../services/authServices.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
@@ -16,9 +20,26 @@ function AdminPage() {
   const [recipes, setRecipes] = useState([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
 
+  const [admins, setAdmins] = useState([]);
+  const [loadingAdmins, setLoadingAdmins] = useState(true);
+
   const [newAdminEmail, setNewAdminEmail] = useState("");
   const [newAdminPassword, setNewAdminPassword] = useState("");
   const [adminFormError, setAdminFormError] = useState("");
+
+  async function loadAdminsList() {
+    setLoadingAdmins(true);
+
+    try {
+      const response = await listAdmins();
+      setAdmins(response.data);
+    } catch (err) {
+      setAdmins([]);
+      showToast("Impossible de charger les administrateurs.", "error");
+    }
+
+    setLoadingAdmins(false);
+  }
 
   useEffect(() => {
     async function loadAdminRecipes() {
@@ -36,6 +57,7 @@ function AdminPage() {
     }
 
     loadAdminRecipes();
+    loadAdminsList();
   }, [showToast]);
 
   async function handleDeleteRecipe(recipeId, recipeTitle) {
@@ -72,8 +94,34 @@ function AdminPage() {
       showToast("Administrateur créé avec succès.", "success");
       setNewAdminEmail("");
       setNewAdminPassword("");
+      await loadAdminsList();
     } catch (err) {
       setAdminFormError(err.message);
+    }
+  }
+
+  async function handleDeleteAdmin(adminId, adminEmail) {
+    const confirmed = window.confirm(
+      'Supprimer l\'administrateur "' + adminEmail + '" ?',
+    );
+
+    if (confirmed === false) {
+      return;
+    }
+
+    try {
+      await deleteAdmin(adminId);
+
+      const newAdmins = [];
+      for (let i = 0; i < admins.length; i++) {
+        if (admins[i].id !== adminId) {
+          newAdmins.push(admins[i]);
+        }
+      }
+      setAdmins(newAdmins);
+      showToast("Administrateur supprimé.", "success");
+    } catch (err) {
+      showToast(err.message, "error");
     }
   }
 
@@ -85,7 +133,61 @@ function AdminPage() {
       </header>
 
       <section className="admin-page__section admin-page__section--admins">
-        <h2 className="admin-page__section-title">Ajouter un administrateur</h2>
+        <h2 className="admin-page__section-title">Administrateurs</h2>
+
+        {loadingAdmins === true && (
+          <p className="admin-page__status">Chargement des administrateurs...</p>
+        )}
+
+        {loadingAdmins === false && admins.length === 0 && (
+          <p className="admin-page__status">Aucun administrateur.</p>
+        )}
+
+        {loadingAdmins === false && admins.length > 0 && (
+          <table className="admin-recipes-table admin-admins-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {admins.map(function (admin) {
+                return (
+                  <tr key={admin.id}>
+                    <td>{admin.email}</td>
+                    <td>
+                      {admin.isProtected === true && (
+                        <span className="admin-admins-table__badge">
+                          Principal
+                        </span>
+                      )}
+                      {admin.isProtected === false && <span>Admin</span>}
+                    </td>
+                    <td>
+                      {admin.isProtected === false && (
+                        <Button
+                          className="btn--danger"
+                          onClick={function () {
+                            handleDeleteAdmin(admin.id, admin.email);
+                          }}
+                        >
+                          Supprimer
+                        </Button>
+                      )}
+                      {admin.isProtected === true && (
+                        <span className="admin-page__status">—</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+
+        <h3 className="admin-page__subsection-title">Ajouter un administrateur</h3>
 
         <form className="admin-page__form" onSubmit={handleCreateAdminSubmit}>
           <div className="field">

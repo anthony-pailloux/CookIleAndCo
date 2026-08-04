@@ -1,4 +1,4 @@
-import { getFromApi, postToApi } from './api.js';
+import { getFromApi, postToApi, deleteToApi } from './api.js';
 
 const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
@@ -7,10 +7,9 @@ export async function getCurrentUser() {
 }
 
 export async function login(email, password) {
-    return await postToApi('/api/auth/login', { email,password });
+    return await postToApi('/api/auth/login', { email, password });
 }
 
-// logout renvoie 204 sans body — fetch direct (postToApi attend du JSON)
 export async function logout() {
     const response = await fetch(apiBaseUrl + '/api/auth/logout', {
         method: 'POST',
@@ -22,7 +21,15 @@ export async function logout() {
     }
 }
 
-// Crée un compte admin (admin connecté requis — cookie envoyé par postToApi)
 export async function createAdmin(email, password) {
     return await postToApi('/api/auth/admins', { email, password });
+}
+
+// Liste des admins (isProtected = admin principal non supprimable)
+export async function listAdmins() {
+    return await getFromApi('/api/auth/admins');
+}
+
+export async function deleteAdmin(adminId) {
+    return await deleteToApi('/api/auth/admins/' + adminId);
 }
