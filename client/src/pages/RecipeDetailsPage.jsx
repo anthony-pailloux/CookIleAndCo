@@ -1,7 +1,7 @@
 // Page fiche recette — affiche une recette complète (hero, ingrédients, étapes, conseils, partage).
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getFromApi } from "../services/api";
+import { getFromApi, postToApi } from "../services/api";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
@@ -13,6 +13,15 @@ function RecipeDetailsPage() {
   const [recipeDetails, setRecipeDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [comments, setComments] = useState([]);
+  const [captchaQuestion, setCaptchaQuestion] = useState("");
+  const [pseudo, setPseudo] = useState("");
+  const [content, setContent] = useState("");
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -33,6 +42,57 @@ function RecipeDetailsPage() {
 
     loadRecipeDetails();
   }, [id]);
+
+  useEffect(() => {
+    async function loadCommentsData() {
+      try {
+        const captchaData = await getFromApi("/api/captcha");
+        setCaptchaQuestion(captchaData.question);
+        console.log("loadCommentsData — captcha:", captchaData.question);
+
+        const commentsData = await getFromApi(`/api/recipes/${id}/comments`);
+        setComments(commentsData);
+        console.log("loadCommentsData — count:", commentsData.length);
+      } catch (err) {
+        console.log("loadCommentsData — erreur:", err.message);
+      }
+    }
+
+    if (!loading && !errorMessage) {
+      loadCommentsData();
+    }
+  }, [id, loading, errorMessage]);
+
+  async function handleCommentSubmit(event) {
+    event.preventDefault();
+    setCommentError("");
+    setIsSubmitting(true);
+
+    try {
+      const newComment = await postToApi(`/api/recipes/${id}/comments`, {
+        pseudo: pseudo,
+        content: content,
+        captchaAnswer: captchaAnswer,
+      });
+
+      console.log("handleCommentSubmit — ok:", newComment);
+
+      setComments([newComment, ...comments]);
+      setContent("");
+      setCaptchaAnswer("");
+
+      const captchaData = await getFromApi("/api/captcha");
+      setCaptchaQuestion(captchaData.question);
+    } catch (err) {
+      setCommentError(err.message);
+
+      const captchaData = await getFromApi("/api/captcha");
+      setCaptchaQuestion(captchaData.question);
+      setCaptchaAnswer("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   // État chargement
   if (loading) {
@@ -145,43 +205,89 @@ function RecipeDetailsPage() {
         </p>
       </section>
 
+
       {/* Commentaires */}
-<section className="recipe-detail__comments">
-  <h2 className="recipe-detail__section-title">Commentaires</h2>
+      <section className="recipe-detail__comments">
+        <h2 className="recipe-detail__section-title">Commentaires</h2>
 
-  <p className="recipe-detail__comments-empty">
-    Aucun commentaire pour l'instant. Soyez le premier à réagir !
-  </p>
+        {comments.length === 0 && (
+          <p className="recipe-detail__comments-empty">
+            Aucun commentaire pour l'instant. Soyez le premier à réagir !
+          </p>
+        )}
 
-  {/* Formulaire */}
-<form className="recipe-detail__comment-form">
-  <label htmlFor="comment-pseudo">Votre pseudo</label>
-  <input
-    id="comment-pseudo"
-    name="pseudo"
-    type="text"
-    maxLength={30}
-    placeholder="Ex. Marie, Christophe"
-    autoComplete="nickname"
-  />
+        {comments.length > 0 && (
+          <ul className="recipe-detail__comment-list">
+            {comments.map(function (comment) {
+              return (
+                <li key={comment.id} className="recipe-detail__comment-item">
+                  <strong>{comment.pseudo}</strong>
+                  <p>{comment.content}</p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
-  <label htmlFor="comment-content">Votre commentaire</label>
-  <textarea
-    id="comment-content"
-    name="content"
-    rows="3"
-    placeholder="Partagez votre avis sur cette recette…"
-  />
+        <form
+          className="recipe-detail__comment-form"
+          onSubmit={handleCommentSubmit}
+        >
+          <label htmlFor="comment-pseudo">Votre pseudo</label>
+          <input
+            id="comment-pseudo"
+            name="pseudo"
+            type="text"
+            maxLength={30}
+            value={pseudo}
+            onChange={function (event) {
+              setPseudo(event.target.value);
+            }}
+            placeholder="Ex. Marie, Christophe"
+            autoComplete="nickname"
+          />
 
-  <Button type="submit" className="btn--primary">
-    Publier
-  </Button>
-  </form>
-    </section>
+          <label htmlFor="comment-content">Votre commentaire</label>
+          <textarea
+            id="comment-content"
+            name="content"
+            rows="3"
+            value={content}
+            onChange={function (event) {
+              setContent(event.target.value);
+            }}
+            placeholder="Partagez votre avis sur cette recette…"
+          />
+
+          <label htmlFor="comment-captcha">
+            Vérification : {captchaQuestion}
+          </label>
+          <input
+            id="comment-captcha"
+            name="captchaAnswer"
+            type="number"
+            value={captchaAnswer}
+            onChange={function (event) {
+              setCaptchaAnswer(event.target.value);
+            }}
+            placeholder="Votre réponse"
+          />
+
+          {commentError && (
+            <p className="recipe-detail__comment-error">{commentError}</p>
+          )}
+
+          <Button
+            type="submit"
+            className="btn--primary"
+            disabled={isSubmitting}
+          >
+            Publier
+          </Button>
+        </form>
+      </section>
     </main>
   );
 }
 
 export default RecipeDetailsPage;
-
-
