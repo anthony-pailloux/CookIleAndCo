@@ -19,7 +19,6 @@ function CategoriesPage() {
         setCategories(categoriesResponse.data);
         setOrigins(originsResponse.data);
       } catch (err) {
-        console.log("CategoriesPage — erreur:", err.message);
         setCategories([]);
         setOrigins([]);
       }
