@@ -14,6 +14,7 @@ import recipeRoutes from './routes/recipeRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import originRoutes from './routes/originRoutes.js';
 import mealTypeRoutes from './routes/mealTypeRoute.js';
+import captchaRoutes from './routes/captchaRoutes.js';
 
 
 const app = express();
@@ -41,7 +42,6 @@ app.use(session({
     },
 }));
 
-
 // route de test pour voir si le serveur répond
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Route GET /api/health / Connecter' });
@@ -54,6 +54,7 @@ app.use('/api/recipes', recipeRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
+app.use('/api/captcha', captchaRoutes);
 
 // Front React buildé (prod)/ static + fallback SPA pour React Router
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
