@@ -43,3 +43,28 @@ export async function createComment(req, res, next) {
     next(err);
   }
 }
+
+export async function deleteComment(req, res, next) {
+  try {
+    const recipeId = req.params.id;
+    const commentId = req.params.commentId;
+
+    console.log('DELETE comment — recipeId:', recipeId, 'commentId:', commentId);
+
+    const comment = await Comment.findOne({
+      where: {
+        id: commentId,
+        recipeId: recipeId,
+      },
+    });
+
+    if (!comment) {
+      res.status(404).json({ error: 'Commentaire introuvable' });
+    } else {
+      await comment.destroy();
+      res.status(200).json({ message: 'Commentaire supprimé' });
+    }
+  } catch (err) {
+    next(err);
+  }
+}

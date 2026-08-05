@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getFromApi, postToApi } from "../services/api";
+import { getFromApi, postToApi, deleteToApi } from "../services/api";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import Button from "../components/Button.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import "../components/Button.css";
 import "./RecipeDetailsPage.css";
@@ -21,9 +22,14 @@ function RecipeDetailsPage() {
   const [captchaAnswer, setCaptchaAnswer] = useState("");
   const [commentError, setCommentError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const auth = useAuth();
 
   const { id } = useParams();
   const { showToast } = useToast();
+
+  useEffect(function () {
+    auth.loadSession();
+  }, []);
 
   useEffect(() => {
     async function loadRecipeDetails() {
@@ -93,6 +99,31 @@ function RecipeDetailsPage() {
     }
   }
 
+  async function handleDeleteComment(commentId, pseudo) {
+    const confirmed = window.confirm(
+      'Supprimer le commentaire de "' + pseudo + '" ?',
+    );
+
+    if (confirmed === false) {
+      return;
+    }
+
+    try {
+      await deleteToApi("/api/recipes/" + id + "/comments/" + commentId);
+
+      const newComments = [];
+      for (let i = 0; i < comments.length; i++) {
+        if (comments[i].id !== commentId) {
+          newComments.push(comments[i]);
+        }
+      }
+      setComments(newComments);
+      showToast("Commentaire supprimé.", "success");
+    } catch (err) {
+      showToast(err.message, "error");
+    }
+  }
+
   // État chargement
   if (loading) {
     return (
@@ -156,6 +187,11 @@ function RecipeDetailsPage() {
     } else {
       await handleCopyLink();
     }
+  }
+
+  let isAdmin = false;
+  if (auth.user !== null && auth.user.role === "admin") {
+    isAdmin = true;
   }
 
   return (
@@ -347,6 +383,17 @@ function RecipeDetailsPage() {
                 <li key={comment.id} className="recipe-detail__comment-item">
                   <strong>{comment.pseudo}</strong>
                   <p>{comment.content}</p>
+                  {isAdmin && (
+                    <button
+                      type="button"
+                      className="recipe-detail__share-link"
+                      onClick={function () {
+                        handleDeleteComment(comment.id, comment.pseudo);
+                      }}
+                    >
+                      Supprimer
+                    </button>
+                  )}
                 </li>
               );
             })}
