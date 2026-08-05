@@ -14,7 +14,6 @@ const router = Router();
 
 router.post('/', requireAdmin, createRecipeRules, validate, createRecipe);
 router.post('/:id/photo', requireAdmin, uploadRecipePhoto, addRecipePhoto);
-router.post('/:id/comments', createCommentRules, validate, createComment);
 router.post('/:id/comments', createCommentRules, validate, verifyCaptcha, createComment);
 
 router.get('/', listRecipes);

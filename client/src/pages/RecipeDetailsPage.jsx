@@ -1,4 +1,3 @@
-// Page fiche recette — affiche une recette complète (hero, ingrédients, étapes, conseils, partage).
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getFromApi, postToApi } from "../services/api";
@@ -47,14 +46,14 @@ function RecipeDetailsPage() {
     async function loadCommentsData() {
       try {
         const captchaData = await getFromApi("/api/captcha");
+
         setCaptchaQuestion(captchaData.question);
-        console.log("loadCommentsData — captcha:", captchaData.question);
 
         const commentsData = await getFromApi(`/api/recipes/${id}/comments`);
+
         setComments(commentsData);
-        console.log("loadCommentsData — count:", commentsData.length);
       } catch (err) {
-        console.log("loadCommentsData — erreur:", err.message);
+        setCommentError("Impossible de charger les commentaires.");
       }
     }
 
@@ -74,8 +73,6 @@ function RecipeDetailsPage() {
         content: content,
         captchaAnswer: captchaAnswer,
       });
-
-      console.log("handleCommentSubmit — ok:", newComment);
 
       setComments([newComment, ...comments]);
       setContent("");
@@ -205,29 +202,11 @@ function RecipeDetailsPage() {
         </p>
       </section>
 
-
       {/* Commentaires */}
       <section className="recipe-detail__comments">
         <h2 className="recipe-detail__section-title">Commentaires</h2>
 
-        {comments.length === 0 && (
-          <p className="recipe-detail__comments-empty">
-            Aucun commentaire pour l'instant. Soyez le premier à réagir !
-          </p>
-        )}
-
-        {comments.length > 0 && (
-          <ul className="recipe-detail__comment-list">
-            {comments.map(function (comment) {
-              return (
-                <li key={comment.id} className="recipe-detail__comment-item">
-                  <strong>{comment.pseudo}</strong>
-                  <p>{comment.content}</p>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+        
 
         <form
           className="recipe-detail__comment-form"
@@ -277,14 +256,33 @@ function RecipeDetailsPage() {
             <p className="recipe-detail__comment-error">{commentError}</p>
           )}
 
-          <Button
+          <button
             type="submit"
-            className="btn--primary"
+            className="btn btn--primary"
             disabled={isSubmitting}
           >
             Publier
-          </Button>
+          </button>
         </form>
+
+        {comments.length === 0 && (
+          <p className="recipe-detail__comments-empty">
+            Aucun commentaire pour l'instant. Soyez le premier à réagir !
+          </p>
+        )}
+
+        {comments.length > 0 && (
+          <ul className="recipe-detail__comment-list">
+            {comments.map(function (comment) {
+              return (
+                <li key={comment.id} className="recipe-detail__comment-item">
+                  <strong>{comment.pseudo}</strong>
+                  <p>{comment.content}</p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </section>
     </main>
   );
