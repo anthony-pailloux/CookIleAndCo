@@ -136,9 +136,24 @@ function RecipeDetailsPage() {
           <p className="recipe-detail__time">
             ⏱ {recipeDetails.cookingTime} minutes
           </p>
-          <Button className="btn--outline recipe-detail__share-btn">
-            Partager
-          </Button>
+          <section className="recipe-detail__share recipe-detail__share--hero">
+            <Button className="btn--primary recipe-detail__share-main">
+              Partager cette recette
+            </Button>
+            <p className="recipe-detail__share-links">
+              <button type="button" className="recipe-detail__share-link">
+                Facebook
+              </button>
+              <span> · </span>
+              <button type="button" className="recipe-detail__share-link">
+                WhatsApp
+              </button>
+              <span> · </span>
+              <button type="button" className="recipe-detail__share-link">
+                Copier le lien
+              </button>
+            </p>
+          </section>
         </div>
       </section>
 
@@ -182,31 +197,9 @@ function RecipeDetailsPage() {
         </section>
       )}
 
-      {/* Btn partage */}
-      <section className="recipe-detail__share">
-        <Button className="btn--primary recipe-detail__share-main">
-          Partager cette recette
-        </Button>
-        <p className="recipe-detail__share-links">
-          <button type="button" className="recipe-detail__share-link">
-            Facebook
-          </button>
-          <span> · </span>
-          <button type="button" className="recipe-detail__share-link">
-            WhatsApp
-          </button>
-          <span> · </span>
-          <button type="button" className="recipe-detail__share-link">
-            Copier le lien
-          </button>
-        </p>
-      </section>
-
       {/* Commentaires */}
       <section className="recipe-detail__comments">
         <h2 className="recipe-detail__section-title">Commentaires</h2>
-
-        
 
         <form
           className="recipe-detail__comment-form"
@@ -258,7 +251,7 @@ function RecipeDetailsPage() {
 
           <button
             type="submit"
-            className="btn btn--primary"
+            className="btn btn--primary recipe-detail__share-main"
             disabled={isSubmitting}
           >
             Publier

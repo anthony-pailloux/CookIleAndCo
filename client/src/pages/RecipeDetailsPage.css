@@ -72,10 +72,6 @@
   margin: 0;
 }
 
-.recipe-detail__share-btn {
-  width: auto;
-}
-
 /* --- Ingrédients + Préparation --- */
 .recipe-detail__body {
   display: grid;
