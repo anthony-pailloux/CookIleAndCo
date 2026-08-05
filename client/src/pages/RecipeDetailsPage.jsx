@@ -5,6 +5,7 @@ import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import Button from "../components/Button.jsx";
+import { useToast } from "../context/ToastContext.jsx";
 import "../components/Button.css";
 import "./RecipeDetailsPage.css";
 
@@ -22,6 +23,7 @@ function RecipeDetailsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { id } = useParams();
+  const { showToast } = useToast();
 
   useEffect(() => {
     async function loadRecipeDetails() {
@@ -114,6 +116,48 @@ function RecipeDetailsPage() {
 
   const photoSource = getRecipePhotoUrl(recipeDetails.photo);
 
+  const recipeShareUrl = window.location.origin + "/recettes/" + id;
+
+  function handleShareFacebook() {
+    const facebookUrl =
+      "https://www.facebook.com/sharer/sharer.php?u=" +
+      encodeURIComponent(recipeShareUrl);
+
+    window.open(facebookUrl, "_blank", "noopener,noreferrer");
+  }
+
+  function handleShareWhatsApp() {
+    let message = recipeDetails.title + " — Cook'île & Co " + recipeShareUrl;
+    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  }
+
+  async function handleCopyLink() {
+    try {
+      await navigator.clipboard.writeText(recipeShareUrl);
+      showToast("Lien copié !", "success");
+    } catch (err) {
+      showToast("Impossible de copier le lien.", "error");
+    }
+  }
+
+  async function handleShareMain() {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: recipeDetails.title,
+          text: "Découvre cette recette sur Cook'île & Co",
+          url: recipeShareUrl,
+        });
+      } catch (err) {
+        // annulation utilisateur : on ne fait rien
+      }
+    } else {
+      await handleCopyLink();
+    }
+  }
+
   return (
     <main className="recipe-detail">
       {/* Hero */}
@@ -137,19 +181,34 @@ function RecipeDetailsPage() {
             ⏱ {recipeDetails.cookingTime} minutes
           </p>
           <section className="recipe-detail__share recipe-detail__share--hero">
-            <Button className="btn--primary recipe-detail__share-main">
+            <Button
+              className="btn--primary recipe-detail__share-main"
+              onClick={handleShareMain}
+            >
               Partager cette recette
             </Button>
             <p className="recipe-detail__share-links">
-              <button type="button" className="recipe-detail__share-link">
+              <button
+                type="button"
+                className="recipe-detail__share-link"
+                onClick={handleShareFacebook}
+              >
                 Facebook
               </button>
               <span> · </span>
-              <button type="button" className="recipe-detail__share-link">
+              <button
+                type="button"
+                className="recipe-detail__share-link"
+                onClick={handleShareWhatsApp}
+              >
                 WhatsApp
               </button>
               <span> · </span>
-              <button type="button" className="recipe-detail__share-link">
+              <button
+                type="button"
+                className="recipe-detail__share-link"
+                onClick={handleCopyLink}
+              >
                 Copier le lien
               </button>
             </p>
@@ -231,19 +290,36 @@ function RecipeDetailsPage() {
             placeholder="Partagez votre avis sur cette recette…"
           />
 
-          <label htmlFor="comment-captcha">
-            Vérification : {captchaQuestion}
-          </label>
-          <input
-            id="comment-captcha"
-            name="captchaAnswer"
-            type="number"
-            value={captchaAnswer}
-            onChange={function (event) {
-              setCaptchaAnswer(event.target.value);
-            }}
-            placeholder="Votre réponse"
-          />
+          <div className="recipe-detail__captcha">
+            <p className="recipe-detail__captcha-title">
+              Vérification anti-spam
+            </p>
+
+            <div className="recipe-detail__captcha-row">
+              <span
+                className="recipe-detail__captcha-question"
+                aria-hidden="true"
+              >
+                {captchaQuestion}
+              </span>
+              <input
+                id="comment-captcha"
+                name="captchaAnswer"
+                type="number"
+                className="recipe-detail__captcha-input"
+                value={captchaAnswer}
+                onChange={function (event) {
+                  setCaptchaAnswer(event.target.value);
+                }}
+                placeholder="Résultat"
+                aria-label="Réponse à la vérification"
+              />
+            </div>
+
+            <p className="recipe-detail__captcha-hint">
+              Résous l'addition pour confirmer que tu n'es pas un robot.
+            </p>
+          </div>
 
           {commentError && (
             <p className="recipe-detail__comment-error">{commentError}</p>
