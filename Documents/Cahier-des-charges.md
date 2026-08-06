@@ -5,9 +5,8 @@
 |---|---|
 | **Projet** | Tetelle Cook'île & Co |
 | **Objet** | Spécification fonctionnelle de l'application de recettes |
-| **Client** | Tetelle |
+| **Cliente** | Estelle |
 | **Réalisation** | Anthony Pailloux |
-| **Date** | août 2026 |
 | **Maquettes et Wireframe** | `/Documents/wireframes et /Documents/maquettes` |
 | **Modèle de données** | `/Documents/mcd.png` |
 
@@ -22,8 +21,6 @@ Cook'île & Co est une application web de recettes culinaires mettant en avant l
 - permettre à l'équipe d'administration de gérer le contenu (recettes, référentiels) ;
 - offrir le partage des recettes et la possibilité de laisser un commentaire sur une fiche.
 
-**Hors périmètre :** inscription du grand public, espace profil utilisateur, planning de repas, liste de courses.
-
 ---
 
 ## 2. Identité affichée
@@ -35,7 +32,7 @@ Cook'île & Co est une application web de recettes culinaires mettant en avant l
 | Positionnement | Des Antilles aux saveurs du monde |
 | Pied de page | © 2026 Tetelle Cook'île & Co |
 
-Charte visuelle : thème Madras (réf. `documents/branding/colors.css`).
+Charte visuelle : thème Madras.
 
 ---
 
@@ -49,7 +46,7 @@ Deux acteurs.
 | Rechercher et filtrer les recettes | Oui | Oui |
 | Partager une recette | Oui | Oui |
 | Publier un commentaire (avec captcha) | Oui | Oui |
-| Se connecter / se déconnecter (espace admin) | — | Oui |
+| Se connecter / se déconnecter (espace admin) | Non | Oui |
 | Accéder au tableau de bord | Non | Oui |
 | Créer, modifier, supprimer des recettes | Non | Oui |
 | Gérer catégories, origines et types de repas | Non | Oui |
@@ -76,24 +73,23 @@ La page de connexion n'apparaît pas dans la navigation publique. L'accès se fa
 - Trois filtres combinables : origine, type de repas, catégorie.
 - Grille de cartes (photo, titre, catégorie, temps de cuisson).
 - Pagination (12 recettes par page).
-- Les filtres et la recherche sont reflétés dans l'URL pour permettre le partage d'une vue filtrée.
 
 ### 4.3 Fiche recette
 
 - Photo, titre, catégorie, temps de cuisson.
 - Ingrédients structurés (quantité, unité, nom).
 - Étapes de préparation numérotées.
-- Conseils de Tetelle (si renseignés).
-- Partage : Facebook, WhatsApp, copie du lien ; partage natif du navigateur lorsque disponible.
+- Conseils de Tetelle.
+- Partage : Facebook, WhatsApp, copie du lien.
 - Commentaires :
-  - liste des commentaires (pseudo + texte) ;
-  - formulaire public : pseudo, commentaire, captcha arithmétique anti-spam ;
+  - liste des commentaires (pseudo + texte);
+  - formulaire public : pseudo, commentaire, captcha addition anti-spam;
   - publication sans compte.
 
-### 4.4 Catégories et origines (public)
+### 4.4 Catégories et origines des recettes
 
-- Liste des catégories (image, nom) ; clic → catalogue filtré sur la catégorie.
-- Liste des origines ; clic → catalogue filtré sur l'origine.
+- Liste des catégories (image, nom) ; clic -> catalogue filtré sur la catégorie.
+- Liste des origines ; clic -> catalogue filtré sur l'origine.
 
 ### 4.5 Connexion administration
 
@@ -111,7 +107,7 @@ La page de connexion n'apparaît pas dans la navigation publique. L'accès se fa
 - Compte principal : badge distinct, aucune action de modification ou suppression.
 
 **Recettes**
-- Liste des recettes (photo, titre, catégorie).
+- Liste des recettes (photo, titre, catégorie, temps de préparation).
 - Création, modification, suppression (confirmation avant suppression).
 
 ### 4.7 Formulaire recette
@@ -156,10 +152,10 @@ Depuis ce formulaire, l'administrateur peut créer, renommer ou supprimer une ca
 | Backend | Node.js, Express — API REST JSON |
 | Données | MySQL, ORM Sequelize (migrations) |
 | Authentification | Session serveur (`express-session`), cookie `httpOnly` |
-| Hébergement cible | o2switch (mutualisé) |
-| Environnement de développement | Laragon (Windows) |
+| Hébergement | o2switch |
+| Environnement de développement | Laragon |
 
-Les origines sont stockées dans une table dédiée, distincte des catégories. Les types de repas constituent un référentiel séparé.
+Catégories, origines et types de repas sont trois référentiels distincts.
 
 ---
 
