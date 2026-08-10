@@ -1,15 +1,16 @@
 import 'dotenv/config';
-import index from './models/index.js';
+import './models/index.js';
 import app from './app.js';
 import sequelize from './config/database.js';
-
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
 
     try {
-        await sequelize.authenticate(); // test connexion mysql
+        await sequelize.authenticate();
+
+
 
         console.log('Connexion à la DB mysql : ok');
 

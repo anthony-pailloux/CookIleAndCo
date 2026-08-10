@@ -5,6 +5,7 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import fileStoreFactory from 'session-file-store';
 
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
@@ -16,6 +17,14 @@ import originRoutes from './routes/originRoutes.js';
 import mealTypeRoutes from './routes/mealTypeRoute.js';
 import captchaRoutes from './routes/captchaRoutes.js';
 
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const sessionsPath = path.join(dirname, 'sessions');
+
+const FileStore = fileStoreFactory(session);
+const sessionStore = new FileStore({
+    path: sessionsPath,
+    ttl: 86400, // 24 h en secondes
+});
 
 const app = express();
 
@@ -35,14 +44,15 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: sessionStore,
     cookie: {
         httpOnly: true,
         sameSite: 'lax',
         secure: cookieSecure,
+        maxAge: 24 * 60 * 60 * 1000, // 24 h
     },
 }));
 
-// route de test pour voir si le serveur répond
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Route GET /api/health / Connecter' });
 });
@@ -56,9 +66,8 @@ app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
 app.use('/api/captcha', captchaRoutes);
 
-// Front React buildé (prod)/ static + fallback SPA pour React Router
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const clientDistPath = path.join(__dirname, '../client/dist');
+// Front React buildé (prod) — static + fallback SPA pour React Router
+const clientDistPath = path.join(dirname, '../client/dist');
 const indexHtmlPath = path.join(clientDistPath, 'index.html');
 const hasClientBuild = fs.existsSync(indexHtmlPath);
 
