@@ -42,10 +42,20 @@ function HomePage() {
 
   return (
     <main className="home">
-      <section
-        className="home__hero"
-        style={{ backgroundImage: "url(" + heroBanner + ")" }}
-      >
+      <section className="home__hero">
+        <div className="home__hero-media" aria-hidden="true">
+          <img
+            className="home__hero-img"
+            src={heroBanner}
+            alt=""
+            width={1536}
+            height={1024}
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="home__hero-overlay" />
+        </div>
         <div className="home__hero-content">
           <h1>Cook'île & Co</h1>
           <p className="home__hero-accroche">"An Nou Ay !"</p>
