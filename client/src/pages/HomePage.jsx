@@ -6,7 +6,7 @@ import RecipeCard from "../components/RecipeCard.jsx";
 import "./HomePage.css";
 import "../components/Button.css";
 import aboutImage from "../assets/table-familiale-cuisine-du-monde-nappe-madras-rhum.webp";
-import heroBanner from "../assets/banniere-madras-antilles.webp";
+import heroBanner from "../assets/cuisine-antillaise-jardin-abondance-culture-epices-bordeaux.webp";
 
 function HomePage() {
   const [featuredRecipes, setFeaturedRecipes] = useState([]);
@@ -48,8 +48,8 @@ function HomePage() {
             className="home__hero-img"
             src={heroBanner}
             alt=""
-            width={1536}
-            height={1024}
+            width={1900}
+            height={800}
             fetchPriority="high"
             loading="eager"
             decoding="async"
@@ -58,7 +58,9 @@ function HomePage() {
         </div>
         <div className="home__hero-content">
           <h1>Cook'île & Co</h1>
-          <p className="home__hero-accroche">"An Nou Ay !"</p>
+          <p className="home__hero-accroche home__hero-accroche--italic">
+            "An Nou Ay !"
+          </p>
           <p className="home__hero-accroche">
             Des antilles aux saveurs du monde
           </p>
@@ -70,14 +72,27 @@ function HomePage() {
           className="home__about-img"
           src={aboutImage}
           alt="Table familiale aux saveurs des Antilles"
+          width={640}
+          height={427}
+          loading="lazy"
+          decoding="async"
         />
         <div className="home__about-text">
           <h2>À propos</h2>
           <p>
-            La cuisine de Tetelle sur Cook'île & Co, c'est le goût des Antilles
-            et des saveurs du monde, partagé en famille. Recettes
-            traditionnelles, douceurs maison et coups de cœur de Tetelle à
-            cuisiner à votre rythme.
+            Bienvenue chez Cook'île & Co, un univers gourmand où les saveurs des
+            Antilles et du monde se rencontrent, se partagent et se dégustent !
+            Les Antilles y occupent une place particulière, avec leurs recettes
+            traditionnelles, spécialités emblématiques, douceurs maison et
+            produits qui sentent bon le soleil et les souvenirs de famille. Mais
+            je vous emmène aussi à la découverte des saveurs d’ailleurs, à
+            travers des recettes, des spécialités, des découvertes gourmandes et
+            mes coups de cœur culinaires. Cook'île & Co, c’est avant tout une
+            histoire de cuisine, de partage, de découverte et de gourmandise,
+            avec des recettes accessibles à cuisiner simplement, à votre rythme
+            et surtout avec plaisir. Alors, prenez place, ouvrez grand vos
+            papilles et laissez-vous embarquer pour un voyage gourmand… An nou
+            ay !!!
           </p>
         </div>
       </section>

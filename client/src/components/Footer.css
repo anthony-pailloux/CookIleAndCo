@@ -1,8 +1,30 @@
 .site-footer {
   border-top: 3px solid var(--tc-yellow-madras);
   color: var(--tc-yellow-madras);
-  padding: 22px 24px;
+  padding: 1rem 1.5rem;
   text-align: center;
-  font-size: 18px;
-  margin-top: 0rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-top: 0;
+}
+
+.site-footer p {
+  margin: 0 0 0.25rem;
+}
+
+.site-footer span {
+  display: block;
+  font-size: 0.8125rem;
+  opacity: 0.92;
+}
+
+@media (min-width: 768px) {
+  .site-footer {
+    padding: 1.25rem 2rem;
+    font-size: 0.9375rem;
+  }
+
+  .site-footer span {
+    font-size: 0.875rem;
+  }
 }

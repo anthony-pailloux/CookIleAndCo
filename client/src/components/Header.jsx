@@ -24,6 +24,9 @@ function Header() {
             src={logoCookIle}
             alt="Cook'île & Co — logo"
             className="site-header__logo"
+            width={720}
+            height={276}
+            decoding="async"
           />
         </Link>
 
