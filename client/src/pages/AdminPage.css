@@ -3,6 +3,8 @@
   max-width: 1180px;
   margin: 0 auto;
   padding: 2rem 1.5rem 3rem;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 /* Bloc titre + email */
@@ -32,6 +34,8 @@
   border: 2px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
   padding: 1.25rem 1.5rem 1.5rem;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 .admin-page__section--admins {
@@ -88,6 +92,14 @@
   color: var(--tc-white);
 }
 
+/* Conteneur scroll horizontal si le tableau dépasse (desktop) */
+.admin-page__table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 0.5rem;
+}
+
 /* Tableaux (recettes + admins) */
 .admin-recipes-table {
   width: 100%;
@@ -130,9 +142,35 @@
   align-items: flex-start;
 }
 
+.admin-recipes-table__actions .btn {
+  width: auto;
+  min-width: 5.5rem;
+  padding: 8px 10px;
+  font-size: 0.8125rem;
+}
+
 /* Tableau administrateurs */
 .admin-admins-table {
   margin-bottom: 1rem;
+  table-layout: fixed;
+  width: 100%;
+  min-width: 18rem;
+}
+
+.admin-admins-table th:nth-child(1),
+.admin-admins-table td:nth-child(1) {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.admin-admins-table th:nth-child(2),
+.admin-admins-table td:nth-child(2) {
+  width: 5.5rem;
+}
+
+.admin-admins-table th:nth-child(3),
+.admin-admins-table td:nth-child(3) {
+  width: 7.5rem;
 }
 
 .admin-admins-table__badge {
@@ -150,6 +188,152 @@
   flex-direction: column;
   gap: 0.5rem;
   align-items: flex-start;
+}
+
+.admin-admins-table__actions .btn {
+  width: auto;
+  min-width: 5.5rem;
+  padding: 8px 10px;
+  font-size: 0.8125rem;
+}
+
+/* Mobile — cartes empilées au lieu du tableau */
+@media (max-width: 767px) {
+  .admin-page {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .admin-page__header {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .admin-page__title {
+    font-size: 1.375rem;
+  }
+
+  .admin-page__section {
+    padding: 1rem;
+  }
+
+  .admin-page__section-title {
+    font-size: 1.125rem;
+  }
+
+  .admin-page__table-wrap {
+    overflow-x: visible;
+    margin-top: 0;
+  }
+
+  .admin-recipes-table {
+    display: block;
+    width: 100%;
+    border: none;
+    margin-top: 0;
+  }
+
+  .admin-recipes-table thead {
+    display: none;
+  }
+
+  .admin-recipes-table tbody {
+    display: block;
+  }
+
+  .admin-recipes-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 2px solid var(--tc-green-madras);
+    border-radius: var(--tc-radius);
+    background-color: var(--tc-white);
+    overflow: hidden;
+  }
+
+  .admin-recipes-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .admin-recipes-table tbody tr:nth-child(even) {
+    background-color: var(--tc-background-alt);
+  }
+
+  .admin-recipes-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border: none;
+    border-bottom: 1px solid var(--tc-green-madras);
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .admin-recipes-table td:last-child {
+    border-bottom: none;
+  }
+
+  .admin-recipes-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--tc-green-madras);
+    text-align: left;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+  }
+
+  .admin-recipes-table td[data-label="Photo"] {
+    justify-content: center;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .admin-recipes-table td[data-label="Photo"]::before {
+    display: none;
+  }
+
+  .admin-recipes-table td[data-label="Actions"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-recipes-table td[data-label="Actions"]::before {
+    margin-right: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  .admin-recipes-table img {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+
+  .admin-recipes-table__actions,
+  .admin-admins-table__actions {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    gap: 0.5rem;
+  }
+
+  .admin-recipes-table__actions .btn,
+  .admin-admins-table__actions .btn {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 0;
+  }
+
+  .admin-admins-table {
+    table-layout: auto;
+    min-width: 0;
+    margin-bottom: 0;
+  }
+
+  .admin-admins-table th:nth-child(2),
+  .admin-admins-table td:nth-child(2),
+  .admin-admins-table th:nth-child(3),
+  .admin-admins-table td:nth-child(3) {
+    width: auto;
+  }
 }
 
 @media (min-width: 768px) {

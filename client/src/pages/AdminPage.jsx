@@ -184,28 +184,29 @@ function AdminPage() {
         )}
 
         {loadingAdmins === false && admins.length > 0 && (
-          <table className="admin-recipes-table admin-admins-table">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Rôle</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {admins.map(function (admin) {
-                return (
-                  <tr key={admin.id}>
-                    <td>{admin.email}</td>
-                    <td>
+          <div className="admin-page__table-wrap">
+            <table className="admin-recipes-table admin-admins-table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {admins.map(function (admin) {
+                  return (
+                    <tr key={admin.id}>
+                      <td data-label="Email">{admin.email}</td>
+                      <td data-label="Rôle">
                       {admin.isProtected === true && (
                         <span className="admin-admins-table__badge">
                           Principal
                         </span>
                       )}
                       {admin.isProtected === false && <span>Admin</span>}
-                    </td>
-                    <td>
+                      </td>
+                      <td data-label="Actions">
                       {admin.isProtected === false && (
                         <div className="admin-admins-table__actions">
                           <Button
@@ -235,6 +236,7 @@ function AdminPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
 
         {editingAdminId !== null && (
@@ -356,32 +358,33 @@ function AdminPage() {
         )}
 
         {loadingRecipes === false && recipes.length > 0 && (
-          <table className="admin-recipes-table">
-            <thead>
-              <tr>
-                <th>Photo</th>
-                <th>Titre</th>
-                <th>Catégorie</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recipes.map(function (recipe) {
-                const photoUrl = getRecipePhotoUrl(recipe.photo);
+          <div className="admin-page__table-wrap">
+            <table className="admin-recipes-table">
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>Titre</th>
+                  <th>Catégorie</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recipes.map(function (recipe) {
+                  const photoUrl = getRecipePhotoUrl(recipe.photo);
 
-                return (
-                  <tr key={recipe.id}>
-                    <td>
-                      <img
-                        src={photoUrl}
-                        alt={recipe.title}
-                        width="60"
-                        height="60"
-                      />
-                    </td>
-                    <td>{recipe.title}</td>
-                    <td>{recipe.category.name}</td>
-                    <td>
+                  return (
+                    <tr key={recipe.id}>
+                      <td data-label="Photo">
+                        <img
+                          src={photoUrl}
+                          alt={recipe.title}
+                          width="60"
+                          height="60"
+                        />
+                      </td>
+                      <td data-label="Titre">{recipe.title}</td>
+                      <td data-label="Catégorie">{recipe.category.name}</td>
+                      <td data-label="Actions">
                       <div className="admin-recipes-table__actions">
                         <Link
                           to={"/admin/recettes/" + recipe.id + "/modifier"}
@@ -398,12 +401,13 @@ function AdminPage() {
                           Supprimer
                         </Button>
                       </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
     </main>

@@ -53,15 +53,20 @@
 
 .categories-page__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+.categories-page__grid > li {
+  min-width: 0;
+}
+
 .categories-page__card {
   display: block;
+  width: 100%;
   overflow: hidden;
   text-decoration: none;
   color: var(--tc-text);
@@ -88,15 +93,21 @@
 }
 
 .categories-page__body {
-  padding: 0.75rem;
+  padding: 0.5rem 0.375rem;
   text-align: center;
+  /* hauteur fixe pour 2 lignes — cartes alignées même avec 1 ligne */
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .categories-page__name {
   display: block;
   font-family: var(--tc-font-heading);
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
 }
 
 /* Desktop */
@@ -119,7 +130,7 @@
   }
 
   .categories-page__grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.25rem;
   }
 }
