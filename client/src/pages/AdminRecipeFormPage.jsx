@@ -289,7 +289,7 @@ function AdminRecipeFormPage() {
         showToast("Recette enregistrée.", "success");
       }
 
-      navigate("/admin");
+      navigate("/dashbord-admins");
     } catch (err) {
       showToast(err.message, "error");
     }
@@ -316,7 +316,7 @@ function AdminRecipeFormPage() {
   if (isEditMode && recipeLoadFailed === true) {
     return (
       <main className="admin-page admin-recipe-form-page">
-        <Link to="/admin" className="admin-recipe-form-page__back-link">
+        <Link to="/dashbord-admins" className="admin-recipe-form-page__back-link">
           Retour au dashboard
         </Link>
       </main>
@@ -582,7 +582,7 @@ function AdminRecipeFormPage() {
         </button>
       </form>
 
-      <Link to="/admin" className="admin-recipe-form-page__back-link">
+      <Link to="/dashboard-admins" className="admin-recipe-form-page__back-link">
         Retour au dashboard
       </Link>
     </main>

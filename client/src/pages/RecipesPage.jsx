@@ -8,7 +8,7 @@ import "../components/Button.css";
 
 function RecipePage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeSearch = searchParams.get("q") || "";
+  const activeSearch = searchParams.get("search") || "";
 
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -69,9 +69,9 @@ function RecipePage() {
     const nextParams = new URLSearchParams(searchParams);
 
     if (trimmed === "") {
-      nextParams.delete("q");
+      nextParams.delete("search");
     } else {
-      nextParams.set("q", trimmed);
+      nextParams.set("search", trimmed);
     }
 
     nextParams.delete("page");
@@ -132,7 +132,7 @@ function RecipePage() {
         params.set("repas", selectedMealType);
       }
       if (activeSearch !== "") {
-        params.set("q", activeSearch);
+        params.set("search", activeSearch);
       }
 
       const path = "/api/recipes?" + params.toString();

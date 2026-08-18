@@ -20,7 +20,7 @@ function LoginPage() {
     try {
       const loggedUser = await login(email, password);
       auth.setUser(loggedUser);
-      navigate('/admin');
+      navigate('/dashbord-admins');
 
     } catch (error) {
       setErrorMessage(error.message);

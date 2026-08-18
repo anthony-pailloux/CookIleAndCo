@@ -1,4 +1,4 @@
-// l'app express avec les routes et middlewares
+// App express
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
@@ -49,7 +49,7 @@ app.use(session({
         httpOnly: true,
         sameSite: 'lax',
         secure: cookieSecure,
-        maxAge: 24 * 60 * 60 * 1000, // 24 h
+        maxAge: 6 * 60 * 60 * 1000, 
     },
 }));
 

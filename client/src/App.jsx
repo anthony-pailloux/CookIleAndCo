@@ -15,15 +15,14 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/connexion-superadmin" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminRoute />}>
+          <Route path="/connexion-admins" element={<LoginPage />} />
+          
+          <Route path="/dashbord-admins" element={<AdminRoute />}>
             <Route index element={<AdminPage />} />
             <Route path="recettes/nouvelle" element={<AdminRecipeFormPage />} />
-            <Route
-              path="recettes/:id/modifier"
-              element={<AdminRecipeFormPage />}
-            />
+            <Route path="recettes/:id/modifier" element={<AdminRecipeFormPage />} />
           </Route>
+
           <Route path="/recettes" element={<RecipePage />} />
           <Route path="/recettes/:id" element={<RecipeDetailsPage />} />
           <Route path="/categories" element={<CategoriesPage />} />

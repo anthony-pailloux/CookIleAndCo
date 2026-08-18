@@ -10,12 +10,10 @@ export async function login(req, res) {
     // cherche l'utilisateur en BDD par email
     const user = await User.findOne({ where: { email } });
 
-    // on ne dit pas si c'est l'email ou le mdp qui est invalide
     if (!user) {
         return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
-    // compare le mdp saisi au hash stocké (jamais le mdp en clair)
     const passwordOk = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordOk) {
@@ -26,7 +24,7 @@ export async function login(req, res) {
         return res.status(403).json({ error: 'Accès réservé à l\'administrateur' });
     }
 
-    // ouvre la session : minimum userId + role + email (pas le mot de passe)
+    // ouvre la session 
     req.session.userId = user.id;
     req.session.role = user.role;
     req.session.email = user.email;
@@ -41,7 +39,6 @@ export async function login(req, res) {
 
 export function logout(req, res) {
 
-    // supprime la session connectée
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur serveur' });

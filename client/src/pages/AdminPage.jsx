@@ -199,43 +199,43 @@ function AdminPage() {
                     <tr key={admin.id}>
                       <td data-label="Email">{admin.email}</td>
                       <td data-label="Rôle">
-                      {admin.isProtected === true && (
-                        <span className="admin-admins-table__badge">
-                          Principal
-                        </span>
-                      )}
-                      {admin.isProtected === false && <span>Admin</span>}
+                        {admin.isProtected === true && (
+                          <span className="admin-admins-table__badge">
+                            Principal
+                          </span>
+                        )}
+                        {admin.isProtected === false && <span>Admin</span>}
                       </td>
                       <td data-label="Actions">
-                      {admin.isProtected === false && (
-                        <div className="admin-admins-table__actions">
-                          <Button
-                            className="btn--outline"
-                            onClick={function () {
-                              handleStartEditAdmin(admin);
-                            }}
-                          >
-                            Modifier
-                          </Button>
-                          <Button
-                            className="btn--danger"
-                            onClick={function () {
-                              handleDeleteAdmin(admin.id, admin.email);
-                            }}
-                          >
-                            Supprimer
-                          </Button>
-                        </div>
-                      )}
-                      {admin.isProtected === true && (
-                        <span className="admin-page__status">—</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                        {admin.isProtected === false && (
+                          <div className="admin-admins-table__actions">
+                            <Button
+                              className="btn--outline"
+                              onClick={function () {
+                                handleStartEditAdmin(admin);
+                              }}
+                            >
+                              Modifier
+                            </Button>
+                            <Button
+                              className="btn--danger"
+                              onClick={function () {
+                                handleDeleteAdmin(admin.id, admin.email);
+                              }}
+                            >
+                              Supprimer
+                            </Button>
+                          </div>
+                        )}
+                        {admin.isProtected === true && (
+                          <span className="admin-page__status">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
 
@@ -345,7 +345,7 @@ function AdminPage() {
 
       <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
-        <Link to="/admin/recettes/nouvelle" className="btn admin-page__add-btn">
+        <Link to="/dashbord-admins/recettes/nouvelle" className="btn admin-page__add-btn">
           + Ajouter une recette
         </Link>
 
@@ -385,22 +385,22 @@ function AdminPage() {
                       <td data-label="Titre">{recipe.title}</td>
                       <td data-label="Catégorie">{recipe.category.name}</td>
                       <td data-label="Actions">
-                      <div className="admin-recipes-table__actions">
-                        <Link
-                          to={"/admin/recettes/" + recipe.id + "/modifier"}
-                          className="btn btn--outline"
-                        >
-                          Modifier
-                        </Link>
-                        <Button
-                          className="btn--danger"
-                          onClick={function () {
-                            handleDeleteRecipe(recipe.id, recipe.title);
-                          }}
-                        >
-                          Supprimer
-                        </Button>
-                      </div>
+                        <div className="admin-recipes-table__actions">
+                          <Link
+                            to={"/dashbord-admins/recettes/" + recipe.id + "/modifier"}
+                            className="btn btn--outline"
+                          >
+                            Modifier
+                          </Link>
+                          <Button
+                            className="btn--danger"
+                            onClick={function () {
+                              handleDeleteRecipe(recipe.id, recipe.title);
+                            }}
+                          >
+                            Supprimer
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   );

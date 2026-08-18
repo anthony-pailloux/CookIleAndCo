@@ -1,4 +1,4 @@
-// Client HTTP centralisé — toutes les requêtes front → back passent par ici.
+// Client HTTP centralisé, toutes les requêtes front et back passent par ici
 
 // URL du back (ex. http://localhost:3000) — lue depuis client .env
 // Vide en prod (same origin) : requêtes relatives /api/...

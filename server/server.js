@@ -9,9 +9,6 @@ async function startServer() {
 
     try {
         await sequelize.authenticate();
-
-
-
         console.log('Connexion à la DB mysql : ok');
 
         // o2switch, Passenger pas de port manuel
