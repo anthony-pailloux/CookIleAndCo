@@ -103,6 +103,34 @@ a:hover {
   border: none;
 }
 
+/* Secondaire — or Madras, distinct du jaune primaire */
+.btn.btn--outline {
+  width: auto;
+  padding: 10px;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-gold-madras);
+  color: var(--tc-navy);
+  cursor: pointer;
+}
+
+.btn.btn--outline:hover {
+  background: var(--tc-navy);
+  color: var(--tc-white);
+  opacity: 1;
+  border: 1px solid var(--tc-navy);
+}
+
+.btn.btn--outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.btn--outline:disabled:hover {
+  background: var(--tc-gold-madras);
+  color: var(--tc-navy);
+}
+
 .alert-error {
   color: var(--tc-primary);
   font-size: 14px;
