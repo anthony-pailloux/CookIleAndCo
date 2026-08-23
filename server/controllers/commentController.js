@@ -49,8 +49,6 @@ export async function deleteComment(req, res, next) {
     const recipeId = req.params.id;
     const commentId = req.params.commentId;
 
-    console.log('DELETE comment — recipeId:', recipeId, 'commentId:', commentId);
-
     const comment = await Comment.findOne({
       where: {
         id: commentId,

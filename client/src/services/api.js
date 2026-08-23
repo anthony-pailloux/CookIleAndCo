@@ -1,10 +1,8 @@
-// Client HTTP centralisé, toutes les requêtes front et back passent par ici
+// Toutes les requêtes React vers Express passent ici (fetch, cookie, erreurs).
 
-// URL du back (ex. http://localhost:3000) — lue depuis client .env
-// Vide en prod (same origin) : requêtes relatives /api/...
 const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
-// Construit le message d'erreur : détail des champs si validation 400, sinon error générique
+// Prépare le texte d'erreur du back pour l'afficher côté client.
 function buildApiErrorMessage(data) {
     let message;
 
@@ -13,6 +11,7 @@ function buildApiErrorMessage(data) {
 
         for (const fieldName in data.fields) {
             const fieldError = data.fields[fieldName];
+
             if (fieldError && fieldError.msg) {
                 parts.push(fieldError.msg);
             }
@@ -34,7 +33,7 @@ function buildApiErrorMessage(data) {
     return message;
 }
 
-// Envoie une requête HTTP : URL, cookies, body sérialisé en JSON (stringify) si présent ; renvoie la Response brute (pas de parse).
+// Envoie la requête au back avec le cookie. Le JSON est lu plus tard.
 async function requestFromApi(method, path, body) {
 
     const url = apiBaseUrl + path;
@@ -55,7 +54,7 @@ async function requestFromApi(method, path, body) {
     return response;
 }
 
-// GET : appelle requestFromApi, parse la réponse JSON (response.json), gère les erreurs { error }.
+// Lit le JSON. Si ça a planté, on affiche l'erreur du back.
 export async function getFromApi(path) {
 
     const response = await requestFromApi('GET', path);
@@ -68,8 +67,7 @@ export async function getFromApi(path) {
     return data;
 }
 
-
-// POST : envoie un body JSON, parse la réponse, gère les erreurs { error }.
+// Pareil pour POST, PUT, DELETE.
 export async function postToApi(path, body) {
 
     const response = await requestFromApi('POST', path, body);
@@ -82,7 +80,6 @@ export async function postToApi(path, body) {
     return data;
 }
 
-// PUT : modifie une ressource (body JSON), parse la réponse, gère les erreurs { error }.
 export async function putToApi(path, body) {
 
     const response = await requestFromApi('PUT', path, body);
@@ -95,7 +92,6 @@ export async function putToApi(path, body) {
     return data;
 }
 
-// DELETE : supprime une ressource, parse la réponse, gère les erreurs { error }.
 export async function deleteToApi(path) {
 
     const response = await requestFromApi('DELETE', path);

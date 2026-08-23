@@ -25,7 +25,7 @@ export async function createAdmin(email, password) {
     return await postToApi('/api/auth/admins', { email, password });
 }
 
-// Liste des admins (isProtected = admin principal non supprimable)
+// Liste des admins
 export async function listAdmins() {
     return await getFromApi('/api/auth/admins');
 }

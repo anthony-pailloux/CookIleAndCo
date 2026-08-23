@@ -6,7 +6,6 @@ import {
   deleteAdmin,
   updateAdmin,
 } from "../services/authServices.js";
-import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { Link } from "react-router-dom";
@@ -15,7 +14,6 @@ import "../components/Button.css";
 import "./AdminPage.css";
 
 function AdminPage() {
-  const auth = useAuth();
   const { showToast } = useToast();
 
   const [recipes, setRecipes] = useState([]);
@@ -345,7 +343,10 @@ function AdminPage() {
 
       <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
-        <Link to="/dashbord-admins/recettes/nouvelle" className="btn admin-page__add-btn">
+        <Link
+          to="/dashbord-admins/recettes/nouvelle"
+          className="btn admin-page__add-btn"
+        >
           + Ajouter une recette
         </Link>
 
@@ -387,7 +388,11 @@ function AdminPage() {
                       <td data-label="Actions">
                         <div className="admin-recipes-table__actions">
                           <Link
-                            to={"/dashbord-admins/recettes/" + recipe.id + "/modifier"}
+                            to={
+                              "/dashbord-admins/recettes/" +
+                              recipe.id +
+                              "/modifier"
+                            }
                             className="btn btn--outline"
                           >
                             Modifier

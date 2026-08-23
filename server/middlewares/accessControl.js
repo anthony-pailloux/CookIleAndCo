@@ -1,4 +1,4 @@
-// Contrôle d'accès seul l'admin accède aux routes protégées.
+// Middleware qui protège les routes admin (création, modification, suppression).
 
 export function requireAdmin(req, res, next) {
     const userId = req.session.userId;

@@ -1,4 +1,4 @@
-// App express
+// App express : middlewares, session, routes API, 404.
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
@@ -18,13 +18,6 @@ import mealTypeRoutes from './routes/mealTypeRoute.js';
 import captchaRoutes from './routes/captchaRoutes.js';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const sessionsPath = path.join(dirname, 'sessions');
-
-const FileStore = fileStoreFactory(session);
-const sessionStore = new FileStore({
-    path: sessionsPath,
-    ttl: 86400, // 24 h en secondes
-});
 
 const app = express();
 
@@ -32,7 +25,7 @@ app.use(express.json());
 
 // autorise le front à appeler l'api
 app.use(cors({
-    origin: process.env.CLIENT_URL, // url du front
+    origin: process.env.CLIENT_URL,
     credentials: true, // autorise les cookies
 }));
 
@@ -40,16 +33,26 @@ const cookieSecure = process.env.COOKIE_SECURE === 'true';
 
 app.set('trust proxy', 1);
 
+// store + middleware session
+const sessionDurationSeconds = 1 * 60 * 60;
+const sessionsPath = path.join(dirname, 'sessions');
+const FileStore = fileStoreFactory(session);
+const sessionStore = new FileStore({
+    path: sessionsPath,
+    ttl: sessionDurationSeconds,
+});
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
+    rolling: true,
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
         httpOnly: true,
         sameSite: 'lax',
         secure: cookieSecure,
-        maxAge: 6 * 60 * 60 * 1000, 
+        maxAge: sessionDurationSeconds * 1000,
     },
 }));
 
@@ -66,7 +69,7 @@ app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
 app.use('/api/captcha', captchaRoutes);
 
-// Front React buildé (prod) — static + fallback SPA pour React Router
+// Front React buildé (prod) static + fallback SPA pour React Router
 const clientDistPath = path.join(dirname, '../client/dist');
 const indexHtmlPath = path.join(clientDistPath, 'index.html');
 const hasClientBuild = fs.existsSync(indexHtmlPath);
