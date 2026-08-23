@@ -1,7 +1,7 @@
-// créer ou modifier une catégorie (POST / PUT).
+// Nom requis pour catégorie, origine ou type de repas (POST / PUT).
 import { body } from 'express-validator';
 
-export const categoryRules = [
+export const nameRules = [
     body('name')
         .trim()
         .notEmpty()
