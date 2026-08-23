@@ -57,7 +57,7 @@ function Header() {
           </NavLink>
 
           {isAdmin === true && (
-            <NavLink to="/dashbord-admins" className={getNavLinkClass}>
+            <NavLink to="/dashboard-admins" className={getNavLinkClass}>
               Dashboard
             </NavLink>
           )}

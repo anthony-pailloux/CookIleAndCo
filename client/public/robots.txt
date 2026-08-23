@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /dashbord-admins
+Disallow: /dashboard-admins
 Disallow: /connexion-admins
 
 Sitemap: https://www.cookileandco.fr/sitemap.xml

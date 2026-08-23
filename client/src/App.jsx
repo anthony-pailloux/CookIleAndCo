@@ -17,7 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/connexion-admins" element={<LoginPage />} />
           
-          <Route path="/dashbord-admins" element={<AdminRoute />}>
+          <Route path="/dashboard-admins" element={<AdminRoute />}>
             <Route index element={<AdminPage />} />
             <Route path="recettes/nouvelle" element={<AdminRecipeFormPage />} />
             <Route path="recettes/:id/modifier" element={<AdminRecipeFormPage />} />

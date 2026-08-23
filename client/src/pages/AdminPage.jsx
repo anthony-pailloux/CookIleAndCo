@@ -344,7 +344,7 @@ function AdminPage() {
       <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
         <Link
-          to="/dashbord-admins/recettes/nouvelle"
+          to="/dashboard-admins/recettes/nouvelle"
           className="btn admin-page__add-btn"
         >
           + Ajouter une recette
@@ -389,7 +389,7 @@ function AdminPage() {
                         <div className="admin-recipes-table__actions">
                           <Link
                             to={
-                              "/dashbord-admins/recettes/" +
+                              "/dashboard-admins/recettes/" +
                               recipe.id +
                               "/modifier"
                             }
