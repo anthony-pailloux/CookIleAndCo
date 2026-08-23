@@ -1,4 +1,3 @@
-import sequelize from "../config/database.js";
 import User from './User.js';
 import Category from './Category.js';
 import Origin from './Origin.js';
@@ -26,6 +25,4 @@ Object.values(models).forEach(function (model) {
     }
 });
 
-
-export { sequelize };
 export default models;

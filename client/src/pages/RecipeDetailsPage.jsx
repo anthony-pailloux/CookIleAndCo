@@ -4,7 +4,6 @@ import { getFromApi, postToApi, deleteToApi } from "../services/api";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
-import Button from "../components/Button.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import "../components/Button.css";
@@ -217,12 +216,13 @@ function RecipeDetailsPage() {
             ⏱ {recipeDetails.cookingTime} minutes
           </p>
           <section className="recipe-detail__share recipe-detail__share--hero">
-            <Button
-              className="btn--primary recipe-detail__share-main"
+            <button
+              type="button"
+              className="btn btn--primary recipe-detail__share-main"
               onClick={handleShareMain}
             >
               Partager cette recette
-            </Button>
+            </button>
             <p className="recipe-detail__share-links">
               <button
                 type="button"

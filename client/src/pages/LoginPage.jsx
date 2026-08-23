@@ -2,8 +2,8 @@ import { login } from "../services/authServices.js";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import "./LoginPage.css";
+import "../components/Button.css";
 import { useNavigate } from "react-router-dom";
-
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,8 +20,7 @@ function LoginPage() {
     try {
       const loggedUser = await login(email, password);
       auth.setUser(loggedUser);
-      navigate('/dashbord-admins');
-
+      navigate("/dashbord-admins");
     } catch (error) {
       setErrorMessage(error.message);
     }
