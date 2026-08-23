@@ -55,51 +55,33 @@ async function requestFromApi(method, path, body) {
 }
 
 // Lit le JSON. Si ça a planté, on affiche l'erreur du back.
-export async function getFromApi(path) {
-
-    const response = await requestFromApi('GET', path);
+async function readApiResponse(response) {
     const data = await response.json();
 
     if (!response.ok) {
         const message = buildApiErrorMessage(data);
         throw new Error(message);
     }
+
     return data;
 }
 
-// Pareil pour POST, PUT, DELETE.
+export async function getFromApi(path) {
+    const response = await requestFromApi('GET', path);
+    return await readApiResponse(response);
+}
+
 export async function postToApi(path, body) {
-
     const response = await requestFromApi('POST', path, body);
-    const data = await response.json();
-
-    if (!response.ok) {
-        const message = buildApiErrorMessage(data);
-        throw new Error(message);
-    }
-    return data;
+    return await readApiResponse(response);
 }
 
 export async function putToApi(path, body) {
-
     const response = await requestFromApi('PUT', path, body);
-    const data = await response.json();
-
-    if (!response.ok) {
-        const message = buildApiErrorMessage(data);
-        throw new Error(message);
-    }
-    return data;
+    return await readApiResponse(response);
 }
 
 export async function deleteToApi(path) {
-
     const response = await requestFromApi('DELETE', path);
-    const data = await response.json();
-
-    if (!response.ok) {
-        const message = buildApiErrorMessage(data);
-        throw new Error(message);
-    }
-    return data;
+    return await readApiResponse(response);
 }

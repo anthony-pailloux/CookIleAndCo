@@ -45,7 +45,6 @@ export default {
       email: adminEmail,
       password_hash: passwordHash,
       role: 'admin',
-      profile_photo: null,
       created_at: now,
       updated_at: now,
     };

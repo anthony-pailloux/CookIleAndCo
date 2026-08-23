@@ -23,10 +23,6 @@ export default {
         allowNull: false,
         defaultValue: 'user',
       },
-      profile_photo: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

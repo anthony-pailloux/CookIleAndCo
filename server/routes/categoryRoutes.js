@@ -9,7 +9,7 @@ import {
 import { requireAdmin } from "../middlewares/accessControl.js";
 import validate from "../middlewares/validate.js";
 import { categoryRules } from "../validators/categoryRules.js";
-import uploadCategoryImage from "../middlewares/uploadCategoryImage.js";
+import { uploadCategoryImage } from "../middlewares/uploadImage.js";
 
 const router = Router();
 

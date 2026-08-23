@@ -26,10 +26,6 @@ User.init(
                 isIn: [['user', 'admin']],
             },
         },
-        profilePhoto: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
     },
     {
         sequelize: sequelize,

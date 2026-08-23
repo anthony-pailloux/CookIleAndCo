@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getRecipeById, listRecipes, createRecipe, updateRecipe, deleteRecipe, addRecipePhoto } from "../controllers/recipeController.js";
 import { listComments, createComment, deleteComment } from '../controllers/commentController.js';
-import uploadRecipePhoto from "../middlewares/uploadRecipePhoto.js";
+import { uploadRecipePhoto } from "../middlewares/uploadImage.js";
 import { requireAdmin } from "../middlewares/accessControl.js";
 import validate from "../middlewares/validate.js";
 import verifyCaptcha from '../middlewares/verifyCaptcha.js';
