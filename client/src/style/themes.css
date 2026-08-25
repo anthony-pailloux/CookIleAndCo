@@ -28,8 +28,9 @@
   --tc-radius: 6px;
   --tc-spacing: 1rem;
   --tc-spacing-lg: 10rem;
-  --tc-font: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
-  --tc-font-heading: "Libre Baskerville", Georgia, serif;
+  --tc-font: "Open Sans", "Segoe UI", system-ui, sans-serif;
+  --tc-font-heading: "Open Sans", "Segoe UI", system-ui, sans-serif;
+  --tc-letter-spacing: 0.04em;
 }
 
 *,
@@ -43,6 +44,7 @@
 body {
   font-family: var(--tc-font);
   font-size: 16px;
+  letter-spacing: var(--tc-letter-spacing);
   color: var(--tc-text);
   background-color: var(--tc-background);
 }
@@ -51,6 +53,7 @@ h1,
 h2,
 h3 {
   font-family: var(--tc-font-heading);
+  letter-spacing: 0.06em;
 }
 
 a {

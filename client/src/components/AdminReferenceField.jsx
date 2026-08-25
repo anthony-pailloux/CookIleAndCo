@@ -8,6 +8,7 @@ import {
 } from "../services/api.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
 import "./AdminReferenceField.css";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL || "";
@@ -238,7 +239,7 @@ function AdminReferenceField({
             placeholder={"Nouvelle " + entityLabel}
             value={newName}
             onChange={function (event) {
-              setNewName(event.target.value);
+              setNewName(capitalizeFirstLetter(event.target.value));
             }}
           />
           {imageSupported && (
@@ -275,7 +276,7 @@ function AdminReferenceField({
             value={editName}
             disabled={!hasSelection}
             onChange={function (event) {
-              setEditName(event.target.value);
+              setEditName(capitalizeFirstLetter(event.target.value));
             }}
           />
           <button

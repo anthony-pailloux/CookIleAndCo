@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getFromApi, postToApi, putToApi } from "../services/api.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
 import AdminReferenceField from "../components/AdminReferenceField.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
@@ -78,12 +79,12 @@ function AdminRecipeFormPage() {
         try {
           const recipe = await getFromApi("/api/recipes/" + recipeId);
 
-          setTitle(recipe.title);
+          setTitle(capitalizeFirstLetter(recipe.title));
           setCookingTime(String(recipe.cookingTime));
           setCurrentPhotoUrl(getRecipePhotoUrl(recipe.photo));
 
           if (recipe.tips !== null && recipe.tips !== undefined) {
-            setTips(recipe.tips);
+            setTips(capitalizeFirstLetter(recipe.tips));
           } else {
             setTips("");
           }
@@ -104,7 +105,7 @@ function AdminRecipeFormPage() {
             loadedIngredients.push({
               quantity: item.quantity,
               unit: unitValue,
-              name: item.name,
+              name: capitalizeFirstLetter(item.name),
             });
           }
 
@@ -116,7 +117,7 @@ function AdminRecipeFormPage() {
           const loadedSteps = [];
           for (let j = 0; j < recipe.steps.length; j++) {
             loadedSteps.push({
-              description: recipe.steps[j].description,
+              description: capitalizeFirstLetter(recipe.steps[j].description),
             });
           }
 
@@ -161,7 +162,7 @@ function AdminRecipeFormPage() {
         } else if (fieldName === "unit") {
           updatedItem.unit = newValue;
         } else if (fieldName === "name") {
-          updatedItem.name = newValue;
+          updatedItem.name = capitalizeFirstLetter(newValue);
         }
 
         newIngredients.push(updatedItem);
@@ -199,7 +200,7 @@ function AdminRecipeFormPage() {
     const newSteps = [];
     for (let i = 0; i < steps.length; i++) {
       if (i === stepIndex) {
-        newSteps.push({ description: newDescription });
+        newSteps.push({ description: capitalizeFirstLetter(newDescription) });
       } else {
         newSteps.push(steps[i]);
       }
@@ -341,7 +342,7 @@ function AdminRecipeFormPage() {
               type="text"
               value={title}
               onChange={function (event) {
-                setTitle(event.target.value);
+                setTitle(capitalizeFirstLetter(event.target.value));
               }}
             />
           </div>
@@ -527,7 +528,7 @@ function AdminRecipeFormPage() {
               rows="4"
               value={tips}
               onChange={function (event) {
-                setTips(event.target.value);
+                setTips(capitalizeFirstLetter(event.target.value));
               }}
             />
           </div>

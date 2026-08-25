@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFromApi, deleteToApi } from "../services/api.js";
-import {
-  createAdmin,
-  listAdmins,
-  deleteAdmin,
-  updateAdmin,
-} from "../services/authServices.js";
+import { createAdmin, listAdmins, deleteAdmin, updateAdmin } from "../services/authServices.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { Link } from "react-router-dom";
@@ -197,12 +192,19 @@ function AdminPage() {
                     <tr key={admin.id}>
                       <td data-label="Email">{admin.email}</td>
                       <td data-label="Rôle">
-                        {admin.isProtected === true && (
+                        {admin.isPrincipal === true && (
                           <span className="admin-admins-table__badge">
                             Principal
                           </span>
                         )}
-                        {admin.isProtected === false && <span>Admin</span>}
+                        {admin.isDev === true && (
+                          <span className="admin-admins-table__badge admin-admins-table__badge--dev">
+                            Dev
+                          </span>
+                        )}
+                        {admin.isPrincipal === false && admin.isDev === false && (
+                          <span>Admin</span>
+                        )}
                       </td>
                       <td data-label="Actions">
                         {admin.isProtected === false && (

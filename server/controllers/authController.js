@@ -91,14 +91,21 @@ export async function listAdmins(req, res) {
     });
 
     const mainAdminEmail = process.env.ADMIN_EMAIL;
+    const devAdminEmail = process.env.DEV_EMAIL;
 
     const data = [];
 
     for (let i = 0; i < admins.length; i++) {
         const admin = admins[i];
+        let isPrincipal = false;
+        let isDev = false;
         let isProtected = false;
 
         if (admin.email === mainAdminEmail) {
+            isPrincipal = true;
+            isProtected = true;
+        } else if (admin.email === devAdminEmail) {
+            isDev = true;
             isProtected = true;
         }
 
@@ -106,6 +113,8 @@ export async function listAdmins(req, res) {
             id: admin.id,
             email: admin.email,
             role: admin.role,
+            isPrincipal: isPrincipal,
+            isDev: isDev,
             isProtected: isProtected,
         });
     }
@@ -113,7 +122,7 @@ export async function listAdmins(req, res) {
     return res.status(200).json({ data: data });
 }
 
-// Suppression d'un compte admin (admin principal protégé via ADMIN_EMAIL)
+// Suppression d'un compte admin (principal et dev protégés via .env)
 export async function deleteAdmin(req, res) {
     const id = req.params.id;
 
@@ -126,10 +135,15 @@ export async function deleteAdmin(req, res) {
     }
 
     const mainAdminEmail = process.env.ADMIN_EMAIL;
+    const devAdminEmail = process.env.DEV_EMAIL;
 
     if (admin.email === mainAdminEmail) {
         return res.status(403).json({
-            error: 'Impossible de supprimer l\'administrateur principal',
+            error: 'Impossible de supprimer ce compte protégé',
+        });
+    } else if (admin.email === devAdminEmail) {
+        return res.status(403).json({
+            error: 'Impossible de supprimer ce compte protégé',
         });
     }
 
@@ -138,7 +152,7 @@ export async function deleteAdmin(req, res) {
     return res.status(200).json({ message: 'Administrateur supprimé' });
 }
 
-// Modification d'un compte admin (admin principal protégé via ADMIN_EMAIL)
+// Modification d'un compte admin (principal et dev protégés via .env)
 export async function updateAdmin(req, res) {
     const id = req.params.id;
     const email = req.body.email;
@@ -153,10 +167,15 @@ export async function updateAdmin(req, res) {
     }
 
     const mainAdminEmail = process.env.ADMIN_EMAIL;
+    const devAdminEmail = process.env.DEV_EMAIL;
 
     if (admin.email === mainAdminEmail) {
         return res.status(403).json({
-            error: 'Impossible de modifier l\'administrateur principal',
+            error: 'Impossible de modifier ce compte protégé',
+        });
+    } else if (admin.email === devAdminEmail) {
+        return res.status(403).json({
+            error: 'Impossible de modifier ce compte protégé',
         });
     }
 

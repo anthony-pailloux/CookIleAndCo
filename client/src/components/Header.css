@@ -44,6 +44,7 @@
   font-family: var(--tc-font-heading);
   font-weight: 600;
   font-size: 1rem;
+  letter-spacing: 0.06em;
   padding-bottom: 0.15rem;
   border-bottom: 2px solid transparent;
   white-space: nowrap;
@@ -68,6 +69,7 @@
   font-family: var(--tc-font-heading);
   font-weight: 600;
   font-size: 0.875rem;
+  letter-spacing: 0.06em;
   cursor: pointer;
   white-space: nowrap;
   z-index: 2;
