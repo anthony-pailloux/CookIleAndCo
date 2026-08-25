@@ -310,6 +310,7 @@ function AdminPage() {
               className="input"
               type="email"
               name="email"
+              autoComplete="off"
               placeholder="Email du nouvel admin"
               value={newAdminEmail}
               onChange={function (event) {
@@ -325,6 +326,7 @@ function AdminPage() {
               className="input"
               type="password"
               name="password"
+              autoComplete="new-password"
               placeholder="Mot de passe"
               value={newAdminPassword}
               onChange={function (event) {
