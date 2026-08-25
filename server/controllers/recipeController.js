@@ -39,7 +39,7 @@ export async function listRecipes(req, res) {
     const offset = (pageFromUrl - 1) * limitFromUrl;
 
     // filtres
-    const searchQuery = req.query.search;
+    const searchQuery = req.query.q;
     let recipeWhere = {};
 
     if (searchQuery !== undefined && searchQuery !== '') {

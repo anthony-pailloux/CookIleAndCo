@@ -8,7 +8,7 @@ import "../components/Button.css";
 
 function RecipePage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeSearch = searchParams.get("search") || "";
+  const activeSearch = searchParams.get("q") || "";
 
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -69,9 +69,9 @@ function RecipePage() {
     const nextParams = new URLSearchParams(searchParams);
 
     if (trimmed === "") {
-      nextParams.delete("search");
+      nextParams.delete("q");
     } else {
-      nextParams.set("search", trimmed);
+      nextParams.set("q", trimmed);
     }
 
     nextParams.delete("page");
@@ -132,7 +132,7 @@ function RecipePage() {
         params.set("repas", selectedMealType);
       }
       if (activeSearch !== "") {
-        params.set("search", activeSearch);
+        params.set("q", activeSearch);
       }
 
       const path = "/api/recipes?" + params.toString();
@@ -165,7 +165,7 @@ function RecipePage() {
         const originsResponse = await getFromApi("/api/origins");
         const mealTypesResponse = await getFromApi("/api/mealTypes");
         const categoriesResponse = await getFromApi("/api/categories");
-    
+
         setOrigins(originsResponse.data);
         setMealTypes(mealTypesResponse.data);
         setCategories(categoriesResponse.data);
