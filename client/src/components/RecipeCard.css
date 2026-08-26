@@ -18,7 +18,6 @@
 
 .recipe-card__photo {
   background-color: var(--tc-background-alt);
-  border-bottom: 1px solid var(--tc-border);
 }
 
 .recipe-card__photo img {
