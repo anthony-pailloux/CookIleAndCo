@@ -45,33 +45,14 @@ function RecipePage() {
     setSearchParams(nextParams);
   }
 
-  function resetPageInUrl() {
-    goToPage(1);
-  }
-
-  function handleMealTypeChange(event) {
-    setSelectedMealType(event.target.value);
-    resetPageInUrl();
-  }
-
-  function handleOriginChange(event) {
-    setSelectedOrigin(event.target.value);
-    resetPageInUrl();
-  }
-
-  function handleCategoryChange(event) {
-    setSelectedCategory(event.target.value);
-    resetPageInUrl();
-  }
-
-  function applySearchToUrl(value) {
-    const trimmed = value.trim();
+  // Écrit un paramètre dans l'URL sans écraser les autres (filtres + recherche)
+  function applyQueryParam(paramName, value) {
     const nextParams = new URLSearchParams(searchParams);
 
-    if (trimmed === "") {
-      nextParams.delete("q");
+    if (value === "") {
+      nextParams.delete(paramName);
     } else {
-      nextParams.set("q", trimmed);
+      nextParams.set(paramName, value);
     }
 
     nextParams.delete("page");
@@ -81,6 +62,29 @@ function RecipePage() {
     } else {
       setSearchParams(nextParams);
     }
+  }
+
+  function handleMealTypeChange(event) {
+    const value = event.target.value;
+    setSelectedMealType(value);
+    applyQueryParam("repas", value);
+  }
+
+  function handleOriginChange(event) {
+    const value = event.target.value;
+    setSelectedOrigin(value);
+    applyQueryParam("origine", value);
+  }
+
+  function handleCategoryChange(event) {
+    const value = event.target.value;
+    setSelectedCategory(value);
+    applyQueryParam("categorie", value);
+  }
+
+  function applySearchToUrl(value) {
+    const trimmed = value.trim();
+    applyQueryParam("q", trimmed);
   }
 
   function handleSearchSubmit(event) {
