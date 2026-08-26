@@ -3,11 +3,11 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database.js';
 
-class User extends Model {
+class Admin extends Model {
 
 }
 
-User.init(
+Admin.init(
     {
         email: {
             type: DataTypes.STRING,
@@ -21,11 +21,11 @@ User.init(
     },
     {
         sequelize: sequelize,
-        modelName: 'User',
-        tableName: 'users',
+        modelName: 'Admin',
+        tableName: 'admins',
         underscored: true,
         timestamps: true,
     }
 );
 
-export default User;
+export default Admin;

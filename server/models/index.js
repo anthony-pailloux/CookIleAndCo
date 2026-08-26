@@ -1,5 +1,5 @@
 // Relie les tables entre elles (associate).
-import User from './User.js';
+import Admin from './Admin.js';
 import Category from './Category.js';
 import Origin from './Origin.js';
 import MealType from './MealType.js';
@@ -9,7 +9,7 @@ import RecipeStep from "./RecipeStep.js";
 import Comment from './Comment.js';
 
 const models = {
-    User,
+    Admin,
     Category,
     Origin,
     MealType,

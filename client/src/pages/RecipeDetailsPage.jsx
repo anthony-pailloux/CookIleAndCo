@@ -389,7 +389,7 @@ function RecipeDetailsPage() {
                 <li key={comment.id} className="recipe-detail__comment-item">
                   <strong>{comment.pseudo}</strong>
                   <p>{comment.content}</p>
-                  {auth.user !== null && (
+                  {auth.admin !== null && (
                     <button
                       type="button"
                       className="recipe-detail__share-link"

@@ -15,7 +15,7 @@ export default {
 
     // On cherche si l admin existe deja
     const existingRows = await queryInterface.sequelize.query(
-      'SELECT id FROM users WHERE email = :email',
+      'SELECT id FROM admins WHERE email = :email',
       {
         replacements: { email: adminEmail },
         type: Sequelize.QueryTypes.SELECT,
@@ -41,7 +41,7 @@ export default {
     const passwordHash = await bcrypt.hash(adminPassword, 10);
     const now = new Date();
 
-    const adminUser = {
+    const adminRow = {
       email: adminEmail,
       password_hash: passwordHash,
       created_at: now,
@@ -49,7 +49,7 @@ export default {
     };
 
     // on cree le compte admin
-    await queryInterface.bulkInsert('users', [adminUser]);
+    await queryInterface.bulkInsert('admins', [adminRow]);
 
     console.log('seed admin, compte inséré :', adminEmail);
   },

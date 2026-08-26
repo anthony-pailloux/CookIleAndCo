@@ -1,5 +1,3 @@
-// Le fetch unique (cookie + erreurs). Les pages passent par services, pas ici.
-
 const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 // Prepare le texte d erreur du back pour l afficher cote client.

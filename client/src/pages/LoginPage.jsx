@@ -19,8 +19,8 @@ function LoginPage() {
     setErrorMessage("");
 
     try {
-      const loggedUser = await login(email, password);
-      auth.setUser(loggedUser);
+      const loggedAdmin = await login(email, password);
+      auth.setAdmin(loggedAdmin);
       navigate("/dashboard-admins");
     } catch (error) {
       setErrorMessage(error.message);

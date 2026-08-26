@@ -23,7 +23,7 @@ function Header() {
 
   async function handleLogout() {
     await logout();
-    auth.setUser(null);
+    auth.setAdmin(null);
   }
 
   return (
@@ -53,14 +53,14 @@ function Header() {
             Catégories
           </NavLink>
 
-          {auth.user !== null && (
+          {auth.admin !== null && (
             <NavLink to="/dashboard-admins" className={getNavLinkClass}>
               Dashboard
             </NavLink>
           )}
         </nav>
 
-        {auth.user !== null && (
+        {auth.admin !== null && (
           <button
             type="button"
             className="site-header__logout-btn"

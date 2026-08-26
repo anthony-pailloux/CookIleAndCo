@@ -1,9 +1,9 @@
-// Bloque la route si personne n est connecte.
+// Bloque la route si aucun admin n'est connecté (session sans adminId).
 
-export function requireAdmin(req, res, next) {
-    const userId = req.session.userId;
+export function requireAuth(req, res, next) {
+    const adminId = req.session.adminId;
 
-    if (!userId) {
+    if (!adminId) {
         res.status(401).json({ error: 'Non authentifié' });
     } else {
         next();

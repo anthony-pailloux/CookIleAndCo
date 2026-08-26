@@ -159,31 +159,7 @@
 
 .admin-admins-table th:nth-child(2),
 .admin-admins-table td:nth-child(2) {
-  width: 8rem;
-  overflow: hidden;
-  text-align: center;
-}
-
-.admin-admins-table th:nth-child(3),
-.admin-admins-table td:nth-child(3) {
   width: 7.5rem;
-}
-
-.admin-admins-table__badge {
-  display: inline-block;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  background-color: var(--tc-yellow-madras);
-  color: var(--tc-text);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.admin-admins-table__badge--dev {
-  background-color: var(--tc-navy);
-  color: var(--tc-white);
 }
 
 .admin-admins-table__actions {
@@ -332,9 +308,7 @@
   }
 
   .admin-admins-table th:nth-child(2),
-  .admin-admins-table td:nth-child(2),
-  .admin-admins-table th:nth-child(3),
-  .admin-admins-table td:nth-child(3) {
+  .admin-admins-table td:nth-child(2) {
     width: auto;
   }
 }

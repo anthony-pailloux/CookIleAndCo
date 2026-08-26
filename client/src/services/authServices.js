@@ -1,8 +1,8 @@
 // Appels login, session et comptes admin. Le fetch est dans api.js.
 import { getFromApi, postToApi, putToApi, deleteToApi } from './api.js';
 
-export async function getCurrentUser() {
-    return await getFromApi('/api/auth/current-user');
+export async function getCurrentAdmin() {
+    return await getFromApi('/api/auth/current-admin');
 }
 
 export async function login(email, password) {

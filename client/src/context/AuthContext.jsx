@@ -1,12 +1,12 @@
-// Memoire de connexion. Toute l app peut lire user avec useAuth().
+// Memoire de connexion. Toute l app peut lire admin avec useAuth().
 import { createContext, useContext, useState } from "react";
-import { getCurrentUser } from "../services/authServices.js";
+import { getCurrentAdmin } from "../services/authServices.js";
 
 const AuthContext = createContext(null);
 
 // Pose AuthProvider autour de App dans main.jsx.
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // Demande au serveur si un admin est encore connecte.
@@ -14,16 +14,16 @@ export function AuthProvider({ children }) {
     setLoading(true);
 
     try {
-      const data = await getCurrentUser();
+      const data = await getCurrentAdmin();
 
-      setUser(data);
+      setAdmin(data);
     } catch (error) {
-      setUser(null);
+      setAdmin(null);
     }
     setLoading(false);
   }
 
-  const contextValue = { user, loading, loadSession, setUser };
+  const contextValue = { admin, loading, loadSession, setAdmin };
 
   return (
     <AuthContext.Provider value={contextValue}>
@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Petit raccourci pour lire user depuis une page.
+// Petit raccourci pour lire admin depuis une page.
 export function useAuth() {
   const context = useContext(AuthContext);
 

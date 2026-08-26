@@ -19,7 +19,7 @@ function AdminRoute() {
   if (auth.loading === true || sessionChecked === false) {
     return <p>Chargement...</p>;
   }
-  if (auth.user === null) {
+  if (auth.admin === null) {
     return <Navigate to="/" replace />;
   }
 

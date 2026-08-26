@@ -1,6 +1,6 @@
 // Login, session et comptes admin.
 import bcrypt from 'bcrypt';
-import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 
 // connexion admin
 export async function login(req, res) {
@@ -8,27 +8,27 @@ export async function login(req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    // cherche la personne en BDD par email
-    const user = await User.findOne({ where: { email } });
+    // cherche l admin en BDD par email
+    const admin = await Admin.findOne({ where: { email } });
 
-    if (!user) {
+    if (!admin) {
         return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
-    const passwordOk = await bcrypt.compare(password, user.passwordHash);
+    const passwordOk = await bcrypt.compare(password, admin.passwordHash);
 
     if (!passwordOk) {
         return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
-    // ouvre la session (un compte en table users = un admin)
-    req.session.userId = user.id;
-    req.session.email = user.email;
+    // ouvre la session
+    req.session.adminId = admin.id;
+    req.session.email = admin.email;
 
-    // renvoie les infos de la personne connectee
+    // renvoie les infos de l admin connecte
     return res.status(200).json({
-        id: user.id,
-        email: user.email,
+        id: admin.id,
+        email: admin.email,
     });
 }
 
@@ -43,12 +43,12 @@ export function logout(req, res) {
     });
 }
 
-// Personne connectee via la session (cookie pose au login)
-export function getCurrentUser(req, res) {
+// Admin connecte via la session (cookie pose au login)
+export function getCurrentAdmin(req, res) {
 
-    // Infos depuis la session (requireAdmin a deja verifie userId)
+    // Infos depuis la session (requireAuth a deja verifie adminId)
     return res.status(200).json({
-        id: req.session.userId,
+        id: req.session.adminId,
         email: req.session.email,
     });
 }
@@ -57,13 +57,13 @@ export function getCurrentUser(req, res) {
 export async function createAdmin(req, res) {
     const email = req.body.email;
     const password = req.body.password;
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
+    const existingAdmin = await Admin.findOne({ where: { email } });
+    if (existingAdmin) {
         return res.status(409).json({ error: 'Cet email est déjà utilisé' });
     }
     // Hash du mot de passe
     const passwordHash = await bcrypt.hash(password, 10);
-    const newAdmin = await User.create({
+    const newAdmin = await Admin.create({
         email: email,
         passwordHash: passwordHash,
     });
@@ -76,7 +76,7 @@ export async function createAdmin(req, res) {
 
 // Liste des comptes admin
 export async function listAdmins(req, res) {
-    const admins = await User.findAll({
+    const admins = await Admin.findAll({
         attributes: ['id', 'email'],
         order: [['createdAt', 'ASC']],
     });
@@ -116,7 +116,7 @@ export async function listAdmins(req, res) {
 export async function deleteAdmin(req, res) {
     const id = req.params.id;
 
-    const admin = await User.findOne({
+    const admin = await Admin.findOne({
         where: { id: id },
     });
 
@@ -148,7 +148,7 @@ export async function updateAdmin(req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    const admin = await User.findOne({
+    const admin = await Admin.findOne({
         where: { id: id },
     });
 
@@ -169,9 +169,9 @@ export async function updateAdmin(req, res) {
         });
     }
 
-    const existingUser = await User.findOne({ where: { email } });
+    const existingAdmin = await Admin.findOne({ where: { email } });
 
-    if (existingUser && existingUser.id !== admin.id) {
+    if (existingAdmin && existingAdmin.id !== admin.id) {
         return res.status(409).json({ error: 'Cet email est déjà utilisé' });
     }
 

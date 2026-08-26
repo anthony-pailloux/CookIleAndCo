@@ -1,6 +1,6 @@
 'use strict';
 
-// Retire le role : tous les comptes de users sont des admins.
+// Retire le role : tous les comptes de admins sont des administrateurs.
 export default {
   async up(queryInterface) {
     const table = await queryInterface.describeTable('users');
