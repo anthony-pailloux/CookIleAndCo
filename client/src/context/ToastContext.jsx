@@ -1,4 +1,4 @@
-// Toasts global
+// Petit message a l ecran (succes ou erreur).
 import { createContext, useContext, useState } from "react";
 import "../components/Toast.css";
 

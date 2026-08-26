@@ -1,3 +1,4 @@
+// Requetes BDD pour les commentaires.
 import Comment from '../models/Comment.js';
 import Recipe from '../models/Recipe.js';
 

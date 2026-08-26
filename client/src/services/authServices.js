@@ -1,6 +1,5 @@
+// Appels login, session et comptes admin. Le fetch est dans api.js.
 import { getFromApi, postToApi, putToApi, deleteToApi } from './api.js';
-
-const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 export async function getCurrentUser() {
     return await getFromApi('/api/auth/current-user');
@@ -11,14 +10,7 @@ export async function login(email, password) {
 }
 
 export async function logout() {
-    const response = await fetch(apiBaseUrl + '/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
-    });
-
-    if (!response.ok) {
-        throw new Error('Erreur serveur');
-    }
+    return await postToApi('/api/auth/logout');
 }
 
 export async function createAdmin(email, password) {

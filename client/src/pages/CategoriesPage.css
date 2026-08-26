@@ -82,7 +82,6 @@
 
 .categories-page__photo {
   background-color: var(--tc-background-alt);
-  border-bottom: 1px solid var(--tc-border);
 }
 
 .categories-page__photo img {

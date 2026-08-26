@@ -1,3 +1,4 @@
+// URLs types de repas. Lecture pour tous, ecriture pour l admin.
 import { Router } from "express";
 import {
     listMealType,

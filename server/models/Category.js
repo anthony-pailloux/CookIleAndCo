@@ -1,11 +1,11 @@
-// catégorie d'une recette
+// Categorie d une recette (boisson, dessert...).
 
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 class Category extends Model {
     static associate(models) {
-        // une catégorie a plusieurs de recettes
+        // Une categorie a plusieurs recettes
         Category.hasMany(models.Recipe, {
             foreignKey: 'categoryId',
             as: 'recipes',

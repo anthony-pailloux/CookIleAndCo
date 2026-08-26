@@ -1,3 +1,4 @@
+// Login, session et comptes admin.
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 
@@ -7,7 +8,7 @@ export async function login(req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    // cherche l'utilisateur en BDD par email
+    // cherche la personne en BDD par email
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -20,20 +21,14 @@ export async function login(req, res) {
         return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
-    if (user.role !== 'admin') {
-        return res.status(403).json({ error: 'Accès réservé à l\'administrateur' });
-    }
-
-    // ouvre la session 
+    // ouvre la session (un compte en table users = un admin)
     req.session.userId = user.id;
-    req.session.role = user.role;
     req.session.email = user.email;
 
-    // renvoie les infos de l'utilisateur connecté
+    // renvoie les infos de la personne connectee
     return res.status(200).json({
         id: user.id,
         email: user.email,
-        role: user.role,
     });
 }
 
@@ -48,18 +43,17 @@ export function logout(req, res) {
     });
 }
 
-// utilisateur connecté via la session (cookie httpOnly posé au login)
+// Personne connectee via la session (cookie pose au login)
 export function getCurrentUser(req, res) {
 
-    // infos depuis la session (requireAdmin a déjà vérifié userId + role)
+    // Infos depuis la session (requireAdmin a deja verifie userId)
     return res.status(200).json({
         id: req.session.userId,
         email: req.session.email,
-        role: req.session.role,
     });
 }
 
-// Création d'un compte admin
+// Creation d un compte admin
 export async function createAdmin(req, res) {
     const email = req.body.email;
     const password = req.body.password;
@@ -72,21 +66,18 @@ export async function createAdmin(req, res) {
     const newAdmin = await User.create({
         email: email,
         passwordHash: passwordHash,
-        role: 'admin',
     });
 
     return res.status(201).json({
         id: newAdmin.id,
         email: newAdmin.email,
-        role: newAdmin.role,
     });
 }
 
 // Liste des comptes admin
 export async function listAdmins(req, res) {
     const admins = await User.findAll({
-        where: { role: 'admin' },
-        attributes: ['id', 'email', 'role'],
+        attributes: ['id', 'email'],
         order: [['createdAt', 'ASC']],
     });
 
@@ -112,7 +103,6 @@ export async function listAdmins(req, res) {
         data.push({
             id: admin.id,
             email: admin.email,
-            role: admin.role,
             isPrincipal: isPrincipal,
             isDev: isDev,
             isProtected: isProtected,
@@ -122,12 +112,12 @@ export async function listAdmins(req, res) {
     return res.status(200).json({ data: data });
 }
 
-// Suppression d'un compte admin (principal et dev protégés via .env)
+// Suppression d un compte admin (comptes proteges via .env)
 export async function deleteAdmin(req, res) {
     const id = req.params.id;
 
     const admin = await User.findOne({
-        where: { id: id, role: 'admin' },
+        where: { id: id },
     });
 
     if (!admin) {
@@ -152,14 +142,14 @@ export async function deleteAdmin(req, res) {
     return res.status(200).json({ message: 'Administrateur supprimé' });
 }
 
-// Modification d'un compte admin (principal et dev protégés via .env)
+// Modification d un compte admin (comptes proteges via .env)
 export async function updateAdmin(req, res) {
     const id = req.params.id;
     const email = req.body.email;
     const password = req.body.password;
 
     const admin = await User.findOne({
-        where: { id: id, role: 'admin' },
+        where: { id: id },
     });
 
     if (!admin) {
@@ -194,6 +184,5 @@ export async function updateAdmin(req, res) {
     return res.status(200).json({
         id: admin.id,
         email: admin.email,
-        role: admin.role,
     });
 }

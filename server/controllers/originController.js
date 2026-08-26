@@ -1,3 +1,4 @@
+// Requetes BDD pour les origines.
 import Origin from "../models/Origin.js";
 import Recipe from "../models/Recipe.js";
 

@@ -1,10 +1,10 @@
-// lit les erreurs express-validator et renvoie 400ok
+// Si les champs du formulaire sont faux, on renvoie 400 et on arrete.
 
 import { validationResult } from 'express-validator';
 
 export default function validate(req, res, next) {
 
-    // Récupère le résultat des règles body() passées avant ce middleware
+    // Lit le resultat des regles posees avant ce middleware
     const result = validationResult(req);
 
     if (!result.isEmpty()) {

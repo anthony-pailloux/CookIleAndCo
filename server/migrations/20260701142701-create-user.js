@@ -18,11 +18,6 @@ export default {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      role: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: 'user',
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

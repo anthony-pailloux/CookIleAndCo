@@ -1,3 +1,4 @@
+// Point de depart React. On enveloppe App avec le routeur, la session et les toasts.
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -6,8 +7,6 @@ import { ToastProvider } from "./context/ToastContext.jsx";
 import "./style/themes.css";
 import App from "./App.jsx";
 
-// Point d'entrée React 
-// Monte App dans le DOM avec BrowserRouter (react-router-dom).
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>

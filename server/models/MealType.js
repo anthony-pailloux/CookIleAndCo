@@ -1,4 +1,4 @@
-// type de repas d'une recette
+// Type de repas d une recette (petit dejeuner, diner...).
 
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";

@@ -1,4 +1,4 @@
-// Règles express-validator pour créer ou modifier une recette (POST / PUT).
+// Controles des champs pour creer ou modifier une recette.
 import { body } from 'express-validator';
 import Category from '../models/Category.js';
 import Origin from '../models/Origin.js';
@@ -11,12 +11,12 @@ export const createRecipeRules = [
         .notEmpty()
         .withMessage('Titre requis'),
 
-    // Temps de cuisson : entier > 0
+    // Temps de cuisson, entier superieur a 0
     body('cookingTime')
         .isInt({ min: 1 })
         .withMessage('Temps de cuisson invalide'),
 
-    // Catégorie : format + existence en BDD
+    // Categorie, format et existence en BDD
     body('categoryId')
         .isInt({ min: 1 })
         .withMessage('Catégorie requise')
@@ -30,7 +30,7 @@ export const createRecipeRules = [
             }
         }),
 
-    // Origine : format + existence en BDD
+    // Origine, format et existence en BDD
     body('originId')
         .isInt({ min: 1 })
         .withMessage('Origine requise')
@@ -44,7 +44,7 @@ export const createRecipeRules = [
             }
         }),
 
-    // Type de repas : format + existence en BDD
+    // Type de repas, format et existence en BDD
     body('mealTypeId')
         .isInt({ min: 1 })
         .withMessage('Type de repas requis')

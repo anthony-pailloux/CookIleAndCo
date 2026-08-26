@@ -1,3 +1,4 @@
+// URLs recettes. Les commentaires sont branches sur une recette.
 import { Router } from "express";
 import { getRecipeById, listRecipes, createRecipe, updateRecipe, deleteRecipe, addRecipePhoto } from "../controllers/recipeController.js";
 import { listComments, createComment, deleteComment } from '../controllers/commentController.js';

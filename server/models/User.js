@@ -1,4 +1,4 @@
-// compte utilisateur
+// Compte administrateur (email, mot de passe).
 
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database.js';
@@ -17,14 +17,6 @@ User.init(
         passwordHash: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        role: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            defaultValue: 'user', 
-            validate: {
-                isIn: [['user', 'admin']],
-            },
         },
     },
     {

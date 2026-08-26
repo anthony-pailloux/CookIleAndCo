@@ -1,3 +1,4 @@
+// Cadre commun, header en haut, page au milieu, pied de page.
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import "./Layout.css";

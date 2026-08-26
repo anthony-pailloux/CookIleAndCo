@@ -1,3 +1,4 @@
+// URLs des categories.
 import { Router } from "express";
 import {
     listCategory,

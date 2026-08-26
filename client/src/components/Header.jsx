@@ -16,6 +16,7 @@ function getNavLinkClass({ isActive }) {
 function Header() {
   const auth = useAuth();
 
+  // Session ici pour afficher Dashboard si un admin est encore connecte.
   useEffect(function () {
     auth.loadSession();
   }, []);
@@ -25,10 +26,6 @@ function Header() {
     auth.setUser(null);
   }
 
-  let isAdmin = false;
-  if (auth.user !== null && auth.user.role === "admin") {
-    isAdmin = true;
-  }
   return (
     <header className="site-header bg-green-textured">
       <div className="site-header__inner">
@@ -56,14 +53,14 @@ function Header() {
             Catégories
           </NavLink>
 
-          {isAdmin === true && (
+          {auth.user !== null && (
             <NavLink to="/dashboard-admins" className={getNavLinkClass}>
               Dashboard
             </NavLink>
           )}
         </nav>
 
-        {isAdmin === true && (
+        {auth.user !== null && (
           <button
             type="button"
             className="site-header__logout-btn"

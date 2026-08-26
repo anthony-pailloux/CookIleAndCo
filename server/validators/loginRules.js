@@ -1,3 +1,4 @@
+// Controles des champs du formulaire de connexion.
 import { body } from 'express-validator';
 
 export const loginRules = [

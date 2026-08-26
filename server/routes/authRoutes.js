@@ -1,3 +1,4 @@
+// URLs login, logout, session et comptes admin.
 import { Router } from 'express';
 import { login, logout, getCurrentUser, createAdmin, listAdmins, deleteAdmin, updateAdmin } from '../controllers/authController.js';
 import validate from '../middlewares/validate.js';
@@ -16,7 +17,7 @@ router.post('/admins', requireAdmin, createAdminRules, validate, createAdmin);
 router.post('/login', loginRateLimit, loginRules, validate, login);
 router.post('/logout', logout);
 
-router.put('/admins/:id', requireAdmin, updateAdmin);
+router.put('/admins/:id', requireAdmin, createAdminRules, validate, updateAdmin);
 
 router.delete('/admins/:id', requireAdmin, deleteAdmin);
 

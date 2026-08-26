@@ -1,22 +1,23 @@
 'use strict';
 
-// Retire une colonne jamais utilisee (photo de profil).
+// Retire le role : tous les comptes de users sont des admins.
 export default {
   async up(queryInterface) {
     const table = await queryInterface.describeTable('users');
 
-    if (table.profile_photo) {
-      await queryInterface.removeColumn('users', 'profile_photo');
+    if (table.role) {
+      await queryInterface.removeColumn('users', 'role');
     }
   },
 
   async down(queryInterface, Sequelize) {
     const table = await queryInterface.describeTable('users');
 
-    if (!table.profile_photo) {
-      await queryInterface.addColumn('users', 'profile_photo', {
+    if (!table.role) {
+      await queryInterface.addColumn('users', 'role', {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 'admin',
       });
     }
   },

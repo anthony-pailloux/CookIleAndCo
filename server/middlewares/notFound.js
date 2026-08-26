@@ -1,4 +1,4 @@
-// route inconnue, renvoie 404
+// Route inconnue, on renvoie 404.
 export default function notFound(req, res) {
     const status = 404;
     const message = 'Route introuvable';

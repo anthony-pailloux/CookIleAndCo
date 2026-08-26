@@ -1,4 +1,4 @@
-
+// Limite les tentatives de login (3 essais puis attente).
 import rateLimit from 'express-rate-limit';
 
 const loginRateLimit = rateLimit({

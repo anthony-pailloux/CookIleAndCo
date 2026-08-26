@@ -1,11 +1,11 @@
-// ingrédient d'une recette
+// Ingredient d une recette (quantite, unite, nom).
 
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 class RecipeIngredient extends Model {
     static associate(models) {
-        // liste des ingredient appartient à une recette
+        // Liste des ingredients d une recette
         RecipeIngredient.belongsTo(models.Recipe, {
             foreignKey: 'recipeId',
         });

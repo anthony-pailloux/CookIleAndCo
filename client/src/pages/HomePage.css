@@ -211,7 +211,6 @@
 
 .home__categories-photo {
   background-color: var(--tc-background-alt);
-  border-bottom: 1px solid var(--tc-border);
 }
 
 .home__categories-photo img {

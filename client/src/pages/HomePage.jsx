@@ -1,6 +1,8 @@
+// Page d accueil, quelques recettes et categories.
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getFromApi } from "../services/api.js";
+import { listRecipes } from "../services/recipeServices.js";
+import { listCategories } from "../services/referenceServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import RecipeCard from "../components/RecipeCard.jsx";
 import "./HomePage.css";
@@ -14,7 +16,7 @@ function HomePage() {
   useEffect(() => {
     async function loadFeaturedRecipes() {
       try {
-        const response = await getFromApi("/api/recipes?limit=3");
+        const response = await listRecipes({ limit: 3 });
         setFeaturedRecipes(response.data);
       } catch (err) {
         setFeaturedRecipes([]);
@@ -29,7 +31,7 @@ function HomePage() {
   useEffect(() => {
     async function loadFeaturedCategories() {
       try {
-        const response = await getFromApi("/api/categories");
+        const response = await listCategories();
         const firstFour = response.data.slice(0, 4);
         setFeaturedCategories(firstFour);
       } catch (err) {

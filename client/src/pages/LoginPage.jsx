@@ -1,3 +1,4 @@
+// Page de connexion admin.
 import { login } from "../services/authServices.js";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -60,7 +61,7 @@ function LoginPage() {
 
           {errorMessage !== "" && <p className="alert-error">{errorMessage}</p>}
 
-          <button onClick={handleSubmit} className="btn">
+          <button type="submit" className="btn">
             Se connecter
           </button>
         </form>

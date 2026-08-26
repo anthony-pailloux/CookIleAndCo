@@ -1,4 +1,4 @@
-// origine d'une recette
+// Origine d une recette (Antille, Asie...).
 
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";

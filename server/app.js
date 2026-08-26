@@ -1,4 +1,4 @@
-// App express : middlewares, session, routes API, 404.
+// Construit l app Express. Session, CORS, puis les URLs /api.
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
@@ -14,7 +14,7 @@ import authRoutes from './routes/authRoutes.js';
 import recipeRoutes from './routes/recipeRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import originRoutes from './routes/originRoutes.js';
-import mealTypeRoutes from './routes/mealTypeRoute.js';
+import mealTypeRoutes from './routes/mealTypeRoutes.js';
 import captchaRoutes from './routes/captchaRoutes.js';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -23,17 +23,17 @@ const app = express();
 
 app.use(express.json());
 
-// autorise le front à appeler l'api
+// Le front a le droit d appeler l API (cookie compris)
 app.use(cors({
     origin: process.env.CLIENT_URL,
-    credentials: true, // autorise les cookies
+    credentials: true, // le cookie voyage avec la requete
 }));
 
 const cookieSecure = process.env.COOKIE_SECURE === 'true';
 
 app.set('trust proxy', 1);
 
-// store + middleware session
+// On garde la session dans un dossier, pendant 1 heure
 const sessionDurationSeconds = 1 * 60 * 60;
 const sessionsPath = path.join(dirname, 'sessions');
 const FileStore = fileStoreFactory(session);
@@ -62,6 +62,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/uploads', express.static('uploads'));
 
+// Chaque URL /api pointe vers un fichier dans routes/
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/categories', categoryRoutes);
@@ -69,7 +70,7 @@ app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
 app.use('/api/captcha', captchaRoutes);
 
-// Front React buildé (prod) static + fallback SPA pour React Router
+// En prod, Express sert aussi le site React compile
 const clientDistPath = path.join(dirname, '../client/dist');
 const indexHtmlPath = path.join(clientDistPath, 'index.html');
 const hasClientBuild = fs.existsSync(indexHtmlPath);

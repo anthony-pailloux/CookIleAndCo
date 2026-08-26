@@ -1,17 +1,16 @@
-// Select + CRUD inline pour une liste de référence (catégorie, origine, type de repas).
+// Liste / ajout / modif / suppression (categorie, origine, type de repas).
 import { useState } from "react";
 import {
-  getFromApi,
-  postToApi,
-  putToApi,
-  deleteToApi,
-} from "../services/api.js";
+  listReferenceItems,
+  createReferenceItem,
+  updateReferenceItem,
+  deleteReferenceItem,
+  uploadReferenceImage,
+} from "../services/referenceServices.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
 import "./AdminReferenceField.css";
-
-const apiBaseUrl = import.meta.env.VITE_API_URL || "";
 
 function AdminReferenceField({
   label,
@@ -27,7 +26,7 @@ function AdminReferenceField({
 }) {
   const { showToast } = useToast();
 
-  // supportsImage est optionnel : true seulement si le parent passe supportsImage={true}
+  // Image optionnelle, true seulement si le parent le demande
   let imageSupported = false;
   if (supportsImage === true) {
     imageSupported = true;
@@ -63,36 +62,8 @@ function AdminReferenceField({
   }
 
   async function refreshItems() {
-    const response = await getFromApi(apiPath);
+    const response = await listReferenceItems(apiPath);
     onItemsChange(response.data);
-  }
-
-  async function uploadImage(itemId, file) {
-    const formData = new FormData();
-    formData.append("photo", file);
-
-    const response = await fetch(
-      apiBaseUrl + apiPath + "/" + itemId + "/image",
-      {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      },
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      let message;
-      if (data && data.error) {
-        message = data.error;
-      } else {
-        message = "Erreur serveur";
-      }
-      throw new Error(message);
-    }
-
-    return data;
   }
 
   function handleSelectChange(event) {
@@ -109,10 +80,10 @@ function AdminReferenceField({
     }
 
     try {
-      const createdItem = await postToApi(apiPath, { name: newName });
+      const createdItem = await createReferenceItem(apiPath, newName);
 
       if (imageSupported && newImageFile !== null) {
-        await uploadImage(createdItem.id, newImageFile);
+        await uploadReferenceImage(apiPath, createdItem.id, newImageFile);
       }
 
       await refreshItems();
@@ -138,7 +109,7 @@ function AdminReferenceField({
     }
 
     try {
-      await putToApi(apiPath + "/" + selectedId, { name: editName });
+      await updateReferenceItem(apiPath, selectedId, editName);
       await refreshItems();
       showToast("Modification réussie.", "success");
     } catch (err) {
@@ -158,7 +129,7 @@ function AdminReferenceField({
     }
 
     try {
-      await uploadImage(selectedId, editImageFile);
+      await uploadReferenceImage(apiPath, selectedId, editImageFile);
       await refreshItems();
       setEditImageFile(null);
       showToast("Image mise à jour.", "success");
@@ -183,7 +154,7 @@ function AdminReferenceField({
     }
 
     try {
-      await deleteToApi(apiPath + "/" + selectedId);
+      await deleteReferenceItem(apiPath, selectedId);
       await refreshItems();
       onSelectedIdChange("");
       setEditName("");

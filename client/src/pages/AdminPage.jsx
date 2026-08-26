@@ -1,5 +1,6 @@
+// Tableau de bord, comptes admin et liste des recettes.
 import { useEffect, useState } from "react";
-import { getFromApi, deleteToApi } from "../services/api.js";
+import { listRecipes, deleteRecipe } from "../services/recipeServices.js";
 import { createAdmin, listAdmins, deleteAdmin, updateAdmin } from "../services/authServices.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
@@ -45,7 +46,7 @@ function AdminPage() {
       setLoadingRecipes(true);
 
       try {
-        const response = await getFromApi("/api/recipes?limit=50");
+        const response = await listRecipes({ limit: 50 });
         setRecipes(response.data);
       } catch (err) {
         setRecipes([]);
@@ -98,7 +99,7 @@ function AdminPage() {
     }
 
     try {
-      await deleteToApi("/api/recipes/" + recipeId);
+      await deleteRecipe(recipeId);
 
       const newRecipes = [];
       for (let i = 0; i < recipes.length; i++) {
@@ -163,6 +164,7 @@ function AdminPage() {
         <h1 className="admin-page__title">Le Dashboard de Tetelle</h1>
       </header>
 
+      {/* Bloc 1, gerer les comptes admin */}
       <section className="admin-page__section admin-page__section--admins">
         <h2 className="admin-page__section-title">Administrateurs</h2>
 
@@ -345,6 +347,7 @@ function AdminPage() {
         </form>
       </section>
 
+      {/* Bloc 2, liste des recettes */}
       <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
         <Link

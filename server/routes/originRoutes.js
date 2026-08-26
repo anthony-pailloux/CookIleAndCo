@@ -1,3 +1,4 @@
+// URLs des origines.
 import { Router } from "express";
 import {
     listOrigin,

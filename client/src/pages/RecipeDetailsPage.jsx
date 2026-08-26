@@ -1,6 +1,13 @@
+// Fiche d une recette, ingredients, etapes et commentaires.
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getFromApi, postToApi, deleteToApi } from "../services/api";
+import {
+  getRecipeById,
+  listRecipeComments,
+  createRecipeComment,
+  deleteRecipeComment,
+} from "../services/recipeServices.js";
+import { getCaptcha } from "../services/captchaServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
@@ -26,17 +33,13 @@ function RecipeDetailsPage() {
   const { id } = useParams();
   const { showToast } = useToast();
 
-  useEffect(function () {
-    auth.loadSession();
-  }, []);
-
   useEffect(() => {
     async function loadRecipeDetails() {
       setLoading(true);
       setErrorMessage("");
 
       try {
-        const response = await getFromApi(`/api/recipes/${id}`);
+        const response = await getRecipeById(id);
         setRecipeDetails(response);
       } catch (err) {
         setRecipeDetails(null);
@@ -52,11 +55,11 @@ function RecipeDetailsPage() {
   useEffect(() => {
     async function loadCommentsData() {
       try {
-        const captchaData = await getFromApi("/api/captcha");
+        const captchaData = await getCaptcha();
 
         setCaptchaQuestion(captchaData.question);
 
-        const commentsData = await getFromApi(`/api/recipes/${id}/comments`);
+        const commentsData = await listRecipeComments(id);
 
         setComments(commentsData);
       } catch (err) {
@@ -75,7 +78,7 @@ function RecipeDetailsPage() {
     setIsSubmitting(true);
 
     try {
-      const newComment = await postToApi(`/api/recipes/${id}/comments`, {
+      const newComment = await createRecipeComment(id, {
         pseudo: pseudo,
         content: content,
         captchaAnswer: captchaAnswer,
@@ -85,12 +88,12 @@ function RecipeDetailsPage() {
       setContent("");
       setCaptchaAnswer("");
 
-      const captchaData = await getFromApi("/api/captcha");
+      const captchaData = await getCaptcha();
       setCaptchaQuestion(captchaData.question);
     } catch (err) {
       setCommentError(err.message);
 
-      const captchaData = await getFromApi("/api/captcha");
+      const captchaData = await getCaptcha();
       setCaptchaQuestion(captchaData.question);
       setCaptchaAnswer("");
     } finally {
@@ -108,7 +111,7 @@ function RecipeDetailsPage() {
     }
 
     try {
-      await deleteToApi("/api/recipes/" + id + "/comments/" + commentId);
+      await deleteRecipeComment(id, commentId);
 
       const newComments = [];
       for (let i = 0; i < comments.length; i++) {
@@ -123,7 +126,7 @@ function RecipeDetailsPage() {
     }
   }
 
-  // État chargement
+  // Etat chargement
   if (loading) {
     return (
       <main className="recipe-detail">
@@ -132,7 +135,7 @@ function RecipeDetailsPage() {
     );
   }
 
-  // État erreur
+  // Etat erreur
   if (errorMessage) {
     return (
       <main className="recipe-detail">
@@ -181,16 +184,11 @@ function RecipeDetailsPage() {
           url: recipeShareUrl,
         });
       } catch (err) {
-        // annulation utilisateur : on ne fait rien
+        // Annulation utilisateur, on ne fait rien
       }
     } else {
       await handleCopyLink();
     }
-  }
-
-  let isAdmin = false;
-  if (auth.user !== null && auth.user.role === "admin") {
-    isAdmin = true;
   }
 
   return (
@@ -209,9 +207,17 @@ function RecipeDetailsPage() {
 
         <div className="recipe-detail__intro">
           <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
-          <span className="recipe-detail__badge">
-            {recipeDetails.category.name}
-          </span>
+          <div className="recipe-detail__badges">
+            <span className="recipe-detail__badge">
+              {recipeDetails.category.name}
+            </span>
+            <span className="recipe-detail__badge">
+              {recipeDetails.origin.name}
+            </span>
+            <span className="recipe-detail__badge">
+              {recipeDetails.mealType.name}
+            </span>
+          </div>
           <p className="recipe-detail__time">
             ⏱ {recipeDetails.cookingTime} minutes
           </p>
@@ -252,7 +258,7 @@ function RecipeDetailsPage() {
         </div>
       </section>
 
-      {/* Ingrédients + Préparation */}
+      {/* Ingredients + preparation */}
       <section className="recipe-detail__body">
         <div className="recipe-detail__ingredients">
           <h2 className="recipe-detail__section-title">Ingrédients</h2>
@@ -383,7 +389,7 @@ function RecipeDetailsPage() {
                 <li key={comment.id} className="recipe-detail__comment-item">
                   <strong>{comment.pseudo}</strong>
                   <p>{comment.content}</p>
-                  {isAdmin && (
+                  {auth.user !== null && (
                     <button
                       type="button"
                       className="recipe-detail__share-link"

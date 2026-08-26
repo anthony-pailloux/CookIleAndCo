@@ -19,13 +19,50 @@ Projet réalisé dans le cadre d’un Projet de Fin d’Année. L’objectif est
 
 ```text
 Cookîleandco/
-├── client/          → interface React (port 5173 en dev)
-├── server/          → API Express (port 3000)
-│   ├── migrations/  → schéma BDD
-│   ├── seeders/     → données initiales (catégories, origines, admin…)
-│   └── uploads/     → photos recettes et catégories (non versionnées)
-└── documents/       → cahier des charges, maquettes, branding
+├── client/src/          → interface React (port 5173 en dev)
+│   ├── pages/           → une page = une URL
+│   ├── components/      → morceaux d'UI (carte, header, garde admin…)
+│   ├── context/         → état partagé (connexion, toasts)
+│   └── services/        → un fichier par domaine (jamais d'appel API dans les pages)
+├── server/              → API Express (port 3000)
+│   ├── app.js           → carte des URLs /api/...
+│   ├── routes/          → méthode HTTP + gardes (admin, validation)
+│   ├── controllers/     → logique + Sequelize
+│   ├── models/          → tables
+│   ├── middlewares/     → auth, validation, erreurs
+│   ├── validators/      → règles des champs
+│   ├── migrations/      → historique du schéma BDD
+│   ├── seeders/         → données initiales (catégories, admin…)
+│   └── uploads/         → photos (non versionnées)
+└── documents/           → cahier des charges, maquettes, branding
 ```
+
+## Comment lire le code
+
+Les pages n'appellent **jamais** `api.js`. Elles passent par `services/` :
+
+| Fichier | Domaine |
+|---|---|
+| `authServices.js` | login, session, admins |
+| `recipeServices.js` | recettes, photo, commentaires |
+| `referenceServices.js` | catégories, origines, types de repas |
+| `captchaServices.js` | question anti-robot |
+| `api.js` | le `fetch` (cookie + erreurs) — importé **uniquement** par les fichiers ci-dessus |
+
+Ordre de lecture d’une action :
+
+```text
+page React  →  services/  →  routes/  →  controllers/  →  models/
+```
+
+Exemple — connexion admin :
+
+1. `client/src/pages/LoginPage.jsx` — formulaire
+2. `client/src/services/authServices.js` — `login()`
+3. `server/routes/authRoutes.js` — `POST /api/auth/login`
+4. `server/controllers/authController.js` — vérifie le mot de passe, ouvre la session
+
+Pour une URL du site, ouvrir d’abord `client/src/App.jsx`. Pour une URL `/api/...`, ouvrir d’abord `server/app.js`.
 
 ## Prérequis
 
@@ -127,7 +164,7 @@ Ouvrir l’URL affichée par Vite (souvent [http://localhost:5173](http://localh
 
 ### 7. Se connecter en admin
 
-- URL : [http://localhost:5173/connexion-superadmin](http://localhost:5173/connexion-superadmin)
+- URL : [http://localhost:5173/connexion-admins](http://localhost:5173/connexion-admins)
 - Identifiants : ceux définis dans `ADMIN_EMAIL` / `ADMIN_PASSWORD` du `.env` serveur (créés par le seeder).
 
 ## Vérification rapide
@@ -136,7 +173,7 @@ Ouvrir l’URL affichée par Vite (souvent [http://localhost:5173](http://localh
 |------|-----|
 | API en ligne | [http://localhost:3000/api/health](http://localhost:3000/api/health) |
 | Catalogue | [http://localhost:5173/recettes](http://localhost:5173/recettes) |
-| Admin | [http://localhost:5173/admin](http://localhost:5173/admin) (après connexion) |
+| Admin | [http://localhost:5173/dashboard-admins](http://localhost:5173/dashboard-admins) (après connexion) |
 
 ## Dépannage courant
 

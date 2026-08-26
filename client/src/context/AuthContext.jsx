@@ -1,16 +1,15 @@
-// État de connexion partagé dans toute l'app React.
-
+// Memoire de connexion. Toute l app peut lire user avec useAuth().
 import { createContext, useContext, useState } from "react";
 import { getCurrentUser } from "../services/authServices.js";
 
 const AuthContext = createContext(null);
 
-// Enveloppe l'app dans main.jsx.
+// Pose AuthProvider autour de App dans main.jsx.
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Vérifie si un admin est encore connecté.
+  // Demande au serveur si un admin est encore connecte.
   async function loadSession() {
     setLoading(true);
 
@@ -33,7 +32,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Donne user et loading à la page qui appelle useAuth().
+// Petit raccourci pour lire user depuis une page.
 export function useAuth() {
   const context = useContext(AuthContext);
 

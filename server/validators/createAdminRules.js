@@ -1,3 +1,4 @@
+// Controles des champs pour creer un admin.
 import { body } from 'express-validator';
 
 export const createAdminRules = [

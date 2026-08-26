@@ -1,4 +1,4 @@
-// renvoie une erreur json quand ça plante
+// Renvoie une erreur JSON quand ca plante.
 export default function errorHandler(err, req, res, next) {
     console.error(err);
 

@@ -1,3 +1,4 @@
+// Requetes BDD pour les categories.
 import Category from "../models/Category.js";
 import Recipe from "../models/Recipe.js";
 

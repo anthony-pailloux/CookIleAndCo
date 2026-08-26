@@ -1,7 +1,18 @@
-// Formulaire admin — création et modification de recette.
+// Page du formulaire recette cote admin.
+// Sert a creer une recette ou a modifier une recette deja enregistree.
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getFromApi, postToApi, putToApi } from "../services/api.js";
+import {
+  getRecipeById,
+  createRecipe,
+  updateRecipe,
+  uploadRecipePhoto,
+} from "../services/recipeServices.js";
+import {
+  listCategories,
+  listOrigins,
+  listMealTypes,
+} from "../services/referenceServices.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
@@ -10,13 +21,12 @@ import "../components/Button.css";
 import "./AdminPage.css";
 import "./AdminRecipeFormPage.css";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL || '';
-
 function AdminRecipeFormPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { id: recipeId } = useParams();
 
+  // S il y a un numero dans l adresse, on modifie une recette existante.
   let isEditMode = false;
   if (recipeId !== undefined) {
     isEditMode = true;
@@ -24,10 +34,12 @@ function AdminRecipeFormPage() {
 
   const [title, setTitle] = useState("");
   const [cookingTime, setCookingTime] = useState("");
+  // Photo choisie sur l ordinateur. On l envoie seulement en enregistrant.
   const [photoFile, setPhotoFile] = useState(null);
   const [currentPhotoUrl, setCurrentPhotoUrl] = useState("");
   const [tips, setTips] = useState("");
 
+  // Les trois listes deroulantes du formulaire.
   const [categories, setCategories] = useState([]);
   const [origins, setOrigins] = useState([]);
   const [mealTypes, setMealTypes] = useState([]);
@@ -36,6 +48,7 @@ function AdminRecipeFormPage() {
   const [originId, setOriginId] = useState("");
   const [mealTypeId, setMealTypeId] = useState("");
 
+  // Une ligne au depart. Le serveur n accepte pas une liste vide.
   const [ingredients, setIngredients] = useState([
     { quantity: "", unit: "", name: "" },
   ]);
@@ -45,13 +58,14 @@ function AdminRecipeFormPage() {
   const [loadingRecipe, setLoadingRecipe] = useState(false);
   const [recipeLoadFailed, setRecipeLoadFailed] = useState(false);
 
+  // Au premier affichage, on recupere les trois listes.
   useEffect(
     function () {
       async function loadFormOptions() {
         try {
-          const categoriesResponse = await getFromApi("/api/categories");
-          const originsResponse = await getFromApi("/api/origins");
-          const mealTypesResponse = await getFromApi("/api/mealTypes");
+          const categoriesResponse = await listCategories();
+          const originsResponse = await listOrigins();
+          const mealTypesResponse = await listMealTypes();
 
           setCategories(categoriesResponse.data);
           setOrigins(originsResponse.data);
@@ -66,6 +80,7 @@ function AdminRecipeFormPage() {
     [showToast],
   );
 
+  // En modification, on remplit les champs avec la recette deja enregistree.
   useEffect(
     function () {
       if (isEditMode === false) {
@@ -77,7 +92,7 @@ function AdminRecipeFormPage() {
         setRecipeLoadFailed(false);
 
         try {
-          const recipe = await getFromApi("/api/recipes/" + recipeId);
+          const recipe = await getRecipeById(recipeId);
 
           setTitle(capitalizeFirstLetter(recipe.title));
           setCookingTime(String(recipe.cookingTime));
@@ -93,6 +108,7 @@ function AdminRecipeFormPage() {
           setOriginId(String(recipe.origin.id));
           setMealTypeId(String(recipe.mealType.id));
 
+          // L unite n est pas obligatoire. Le serveur peut renvoyer une valeur vide.
           const loadedIngredients = [];
           for (let i = 0; i < recipe.ingredients.length; i++) {
             const item = recipe.ingredients[i];
@@ -109,6 +125,7 @@ function AdminRecipeFormPage() {
             });
           }
 
+          // S il n y a aucun ingredient, on montre quand meme une ligne vide.
           if (loadedIngredients.length === 0) {
             loadedIngredients.push({ quantity: "", unit: "", name: "" });
           }
@@ -138,6 +155,7 @@ function AdminRecipeFormPage() {
     [recipeId, isEditMode, showToast],
   );
 
+  // On fabrique un nouveau tableau. Sinon React ne voit pas le changement.
   function addIngredient() {
     const newIngredients = [];
     for (let i = 0; i < ingredients.length; i++) {
@@ -147,6 +165,7 @@ function AdminRecipeFormPage() {
     setIngredients(newIngredients);
   }
 
+  // On met a jour un champ d une ligne, les autres restent identiques.
   function updateIngredient(ingredientIndex, fieldName, newValue) {
     const newIngredients = [];
     for (let i = 0; i < ingredients.length; i++) {
@@ -174,6 +193,7 @@ function AdminRecipeFormPage() {
   }
 
   function removeIngredient(ingredientIndex) {
+    // On ne supprime pas la derniere ligne, le serveur en veut au moins une.
     if (ingredients.length <= 1) {
       return;
     }
@@ -187,6 +207,7 @@ function AdminRecipeFormPage() {
     setIngredients(newIngredients);
   }
 
+  // Pareil que pour les ingredients, avec les etapes.
   function addStep() {
     const newSteps = [];
     for (let i = 0; i < steps.length; i++) {
@@ -222,34 +243,7 @@ function AdminRecipeFormPage() {
     setSteps(newSteps);
   }
 
-  async function uploadRecipePhoto(targetRecipeId, file) {
-    const formData = new FormData();
-    formData.append("photo", file);
-
-    const photoResponse = await fetch(
-      apiBaseUrl + "/api/recipes/" + targetRecipeId + "/photo",
-      {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      },
-    );
-
-    const data = await photoResponse.json();
-
-    if (!photoResponse.ok) {
-      let message;
-      if (data && data.error) {
-        message = data.error;
-      } else {
-        message = "Erreur serveur";
-      }
-      throw new Error(message);
-    }
-
-    return true;
-  }
-
+  // D abord on sauve le texte de la recette, ensuite la photo si elle est choisie.
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -268,18 +262,35 @@ function AdminRecipeFormPage() {
       let savedRecipeId = "";
 
       if (isEditMode) {
-        await putToApi("/api/recipes/" + recipeId, recipeBody);
+        await updateRecipe(recipeId, recipeBody);
         savedRecipeId = recipeId;
       } else {
-        const createdRecipe = await postToApi("/api/recipes", recipeBody);
+        const createdRecipe = await createRecipe(recipeBody);
         savedRecipeId = String(createdRecipe.id);
       }
 
+      // La photo part dans un appel a part, pas dans le meme envoi que le texte.
       if (photoFile !== null && photoFile !== undefined) {
         try {
           await uploadRecipePhoto(savedRecipeId, photoFile);
         } catch (photoErr) {
-          showToast(photoErr.message, "error");
+          console.log("la photo n a pas pu etre uploadee", savedRecipeId);
+
+          if (isEditMode === false) {
+            showToast(
+              "Recette enregistrée, mais la photo n'a pas pu être envoyée.",
+              "error",
+            );
+            // La recette est deja sauvee. On ouvre la page modifier pour ne pas en creer une deuxieme.
+            // On remplace l adresse actuelle. Le bouton retour ne ramene pas au formulaire vide.
+            navigate(
+              "/dashboard-admins/recettes/" + savedRecipeId + "/modifier",
+              { replace: true },
+            );
+          } else {
+            showToast(photoErr.message, "error");
+          }
+
           return;
         }
       }
@@ -306,6 +317,7 @@ function AdminRecipeFormPage() {
     submitLabel = "Mettre à jour la recette";
   }
 
+  // En modification, on attend que la recette soit chargee avant d afficher le formulaire.
   if (isEditMode && loadingRecipe === true) {
     return (
       <main className="admin-page admin-recipe-form-page">
@@ -314,6 +326,7 @@ function AdminRecipeFormPage() {
     );
   }
 
+  // Impossible de charger la recette. On propose seulement de revenir au dashboard.
   if (isEditMode && recipeLoadFailed === true) {
     return (
       <main className="admin-page admin-recipe-form-page">
@@ -537,6 +550,7 @@ function AdminRecipeFormPage() {
         <fieldset className="admin-form__section admin-form__section--full-width">
           <legend>Classification</legend>
 
+          {/* On peut aussi ajouter ou supprimer une categorie ici, sans changer de page. */}
           <AdminReferenceField
             label="Catégorie"
             selectId="recipe-category"

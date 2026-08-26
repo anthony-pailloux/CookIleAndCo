@@ -1,3 +1,4 @@
+// Requetes BDD pour les types de repas.
 import MealType from "../models/MealType.js";
 import Recipe from "../models/Recipe.js";
 

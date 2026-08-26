@@ -1,7 +1,7 @@
-// Page catégories & origines — wireframe PAGE-11
+// Page qui liste les categories et les origines.
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getFromApi } from "../services/api.js";
+import { listCategories, listOrigins } from "../services/referenceServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./CategoriesPage.css";
@@ -13,8 +13,8 @@ function CategoriesPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const categoriesResponse = await getFromApi("/api/categories");
-        const originsResponse = await getFromApi("/api/origins");
+        const categoriesResponse = await listCategories();
+        const originsResponse = await listOrigins();
 
         setCategories(categoriesResponse.data);
         setOrigins(originsResponse.data);

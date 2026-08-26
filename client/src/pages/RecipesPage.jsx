@@ -1,12 +1,13 @@
-// Page catalogue paginée des recettes avec recherche et filtres.
-import "./RecipePage.css";
+// Catalogue des recettes, avec recherche, filtres et pages.
+import "./RecipesPage.css";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getFromApi } from "../services/api.js";
+import { listRecipes } from "../services/recipeServices.js";
+import { listCategories, listOrigins, listMealTypes } from "../services/referenceServices.js";
 import RecipeCard from "../components/RecipeCard.jsx";
 import "../components/Button.css";
 
-function RecipePage() {
+function RecipesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeSearch = searchParams.get("q") || "";
 
@@ -23,7 +24,7 @@ function RecipePage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  // Page courante lue depuis l'URL (?page=2)
+  // Page courante lue depuis l URL (?page=2)
   let currentPage = 1;
   const rawPage = searchParams.get("page");
   if (rawPage !== null && rawPage !== "") {
@@ -45,7 +46,7 @@ function RecipePage() {
     setSearchParams(nextParams);
   }
 
-  // Écrit un paramètre dans l'URL sans écraser les autres (filtres + recherche)
+  // Ecrit un parametre dans l URL sans ecraser les autres (filtres + recherche)
   function applyQueryParam(paramName, value) {
     const nextParams = new URLSearchParams(searchParams);
 
@@ -92,7 +93,7 @@ function RecipePage() {
     applySearchToUrl(searchText);
   }
 
-  // Synchronise les filtres avec l'URL (?categorie=… & ?origine=… & ?repas=…)
+  // Recopie les filtres depuis l URL
   useEffect(() => {
     const categorieFromUrl = searchParams.get("categorie");
     const origineFromUrl = searchParams.get("origine");
@@ -122,27 +123,15 @@ function RecipePage() {
     async function loadRecipes() {
       setLoading(true);
 
-      const params = new URLSearchParams();
-      params.set("page", currentPage);
-      params.set("limit", 12);
-
-      if (selectedCategory !== "") {
-        params.set("categorie", selectedCategory);
-      }
-      if (selectedOrigin !== "") {
-        params.set("origine", selectedOrigin);
-      }
-      if (selectedMealType !== "") {
-        params.set("repas", selectedMealType);
-      }
-      if (activeSearch !== "") {
-        params.set("q", activeSearch);
-      }
-
-      const path = "/api/recipes?" + params.toString();
-
       try {
-        const response = await getFromApi(path);
+        const response = await listRecipes({
+          page: currentPage,
+          limit: 12,
+          category: selectedCategory,
+          origin: selectedOrigin,
+          mealType: selectedMealType,
+          search: activeSearch,
+        });
         setRecipes(response.data);
         setTotalPages(response.meta.totalPages);
       } catch (err) {
@@ -162,19 +151,19 @@ function RecipePage() {
     activeSearch,
   ]);
 
-  // Charge origines, types de repas, catégories pour les selects
+  // Charge origines, types de repas, categories pour les listes
   useEffect(() => {
     async function loadFiltersData() {
       try {
-        const originsResponse = await getFromApi("/api/origins");
-        const mealTypesResponse = await getFromApi("/api/mealTypes");
-        const categoriesResponse = await getFromApi("/api/categories");
+        const originsResponse = await listOrigins();
+        const mealTypesResponse = await listMealTypes();
+        const categoriesResponse = await listCategories();
 
         setOrigins(originsResponse.data);
         setMealTypes(mealTypesResponse.data);
         setCategories(categoriesResponse.data);
       } catch (err) {
-        // Page publique : pas de toast, selects vides comme si aucune donnée
+        // Page publique, listes vides si l API ne repond pas
         setOrigins([]);
         setMealTypes([]);
         setCategories([]);
@@ -183,7 +172,7 @@ function RecipePage() {
     loadFiltersData();
   }, []);
 
-  // Boutons numéros de page
+  // Boutons numeros de page
   const pageButtons = [];
   for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
     let pageBtnClass = "recipes-page__pagination-page";
@@ -359,4 +348,4 @@ function RecipePage() {
   );
 }
 
-export default RecipePage;
+export default RecipesPage;

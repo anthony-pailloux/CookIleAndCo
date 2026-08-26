@@ -1,3 +1,4 @@
+// Verifie que la reponse du captcha est la bonne.
 export default function verifyCaptcha(req, res, next) {
   const expected = req.session.captchaAnswer;
   const given = Number(req.body.captchaAnswer);

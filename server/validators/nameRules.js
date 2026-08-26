@@ -1,4 +1,4 @@
-// Nom requis pour catégorie, origine ou type de repas (POST / PUT).
+// Nom obligatoire pour categorie, origine ou type de repas.
 import { body } from 'express-validator';
 
 export const nameRules = [

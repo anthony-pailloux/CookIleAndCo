@@ -41,9 +41,16 @@
 
 .recipe-card__meta {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
+}
+
+.recipe-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 .recipe-card__badge {
@@ -52,7 +59,7 @@
   padding: 0.15rem 0.55rem;
   border: 1px solid var(--tc-navy);
   border-radius: 999px;
-  background-color: var(--tc-green-madras);
+  background-color: var(--tc-navy);
   color: var(--tc-white);
   white-space: nowrap;
 }

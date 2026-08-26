@@ -1,4 +1,4 @@
-// Configuration ESLint du backend — détecte notamment les imports et variables inutilisés.
+// Config ESLint du backend. Signale les imports et variables inutilises.
 import globals from 'globals';
 
 export default [

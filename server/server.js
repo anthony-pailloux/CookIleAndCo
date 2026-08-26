@@ -1,3 +1,4 @@
+// Demarre l API. D abord on teste MySQL, ensuite on ecoute le port.
 import 'dotenv/config';
 import './models/index.js';
 import app from './app.js';
@@ -11,7 +12,7 @@ async function startServer() {
         await sequelize.authenticate();
         console.log('Connexion à la DB mysql : ok');
 
-        // o2switch, Passenger pas de port manuel
+        // Chez o2switch, Passenger choisit le port tout seul
         if (typeof PhusionPassenger !== 'undefined') {
             app.listen('passenger');
             console.log('Server démarré via Passenger');

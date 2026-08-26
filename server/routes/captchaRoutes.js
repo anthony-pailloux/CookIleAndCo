@@ -1,3 +1,4 @@
+// URL du captcha (question anti-robot).
 import { Router } from 'express';
 import { getCaptcha } from '../controllers/captchaController.js';
 

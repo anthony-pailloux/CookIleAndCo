@@ -1,3 +1,4 @@
+// Relie les tables entre elles (associate).
 import User from './User.js';
 import Category from './Category.js';
 import Origin from './Origin.js';
@@ -19,7 +20,7 @@ const models = {
 };
 
 Object.values(models).forEach(function (model) {
-    // appelle associate que si la méthode existe vraiment
+    // Appelle associate seulement si la methode existe
     if (typeof model.associate === 'function') {
         model.associate(models);
     }

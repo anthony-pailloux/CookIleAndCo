@@ -1,4 +1,4 @@
-// JPG/PNG/WebP, max 5 Mo — photos recettes ou catégories.
+// Recoit une photo JPG PNG ou WebP, max 5 Mo.
 import multer from 'multer';
 import path from 'path';
 
@@ -26,7 +26,7 @@ function createImageUpload(destinationFolder) {
 
     const upload = multer({
         storage: storage,
-        limits: { fileSize: 2 * 1024 * 1024 },
+        limits: { fileSize: 5 * 1024 * 1024 },
         fileFilter: fileFilter,
     });
 

@@ -1,3 +1,4 @@
+// Controles des champs pour poster un commentaire.
 import { body } from 'express-validator';
 
 export const createCommentRules = [

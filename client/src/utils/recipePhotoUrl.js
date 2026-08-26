@@ -1,4 +1,4 @@
-// URL d'une photo recette
+// Construit l adresse complete d une photo recette.
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL || '';

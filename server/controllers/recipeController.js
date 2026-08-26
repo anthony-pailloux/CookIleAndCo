@@ -1,4 +1,4 @@
-
+// Requetes BDD pour les recettes (liste, fiche, creation, photo).
 
 import Recipe from '../models/Recipe.js';
 import Category from '../models/Category.js';
@@ -86,7 +86,7 @@ export async function listRecipes(req, res) {
 
     const includes = [categoryInclude, originInclude, mealTypeInclude];
 
-    // On charge les recettes de la page, les plus récentes en premier
+    // On charge les recettes de la page, les plus recentes en premier
     const result = await Recipe.findAndCountAll({
         where: recipeWhere,
         order: [['createdAt', 'DESC']],
@@ -107,7 +107,7 @@ export async function listRecipes(req, res) {
         totalPages = Math.floor(totalRecipes / limitFromUrl) + 1;
     }
 
-    // On prépare les infos de pagination pour le front
+    // On prepare les infos de pagination pour le front
     const meta = {
         page: pageFromUrl,
         limit: limitFromUrl,
@@ -124,7 +124,7 @@ export async function listRecipes(req, res) {
 export async function getRecipeById(req, res) {
     const id = req.params.id;
 
-    // On récupère la recette avec sa catégorie, son origine et son type de repas
+    // On recupere la recette avec sa categorie, son origine et son type de repas
     const recipe = await Recipe.findByPk(id, {
         include: [
             {
@@ -157,9 +157,6 @@ export async function getRecipeById(req, res) {
         ],
     });
 
-    console.log('category JSON:', recipe.category.toJSON());
-
-    
     if (!recipe) {
         res.status(404).json({ error: 'Recette introuvable' });
         return;
@@ -168,7 +165,7 @@ export async function getRecipeById(req, res) {
     res.status(200).json(recipe);
 }
 
-// Création d'une recette
+// Creation d une recette
 export async function createRecipe(req, res) {
     const title = req.body.title;
     const cookingTime = req.body.cookingTime;
@@ -190,7 +187,7 @@ export async function createRecipe(req, res) {
         photo: null,
     });
 
-    // --- ingrédients ---
+    // ingredients
     const ingredientsFromBody = req.body.ingredients;
     const ingredientsToCreate = [];
 
@@ -213,7 +210,7 @@ export async function createRecipe(req, res) {
 
     await RecipeIngredient.bulkCreate(ingredientsToCreate);
 
-    // --- étapes ---
+    // etapes
     const stepsFromBody = req.body.steps;
     const stepsToCreate = [];
 
@@ -233,7 +230,7 @@ export async function createRecipe(req, res) {
     res.status(201).json(newRecipe);
 }
 
-// Modification d'une recette (admin)
+// Modification d une recette (admin)
 export async function updateRecipe(req, res) {
     const id = req.params.id;
 
@@ -264,7 +261,7 @@ export async function updateRecipe(req, res) {
         tips: tips,
     });
 
-    // Supprime les anciens ingrédients et étapes puis recrée 
+    // Supprime les anciens ingredients et etapes puis recree 
     await RecipeIngredient.destroy({ where: { recipeId: id } });
     await RecipeStep.destroy({ where: { recipeId: id } });
 
@@ -309,7 +306,7 @@ export async function updateRecipe(req, res) {
     res.status(200).json(recipe);
 }
 
-// Suppression d'une recette
+// Suppression d une recette
 export async function deleteRecipe(req, res) {
     const id = req.params.id;
 
@@ -325,7 +322,7 @@ export async function deleteRecipe(req, res) {
     res.status(200).json({ message: 'Recette supprimée' });
 }
 
-// Ajoute une photo à une recette
+// Ajoute une photo a une recette
 export async function addRecipePhoto(req, res) {
     const id = req.params.id;
 
