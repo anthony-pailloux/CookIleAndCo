@@ -55,7 +55,7 @@ export default {
     console.log('seed admin, compte inséré :', adminEmail);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down() {
 
   },
 };
