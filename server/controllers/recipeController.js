@@ -86,7 +86,7 @@ export async function listRecipes(req, res) {
 
     const includes = [categoryInclude, originInclude, mealTypeInclude];
 
-    // On charge les recettes de la page, les plus récentes en premier, avec la catégorie
+    // On charge les recettes de la page, les plus récentes en premier
     const result = await Recipe.findAndCountAll({
         where: recipeWhere,
         order: [['createdAt', 'DESC']],
@@ -126,7 +126,6 @@ export async function getRecipeById(req, res) {
 
     // On récupère la recette avec sa catégorie, son origine et son type de repas
     const recipe = await Recipe.findByPk(id, {
-
         include: [
             {
                 model: Category,
@@ -158,6 +157,9 @@ export async function getRecipeById(req, res) {
         ],
     });
 
+    console.log('category JSON:', recipe.category.toJSON());
+
+    
     if (!recipe) {
         res.status(404).json({ error: 'Recette introuvable' });
         return;
