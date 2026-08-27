@@ -1,5 +1,5 @@
 // Petit message a l ecran (succes ou erreur).
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import "../components/Toast.css";
 
 const ToastContext = createContext(null);
@@ -9,7 +9,7 @@ export function ToastProvider({ children }) {
   const [toastType, setToastType] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
 
-  function showToast(message, type) {
+  const showToast = useCallback(function (message, type) {
     setToastMessage(message);
     setToastType(type);
     setToastVisible(true);
@@ -17,7 +17,7 @@ export function ToastProvider({ children }) {
     window.setTimeout(function () {
       setToastVisible(false);
     }, 3500);
-  }
+  }, []);
 
   let toastClassName = "toast";
   if (toastType === "success") {

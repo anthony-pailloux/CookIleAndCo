@@ -58,7 +58,8 @@ function AdminPage() {
 
     loadAdminRecipes();
     loadAdminsList();
-  }, [showToast]);
+    // showToast n est pas une dependance : une nouvelle fonction recrerait la liste en boucle
+  }, []);
 
   function handleStartEditAdmin(admin) {
     setEditingAdminId(admin.id);

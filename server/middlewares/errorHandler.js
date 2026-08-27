@@ -2,6 +2,11 @@
 export default function errorHandler(err, req, res, next) {
     console.error(err);
 
+    // La reponse est deja partie (ex. echec d ecriture de session apres le JSON)
+    if (res.headersSent) {
+        return;
+    }
+
     let status = err.status || 500;
     let message;
 

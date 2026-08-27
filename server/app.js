@@ -40,6 +40,8 @@ const FileStore = fileStoreFactory(session);
 const sessionStore = new FileStore({
     path: sessionsPath,
     ttl: sessionDurationSeconds,
+    retries: 0,
+    logFn: function () {},
 });
 
 app.use(session({
