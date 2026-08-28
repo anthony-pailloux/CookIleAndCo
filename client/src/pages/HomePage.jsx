@@ -144,7 +144,12 @@ function HomePage() {
                 <li key={category.id}>
                   <Link
                     className="home__categories-card"
-                    to={"/recettes?categorie=" + category.name}
+                    to={
+                      "/recettes?" +
+                      new URLSearchParams({
+                        categorie: category.name,
+                      }).toString()
+                    }
                   >
                     <div className="home__categories-photo">
                       <img

@@ -52,7 +52,12 @@ function CategoriesPage() {
                 <li key={category.id}>
                   <Link
                     className="categories-page__card"
-                    to={"/recettes?categorie=" + category.name}
+                    to={
+                      "/recettes?" +
+                      new URLSearchParams({
+                        categorie: category.name,
+                      }).toString()
+                    }
                   >
                     <div className="categories-page__photo">
                       <img
@@ -92,7 +97,12 @@ function CategoriesPage() {
                 <li key={origin.id}>
                   <Link
                     className="categories-page__card"
-                    to={"/recettes?origine=" + origin.name}
+                    to={
+                      "/recettes?" +
+                      new URLSearchParams({
+                        origine: origin.name,
+                      }).toString()
+                    }
                   >
                     <div className="categories-page__photo">
                       <img src={placeholderPhoto} alt={origin.name} />

@@ -16,9 +16,29 @@ function RecipesPage() {
   const [origins, setOrigins] = useState([]);
   const [mealTypes, setMealTypes] = useState([]);
 
-  const [selectedMealType, setSelectedMealType] = useState("");
-  const [selectedOrigin, setSelectedOrigin] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  // On lit l URL tout de suite, sinon le 1er fetch part sans filtre
+  // (puis la reponse "toutes les recettes" ecrase le resultat filtre).
+  let initialCategory = "";
+  const categorieFromUrlAtStart = searchParams.get("categorie");
+  if (categorieFromUrlAtStart !== null) {
+    initialCategory = categorieFromUrlAtStart;
+  }
+
+  let initialOrigin = "";
+  const origineFromUrlAtStart = searchParams.get("origine");
+  if (origineFromUrlAtStart !== null) {
+    initialOrigin = origineFromUrlAtStart;
+  }
+
+  let initialMealType = "";
+  const repasFromUrlAtStart = searchParams.get("repas");
+  if (repasFromUrlAtStart !== null) {
+    initialMealType = repasFromUrlAtStart;
+  }
+
+  const [selectedMealType, setSelectedMealType] = useState(initialMealType);
+  const [selectedOrigin, setSelectedOrigin] = useState(initialOrigin);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [searchText, setSearchText] = useState(activeSearch);
 
   const [totalPages, setTotalPages] = useState(1);
@@ -118,38 +138,71 @@ function RecipesPage() {
     }
   }, [searchParams]);
 
-  // Charge les recettes selon page, recherche et filtres
+  // Charge les recettes selon l URL (source de verite des filtres)
   useEffect(() => {
+    let cancelled = false;
+
     async function loadRecipes() {
       setLoading(true);
+
+      let categoryFilter = "";
+      const categorieFromUrl = searchParams.get("categorie");
+      if (categorieFromUrl !== null) {
+        categoryFilter = categorieFromUrl;
+      }
+
+      let originFilter = "";
+      const origineFromUrl = searchParams.get("origine");
+      if (origineFromUrl !== null) {
+        originFilter = origineFromUrl;
+      }
+
+      let mealTypeFilter = "";
+      const repasFromUrl = searchParams.get("repas");
+      if (repasFromUrl !== null) {
+        mealTypeFilter = repasFromUrl;
+      }
+
+      console.log("loadRecipes — filtres:", {
+        category: categoryFilter,
+        origin: originFilter,
+        mealType: mealTypeFilter,
+        search: activeSearch,
+        page: currentPage,
+      });
 
       try {
         const response = await listRecipes({
           page: currentPage,
           limit: 12,
-          category: selectedCategory,
-          origin: selectedOrigin,
-          mealType: selectedMealType,
+          category: categoryFilter,
+          origin: originFilter,
+          mealType: mealTypeFilter,
           search: activeSearch,
         });
-        setRecipes(response.data);
-        setTotalPages(response.meta.totalPages);
+
+        if (cancelled === false) {
+          setRecipes(response.data);
+          setTotalPages(response.meta.totalPages);
+        }
       } catch (err) {
-        setRecipes([]);
-        setTotalPages(1);
+        if (cancelled === false) {
+          setRecipes([]);
+          setTotalPages(1);
+        }
       } finally {
-        setLoading(false);
+        if (cancelled === false) {
+          setLoading(false);
+        }
       }
     }
 
     loadRecipes();
-  }, [
-    currentPage,
-    selectedCategory,
-    selectedOrigin,
-    selectedMealType,
-    activeSearch,
-  ]);
+
+    return function cleanup() {
+      cancelled = true;
+    };
+  }, [searchParams, currentPage, activeSearch]);
 
   // Charge origines, types de repas, categories pour les listes
   useEffect(() => {

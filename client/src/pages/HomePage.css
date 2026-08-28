@@ -165,10 +165,13 @@
   padding: 0.625rem 0.5rem;
 }
 
+.home__recipes .recipe-card__header {
+  margin: 0 0 0.5rem;
+}
+
 .home__recipes .recipe-card__title {
   font-size: 0.875rem;
   line-height: 1.35;
-  margin: 0 0 0.5rem;
 }
 
 /* Parcourir par catégorie */
