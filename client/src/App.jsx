@@ -1,5 +1,5 @@
 // Liste des pages du site. Chaque chemin ouvre une page.
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -17,6 +17,11 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/connexion-admins" element={<LoginPage />} />
+
+          {/* /admin : visiteur → accueil, admin → dashboard. */}
+          <Route path="/admin" element={<AdminRoute />}>
+            <Route index element={<Navigate to="/dashboard-admins" replace />} />
+          </Route>
 
           {/* Filtre admin. Les pages du dashboard s affichent ensuite. */}
           <Route path="/dashboard-admins" element={<AdminRoute />}>
