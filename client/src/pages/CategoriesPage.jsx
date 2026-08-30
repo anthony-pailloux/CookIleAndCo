@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listCategories, listOrigins } from "../services/referenceServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
-import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import "./CategoriesPage.css";
 
 function CategoriesPage() {
@@ -105,7 +104,10 @@ function CategoriesPage() {
                     }
                   >
                     <div className="categories-page__photo">
-                      <img src={placeholderPhoto} alt={origin.name} />
+                      <img
+                        src={getRecipePhotoUrl(origin.image)}
+                        alt={origin.name}
+                      />
                     </div>
                     <div className="categories-page__body">
                       <span className="categories-page__name">

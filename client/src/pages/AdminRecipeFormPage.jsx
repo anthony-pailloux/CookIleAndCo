@@ -108,10 +108,15 @@ function AdminRecipeFormPage() {
           setOriginId(String(recipe.origin.id));
           setMealTypeId(String(recipe.mealType.id));
 
-          // L unite n est pas obligatoire. Le serveur peut renvoyer une valeur vide.
+          // Quantite et unite sont optionnelles. Le serveur peut renvoyer null.
           const loadedIngredients = [];
           for (let i = 0; i < recipe.ingredients.length; i++) {
             const item = recipe.ingredients[i];
+
+            let quantityValue = "";
+            if (item.quantity !== null && item.quantity !== undefined) {
+              quantityValue = item.quantity;
+            }
 
             let unitValue = "";
             if (item.unit !== null && item.unit !== undefined) {
@@ -119,7 +124,7 @@ function AdminRecipeFormPage() {
             }
 
             loadedIngredients.push({
-              quantity: item.quantity,
+              quantity: quantityValue,
               unit: unitValue,
               name: capitalizeFirstLetter(item.name),
             });
@@ -408,7 +413,7 @@ function AdminRecipeFormPage() {
 
                 <div className="admin-form__field">
                   <label htmlFor={"ingredient-quantity-" + ingredientIndex}>
-                    Quantité *
+                    Quantité
                   </label>
                   <input
                     id={"ingredient-quantity-" + ingredientIndex}
@@ -574,6 +579,7 @@ function AdminRecipeFormPage() {
             onItemsChange={setOrigins}
             selectedId={originId}
             onSelectedIdChange={setOriginId}
+            supportsImage={true}
           />
 
           <AdminReferenceField

@@ -197,6 +197,11 @@ export async function createRecipe(req, res) {
     for (let i = 0; i < ingredientsFromBody.length; i++) {
         const item = ingredientsFromBody[i];
 
+        let quantity = null;
+        if (item.quantity !== undefined && item.quantity !== "") {
+            quantity = item.quantity;
+        }
+
         let unit = null;
         if (item.unit !== undefined && item.unit !== "") {
             unit = item.unit;
@@ -204,7 +209,7 @@ export async function createRecipe(req, res) {
 
         ingredientsToCreate.push({
             recipeId: newRecipe.id,
-            quantity: item.quantity,
+            quantity: quantity,
             unit: unit,
             name: item.name,
             sortOrder: i + 1,
@@ -274,6 +279,11 @@ export async function updateRecipe(req, res) {
     for (let i = 0; i < ingredientsFromBody.length; i++) {
         const item = ingredientsFromBody[i];
 
+        let quantity = null;
+        if (item.quantity !== undefined && item.quantity !== "") {
+            quantity = item.quantity;
+        }
+
         let unit = null;
         if (item.unit !== undefined && item.unit !== "") {
             unit = item.unit;
@@ -281,7 +291,7 @@ export async function updateRecipe(req, res) {
 
         ingredientsToCreate.push({
             recipeId: id,
-            quantity: item.quantity,
+            quantity: quantity,
             unit: unit,
             name: item.name,
             sortOrder: i + 1,

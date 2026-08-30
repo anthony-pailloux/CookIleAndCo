@@ -67,11 +67,6 @@ export const createRecipeRules = [
         .notEmpty()
         .withMessage('Nom ingrédient requis'),
 
-    body('ingredients.*.quantity')
-        .trim()
-        .notEmpty()
-        .withMessage('Quantité requise'),
-
     body('steps')
         .isArray({ min: 1 })
         .withMessage('Au moins une étape requise'),

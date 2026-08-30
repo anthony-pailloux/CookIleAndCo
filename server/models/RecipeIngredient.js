@@ -20,7 +20,7 @@ RecipeIngredient.init(
         },
         quantity: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         unit: {
             type: DataTypes.STRING,

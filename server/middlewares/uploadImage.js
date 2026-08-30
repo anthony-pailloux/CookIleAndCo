@@ -1,10 +1,12 @@
 // Recoit une photo JPG PNG ou WebP, max 5 Mo.
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 
 function createImageUpload(destinationFolder) {
     const storage = multer.diskStorage({
         destination: function (req, file, callBack) {
+            fs.mkdirSync(destinationFolder, { recursive: true });
             callBack(null, destinationFolder);
         },
         filename: function (req, file, callBack) {
@@ -35,3 +37,4 @@ function createImageUpload(destinationFolder) {
 
 export const uploadRecipePhoto = createImageUpload('uploads/recipes/');
 export const uploadCategoryImage = createImageUpload('uploads/categories/');
+export const uploadOriginImage = createImageUpload('uploads/origins/');

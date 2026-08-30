@@ -119,7 +119,7 @@ function AdminReferenceField({
 
   async function handleImageUpdate() {
     if (selectedId === "") {
-      showToast("Choisis d'abord une catégorie.", "error");
+      showToast("Choisis d'abord une " + entityLabel + ".", "error");
       return;
     }
 
