@@ -16,6 +16,11 @@ export const createRecipeRules = [
         .isInt({ min: 1 })
         .withMessage('Temps de cuisson invalide'),
 
+    // Même règle : entier >= 1
+    body('preparationTime')
+        .isInt({ min: 1 })
+        .withMessage('Temps de préparation invalide'),
+
     // Categorie, format et existence en BDD
     body('categoryId')
         .isInt({ min: 1 })

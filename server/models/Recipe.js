@@ -48,6 +48,10 @@ Recipe.init(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        preparationTime: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         tips: {
             type: DataTypes.TEXT,
             allowNull: true,
@@ -65,6 +69,7 @@ Recipe.init(
             allowNull: false,
         },
     },
+
     {
         sequelize: sequelize,
         modelName: 'Recipe',

@@ -50,10 +50,19 @@
   gap: 0.75rem;
 }
 
+.recipe-detail__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
 .recipe-detail__title {
   font-size: 1.625rem;
   color: var(--tc-text);
   margin: 0;
+  min-width: 0;
 }
 
 .recipe-detail__badges {
@@ -76,6 +85,16 @@
   font-size: 0.875rem;
   color: var(--tc-text-muted);
   margin: 0;
+}
+
+.recipe-detail__edit-btn {
+  flex-shrink: 0;
+  width: auto;
+  min-width: 5.5rem;
+  padding: 8px 10px;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 /* --- Ingrédients + Préparation --- */

@@ -206,7 +206,21 @@ function RecipeDetailsPage() {
         </div>
 
         <div className="recipe-detail__intro">
-          <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
+          <div className="recipe-detail__title-row">
+            <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
+            {auth.admin !== null && (
+              <Link
+                to={
+                  "/dashboard-admins/recettes/" +
+                  recipeDetails.id +
+                  "/modifier"
+                }
+                className="btn btn--outline recipe-detail__edit-btn"
+              >
+                Modifier
+              </Link>
+            )}
+          </div>
           <div className="recipe-detail__badges">
             <span className="recipe-detail__badge">
               {recipeDetails.category.name}
@@ -219,7 +233,8 @@ function RecipeDetailsPage() {
             </span>
           </div>
           <p className="recipe-detail__time">
-            ⏱ {recipeDetails.cookingTime} minutes
+            Préparation ⏱ {recipeDetails.preparationTime} min · Cuisson ⏱{" "}
+            {recipeDetails.cookingTime} min
           </p>
           <section className="recipe-detail__share recipe-detail__share--hero">
             <button

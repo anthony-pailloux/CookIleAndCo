@@ -172,6 +172,7 @@ export async function getRecipeById(req, res) {
 export async function createRecipe(req, res) {
     const title = req.body.title;
     const cookingTime = req.body.cookingTime;
+    const preparationTime = req.body.preparationTime;
     const categoryId = req.body.categoryId;
     const originId = req.body.originId;
     const mealTypeId = req.body.mealTypeId;
@@ -183,6 +184,7 @@ export async function createRecipe(req, res) {
     const newRecipe = await Recipe.create({
         title: title,
         cookingTime: cookingTime,
+        preparationTime: preparationTime,
         categoryId: categoryId,
         originId: originId,
         mealTypeId: mealTypeId,
@@ -251,6 +253,7 @@ export async function updateRecipe(req, res) {
 
     const title = req.body.title;
     const cookingTime = req.body.cookingTime;
+    const preparationTime = req.body.preparationTime;
     const categoryId = req.body.categoryId;
     const originId = req.body.originId;
     const mealTypeId = req.body.mealTypeId;
@@ -263,6 +266,7 @@ export async function updateRecipe(req, res) {
     await recipe.update({
         title: title,
         cookingTime: cookingTime,
+        preparationTime: preparationTime,
         categoryId: categoryId,
         originId: originId,
         mealTypeId: mealTypeId,

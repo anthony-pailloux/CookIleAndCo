@@ -116,7 +116,11 @@ function HomePage() {
 
               return (
                 <li key={recipe.id} className="home__recipes-item">
-                  <RecipeCard recipe={recipe} isFirstCard={isFirstCard} />
+                  <RecipeCard
+                    recipe={recipe}
+                    isFirstCard={isFirstCard}
+                    showTimes={false}
+                  />
                 </li>
               );
             })}

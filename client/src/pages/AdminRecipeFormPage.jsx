@@ -34,6 +34,7 @@ function AdminRecipeFormPage() {
 
   const [title, setTitle] = useState("");
   const [cookingTime, setCookingTime] = useState("");
+  const [preparationTime, setPreparationTime] = useState("");
   // Photo choisie sur l ordinateur. On l envoie seulement en enregistrant.
   const [photoFile, setPhotoFile] = useState(null);
   const [currentPhotoUrl, setCurrentPhotoUrl] = useState("");
@@ -96,6 +97,7 @@ function AdminRecipeFormPage() {
 
           setTitle(capitalizeFirstLetter(recipe.title));
           setCookingTime(String(recipe.cookingTime));
+          setPreparationTime(String(recipe.preparationTime));
           setCurrentPhotoUrl(getRecipePhotoUrl(recipe.photo));
 
           if (recipe.tips !== null && recipe.tips !== undefined) {
@@ -255,6 +257,7 @@ function AdminRecipeFormPage() {
     const recipeBody = {
       title: title,
       cookingTime: Number(cookingTime),
+      preparationTime: Number(preparationTime),
       categoryId: Number(categoryId),
       originId: Number(originId),
       mealTypeId: Number(mealTypeId),
@@ -377,6 +380,22 @@ function AdminRecipeFormPage() {
               value={cookingTime}
               onChange={function (event) {
                 setCookingTime(event.target.value);
+              }}
+            />
+          </div>
+
+          <div className="admin-form__field">
+            <label htmlFor="recipe-preparation-time">
+              Temps de préparation (min) *
+            </label>
+            <input
+              id="recipe-preparation-time"
+              className="input"
+              type="number"
+              min="1"
+              value={preparationTime}
+              onChange={function (event) {
+                setPreparationTime(event.target.value);
               }}
             />
           </div>
