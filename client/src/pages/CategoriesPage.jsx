@@ -63,8 +63,6 @@ function CategoriesPage() {
                         src={getRecipePhotoUrl(category.image)}
                         alt={category.name}
                       />
-                    </div>
-                    <div className="categories-page__body">
                       <span className="categories-page__name">
                         {category.name}
                       </span>
@@ -108,8 +106,6 @@ function CategoriesPage() {
                         src={getRecipePhotoUrl(origin.image)}
                         alt={origin.name}
                       />
-                    </div>
-                    <div className="categories-page__body">
                       <span className="categories-page__name">
                         {origin.name}
                       </span>

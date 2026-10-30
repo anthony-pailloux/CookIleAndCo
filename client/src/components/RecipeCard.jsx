@@ -38,10 +38,7 @@ function RecipeCard({ recipe, isFirstCard, showTimes }) {
             event.currentTarget.src = placeholderPhoto;
           }}
         />
-      </div>
-
-      <div className="recipe-card__body">
-        <div className="recipe-card__header">
+        <div className="recipe-card__caption">
           <h2 className="recipe-card__title">{recipe.title}</h2>
           {timeBlock}
         </div>

@@ -7,16 +7,17 @@
   overflow: hidden;
   background: var(--tc-white);
   text-decoration: none;
-  color: var(--tc-text);
+  color: var(--tc-white);
   transition: box-shadow 0.2s ease;
 }
 
 .recipe-card:hover {
   box-shadow: 0 2px 8px rgba(27, 58, 107, 0.15);
-  color: var(--tc-text);
+  color: var(--tc-white);
 }
 
 .recipe-card__photo {
+  position: relative;
   background-color: var(--tc-background-alt);
 }
 
@@ -27,18 +28,22 @@
   object-fit: cover;
 }
 
-.recipe-card__body {
-  padding: 0.75rem;
-  background-color: var(--tc-background-alt);
-}
-
-.recipe-card__header {
+/* Titre (et temps) collés au bas de la photo : le dégradé assombrit le bas, y compris le placeholder clair */
+.recipe-card__caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin: 0;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 2rem 0.75rem 0.65rem;
+  background: linear-gradient(
+    to top,
+    rgba(44, 24, 16, 0.92) 0%,
+    rgba(44, 24, 16, 0.78) 46%,
+    rgba(44, 24, 16, 0) 100%
+  );
 }
 
 .recipe-card__title {
@@ -47,10 +52,13 @@
   margin: 0;
   line-height: 1.35;
   min-width: 0;
+  color: var(--tc-white);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
 }
 
 .recipe-card__time {
   font-size: 0.8125rem;
-  color: var(--tc-text-muted);
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 }
 

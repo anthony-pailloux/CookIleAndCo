@@ -70,62 +70,70 @@ function HomePage() {
       </section>
 
       <section className="home__about">
-        <img
-          className="home__about-img"
-          src={aboutImage}
-          alt="Table familiale aux saveurs des Antilles"
-          width={640}
-          height={427}
-          loading="lazy"
-          decoding="async"
-        />
-        <div className="home__about-text">
-          <h2>À propos</h2>
-          <p>
-            Bienvenue chez Cook'île & Co, un univers gourmand où les saveurs des
-            Antilles et du monde se rencontrent, se partagent et se dégustent !
-            Les Antilles y occupent une place particulière, avec leurs recettes
-            traditionnelles, spécialités emblématiques, douceurs maison et
-            produits qui sentent bon le soleil et les souvenirs de famille. Mais
-            je vous emmène aussi à la découverte des saveurs d’ailleurs, à
-            travers des recettes, des spécialités, des découvertes gourmandes et
-            mes coups de cœur culinaires. Cook'île & Co, c’est avant tout une
-            histoire de cuisine, de partage, de découverte et de gourmandise,
-            avec des recettes accessibles à cuisiner simplement, à votre rythme
-            et surtout avec plaisir. Alors, prenez place, ouvrez grand vos
-            papilles et laissez-vous embarquer pour un voyage gourmand… An nou
-            ay !!!
-          </p>
+        <h2 className="home__heading">À propos</h2>
+        <div className="home__frame">
+          <div className="home__frame-inner">
+            <img
+              className="home__about-img"
+              src={aboutImage}
+              alt="Table familiale aux saveurs des Antilles"
+              width={640}
+              height={427}
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="home__about-text">
+              <p>
+                Bienvenue chez Cook'île & Co, un univers gourmand où les saveurs des
+                Antilles et du monde se rencontrent, se partagent et se dégustent !
+                Les Antilles y occupent une place particulière, avec leurs recettes
+                traditionnelles, spécialités emblématiques, douceurs maison et
+                produits qui sentent bon le soleil et les souvenirs de famille. Mais
+                je vous emmène aussi à la découverte des saveurs d’ailleurs, à
+                travers des recettes, des spécialités, des découvertes gourmandes et
+                mes coups de cœur culinaires. Cook'île & Co, c’est avant tout une
+                histoire de cuisine, de partage, de découverte et de gourmandise,
+                avec des recettes accessibles à cuisiner simplement, à votre rythme
+                et surtout avec plaisir. Alors, prenez place, ouvrez grand vos
+                papilles et laissez-vous embarquer pour un voyage gourmand… An nou
+                ay !!!
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="home__recipes">
-        <h2>Quelques recettes</h2>
+        <h2 className="home__heading">Quelques recettes</h2>
 
-        {featuredRecipes.length === 0 && (
-          <p className="home__recipes-empty">Aucune recette pour le moment.</p>
-        )}
+        <div className="home__frame">
+          <div className="home__frame-inner">
+            {featuredRecipes.length === 0 && (
+              <p className="home__recipes-empty">Aucune recette pour le moment.</p>
+            )}
 
-        {featuredRecipes.length > 0 && (
-          <ul className="home__recipes-grid">
-            {featuredRecipes.map((recipe, index) => {
-              let isFirstCard = false;
-              if (index === 0) {
-                isFirstCard = true;
-              }
+            {featuredRecipes.length > 0 && (
+              <ul className="home__recipes-grid">
+                {featuredRecipes.map((recipe, index) => {
+                  let isFirstCard = false;
+                  if (index === 0) {
+                    isFirstCard = true;
+                  }
 
-              return (
-                <li key={recipe.id} className="home__recipes-item">
-                  <RecipeCard
-                    recipe={recipe}
-                    isFirstCard={isFirstCard}
-                    showTimes={false}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-        )}
+                  return (
+                    <li key={recipe.id} className="home__recipes-item">
+                      <RecipeCard
+                        recipe={recipe}
+                        isFirstCard={isFirstCard}
+                        showTimes={false}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
 
         <Link className="btn home__recipes-cta" to="/recettes">
           Voir toutes les recettes
@@ -133,43 +141,47 @@ function HomePage() {
       </section>
 
       <section className="home__categories">
-        <h2>Parcourir par catégorie</h2>
+        <h2 className="home__heading">Parcourir par catégorie</h2>
 
-        {featuredCategories.length === 0 && (
-          <p className="home__categories-empty">
-            Aucune catégorie pour le moment.
-          </p>
-        )}
+        <div className="home__frame">
+          <div className="home__frame-inner">
+            {featuredCategories.length === 0 && (
+              <p className="home__categories-empty">
+                Aucune catégorie pour le moment.
+              </p>
+            )}
 
-        {featuredCategories.length > 0 && (
-          <ul className="home__categories-grid">
-            {featuredCategories.map((category) => {
-              return (
-                <li key={category.id}>
-                  <Link
-                    className="home__categories-card"
-                    to={
-                      "/recettes?" +
-                      new URLSearchParams({
-                        categorie: category.name,
-                      }).toString()
-                    }
-                  >
-                    <div className="home__categories-photo">
-                      <img
-                        src={getRecipePhotoUrl(category.image)}
-                        alt={category.name}
-                      />
-                    </div>
-                    <span className="home__categories-name">
-                      {category.name}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+            {featuredCategories.length > 0 && (
+              <ul className="home__categories-grid">
+                {featuredCategories.map((category) => {
+                  return (
+                    <li key={category.id}>
+                      <Link
+                        className="home__categories-card"
+                        to={
+                          "/recettes?" +
+                          new URLSearchParams({
+                            categorie: category.name,
+                          }).toString()
+                        }
+                      >
+                        <div className="home__categories-photo">
+                          <img
+                            src={getRecipePhotoUrl(category.image)}
+                            alt={category.name}
+                          />
+                          <span className="home__categories-name">
+                            {category.name}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
 
         <Link className="btn home__categories-cta" to="/categories">
           Voir toutes les catégories
