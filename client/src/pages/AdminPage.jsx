@@ -27,6 +27,8 @@ function AdminPage() {
   const [editAdminPassword, setEditAdminPassword] = useState("");
   const [editAdminFormError, setEditAdminFormError] = useState("");
 
+  const [activeTab, setActiveTab] = useState("recipes");
+
   async function loadAdminsList() {
     setLoadingAdmins(true);
 
@@ -159,14 +161,67 @@ function AdminPage() {
     }
   }
 
+  let recipesTabClassName;
+  if (activeTab === "recipes") {
+    recipesTabClassName = "admin-page__tab admin-page__tab--active";
+  } else {
+    recipesTabClassName = "admin-page__tab";
+  }
+
+  let adminsTabClassName;
+  if (activeTab === "admins") {
+    adminsTabClassName = "admin-page__tab admin-page__tab--active";
+  } else {
+    adminsTabClassName = "admin-page__tab";
+  }
+
   return (
     <main className="admin-page">
       <header className="admin-page__header">
         <h1 className="admin-page__title">Le Dashboard de Tetelle</h1>
       </header>
 
-      {/* Bloc 1, gerer les comptes admin */}
-      <section className="admin-page__section admin-page__section--admins">
+      {/* Barre d'onglets : un seul panneau visible */}
+      <div
+        className="admin-page__tabs"
+        role="tablist"
+        aria-label="Sections du dashboard"
+      >
+        <button
+          type="button"
+          id="admin-tab-recipes"
+          role="tab"
+          className={recipesTabClassName}
+          aria-selected={activeTab === "recipes"}
+          aria-controls="admin-panel-recipes"
+          onClick={function () {
+            setActiveTab("recipes");
+          }}
+        >
+          Mes recettes
+        </button>
+        <button
+          type="button"
+          id="admin-tab-admins"
+          role="tab"
+          className={adminsTabClassName}
+          aria-selected={activeTab === "admins"}
+          aria-controls="admin-panel-admins"
+          onClick={function () {
+            setActiveTab("admins");
+          }}
+        >
+          Administrateurs
+        </button>
+      </div>
+
+      {activeTab === "admins" && (
+      <section
+        className="admin-page__section admin-page__section--admins"
+        id="admin-panel-admins"
+        role="tabpanel"
+        aria-labelledby="admin-tab-admins"
+      >
         <h2 className="admin-page__section-title">Administrateurs</h2>
 
         {loadingAdmins === true && (
@@ -331,9 +386,15 @@ function AdminPage() {
           </button>
         </form>
       </section>
+      )}
 
-      {/* Bloc 2, liste des recettes */}
-      <section className="admin-page__section">
+      {activeTab === "recipes" && (
+      <section
+        className="admin-page__section"
+        id="admin-panel-recipes"
+        role="tabpanel"
+        aria-labelledby="admin-tab-recipes"
+      >
         <h2 className="admin-page__section-title">Mes recettes</h2>
         <Link
           to="/dashboard-admins/recettes/nouvelle"
@@ -407,6 +468,7 @@ function AdminPage() {
           </div>
         )}
       </section>
+      )}
     </main>
   );
 }

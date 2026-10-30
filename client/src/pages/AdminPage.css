@@ -22,6 +22,48 @@
   font-size: 1.75rem;
 }
 
+/* Onglets : recettes par défaut, administrateurs à côté */
+.admin-page__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-page__tab {
+  margin: 0;
+  padding: 0.65rem 1.15rem;
+  border: 2px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
+  background-color: var(--tc-white);
+  color: var(--tc-green-madras);
+  font-family: var(--tc-font);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.admin-page__tab:hover {
+  background-color: var(--tc-background-alt);
+}
+
+.admin-page__tab--active {
+  background-color: var(--tc-green-madras);
+  color: var(--tc-white);
+}
+
+.admin-page__tab--active:hover {
+  background-color: var(--tc-green-madras);
+  filter: brightness(1.08);
+}
+
+.admin-page__tab:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 3px;
+}
+
 /* Sections (recettes, administrateurs…) */
 .admin-page__section {
   background-color: var(--tc-white);
@@ -128,12 +170,13 @@
   display: block;
 }
 
-/* Colonne Actions recettes */
+/* Colonne Actions recettes : boutons côte à côte */
 .admin-recipes-table__actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.5rem;
-  align-items: flex-start;
 }
 
 .admin-recipes-table__actions .btn {
@@ -146,9 +189,7 @@
 /* Tableau administrateurs */
 .admin-admins-table {
   margin-bottom: 1rem;
-  table-layout: fixed;
   width: 100%;
-  min-width: 18rem;
 }
 
 .admin-admins-table th:nth-child(1),
@@ -157,16 +198,12 @@
   overflow-wrap: anywhere;
 }
 
-.admin-admins-table th:nth-child(2),
-.admin-admins-table td:nth-child(2) {
-  width: 7.5rem;
-}
-
 .admin-admins-table__actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.5rem;
-  align-items: flex-start;
 }
 
 .admin-admins-table__actions .btn {
@@ -320,5 +357,34 @@
 
   .admin-page__title {
     font-size: 2rem;
+  }
+
+  /* Largeurs de colonnes seulement en tableau (pas en cartes mobile) */
+  .admin-recipes-table:not(.admin-admins-table) {
+    table-layout: fixed;
+  }
+
+  .admin-recipes-table:not(.admin-admins-table) th:nth-child(1),
+  .admin-recipes-table:not(.admin-admins-table) td:nth-child(1) {
+    width: 6.25rem;
+  }
+
+  .admin-recipes-table:not(.admin-admins-table) th:nth-child(3),
+  .admin-recipes-table:not(.admin-admins-table) td:nth-child(3) {
+    width: 12rem;
+  }
+
+  .admin-recipes-table:not(.admin-admins-table) th:nth-child(4),
+  .admin-recipes-table:not(.admin-admins-table) td:nth-child(4) {
+    width: 15rem;
+  }
+
+  .admin-admins-table {
+    table-layout: fixed;
+  }
+
+  .admin-admins-table th:nth-child(2),
+  .admin-admins-table td:nth-child(2) {
+    width: 15rem;
   }
 }
