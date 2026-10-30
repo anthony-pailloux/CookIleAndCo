@@ -14,6 +14,8 @@ function AdminPage() {
 
   const [recipes, setRecipes] = useState([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const [admins, setAdmins] = useState([]);
   const [loadingAdmins, setLoadingAdmins] = useState(true);
@@ -43,24 +45,48 @@ function AdminPage() {
     setLoadingAdmins(false);
   }
 
-  useEffect(() => {
-    async function loadAdminRecipes() {
-      setLoadingRecipes(true);
+  // 12 recettes par page, comme le catalogue public.
+  async function loadAdminRecipes(pageToLoad) {
+    setLoadingRecipes(true);
 
-      try {
-        const response = await listRecipes({ limit: 50 });
-        setRecipes(response.data);
-      } catch (err) {
-        setRecipes([]);
-        showToast("Impossible de charger les recettes.", "error");
-      } finally {
-        setLoadingRecipes(false);
+    try {
+      const response = await listRecipes({
+        page: pageToLoad,
+        limit: 12,
+      });
+
+      setRecipes(response.data);
+
+      let pagesCount = 0;
+      if (response.meta !== undefined && response.meta !== null) {
+        pagesCount = response.meta.totalPages;
       }
-    }
+      setTotalPages(pagesCount);
 
-    loadAdminRecipes();
-    loadAdminsList();
+      // Apres une suppression, la page demandee peut ne plus exister.
+      if (pagesCount === 0) {
+        if (pageToLoad !== 1) {
+          setCurrentPage(1);
+        }
+      } else if (pageToLoad > pagesCount) {
+        setCurrentPage(pagesCount);
+      }
+    } catch (err) {
+      setRecipes([]);
+      setTotalPages(0);
+      showToast("Impossible de charger les recettes.", "error");
+    } finally {
+      setLoadingRecipes(false);
+    }
+  }
+
+  useEffect(() => {
+    loadAdminRecipes(currentPage);
     // showToast n est pas une dependance : une nouvelle fonction recrerait la liste en boucle
+  }, [currentPage]);
+
+  useEffect(() => {
+    loadAdminsList();
   }, []);
 
   function handleStartEditAdmin(admin) {
@@ -103,15 +129,14 @@ function AdminPage() {
 
     try {
       await deleteRecipe(recipeId);
-
-      const newRecipes = [];
-      for (let i = 0; i < recipes.length; i++) {
-        if (recipes[i].id !== recipeId) {
-          newRecipes.push(recipes[i]);
-        }
-      }
-      setRecipes(newRecipes);
       showToast("Recette supprimée.", "success");
+
+      // Derniere ligne de la page : on recule, le useEffect recharge la liste.
+      if (recipes.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        await loadAdminRecipes(currentPage);
+      }
     } catch (err) {
       showToast(err.message, "error");
     }
@@ -173,6 +198,40 @@ function AdminPage() {
     adminsTabClassName = "admin-page__tab admin-page__tab--active";
   } else {
     adminsTabClassName = "admin-page__tab";
+  }
+
+  function goToPage(pageNumber) {
+    if (pageNumber < 1) {
+      return;
+    }
+
+    if (totalPages > 0 && pageNumber > totalPages) {
+      return;
+    }
+
+    setCurrentPage(pageNumber);
+  }
+
+  const pageButtons = [];
+  for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+    let pageBtnClass = "admin-page__pagination-page";
+    if (pageNum === currentPage) {
+      pageBtnClass =
+        "admin-page__pagination-page admin-page__pagination-page--active";
+    }
+
+    pageButtons.push(
+      <button
+        key={pageNum}
+        type="button"
+        className={pageBtnClass}
+        onClick={function () {
+          goToPage(pageNum);
+        }}
+      >
+        {pageNum}
+      </button>,
+    );
   }
 
   return (
@@ -466,6 +525,37 @@ function AdminPage() {
               </tbody>
             </table>
           </div>
+        )}
+
+        {loadingRecipes === false && totalPages > 1 && (
+          <nav
+            className="admin-page__pagination"
+            aria-label="Pagination des recettes"
+          >
+            <button
+              type="button"
+              className="admin-page__pagination-nav"
+              disabled={currentPage <= 1}
+              onClick={function () {
+                goToPage(currentPage - 1);
+              }}
+            >
+              ← Préc
+            </button>
+
+            {pageButtons}
+
+            <button
+              type="button"
+              className="admin-page__pagination-nav"
+              disabled={currentPage >= totalPages}
+              onClick={function () {
+                goToPage(currentPage + 1);
+              }}
+            >
+              Suiv →
+            </button>
+          </nav>
         )}
       </section>
       )}

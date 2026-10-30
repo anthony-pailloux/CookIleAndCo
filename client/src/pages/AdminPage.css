@@ -388,3 +388,54 @@
     width: 15rem;
   }
 }
+
+/* Pagination : meme rendu que le catalogue (recipes-page). */
+.admin-page__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.625rem;
+}
+
+.admin-page__pagination-nav,
+.admin-page__pagination-page {
+  padding: 10px 16px;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-yellow-madras);
+  color: var(--tc-white);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: background-color 0.35s ease, opacity 0.35s ease, border-color 0.35s ease;
+}
+
+.admin-page__pagination-nav:hover,
+.admin-page__pagination-page:hover {
+  background: var(--tc-green-madras);
+  border: 1px solid var(--tc-yellow-madras);
+  opacity: 0.9;
+}
+
+.admin-page__pagination-page--active {
+  background: var(--tc-green-madras);
+  color: var(--tc-white);
+  border: 1px solid var(--tc-navy);
+}
+
+.admin-page__pagination-page--active:hover {
+  background: var(--tc-green-madras);
+  opacity: 1;
+}
+
+.admin-page__pagination-nav:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-page__pagination-nav:disabled:hover {
+  background: var(--tc-yellow-madras);
+  border: 1px solid var(--tc-navy);
+  opacity: 0.45;
+}
