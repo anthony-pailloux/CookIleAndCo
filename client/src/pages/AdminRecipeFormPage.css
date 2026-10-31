@@ -1,130 +1,687 @@
-/* Ligne 1 : 3 colonnes · hauteur agrandie · pas de scroll */
+/* Fiche admin recette : memes cartes que le dashboard (vert, creme, jaune). */
+
+.admin-recipe-form-page .admin-page__header {
+  margin-bottom: 1.5rem;
+}
+
 .admin-recipe-form-page .admin-form {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: auto auto;
-  gap: 1.25rem;
-  margin-bottom: 1rem;
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.35rem;
+  margin-bottom: 0;
+  min-width: 0;
 }
 
-.admin-recipe-form-page__options-error {
-  margin-bottom: 1rem;
-}
-
-.admin-form__section--full-width {
-  grid-column: 1 / -1;
-}
-
-.admin-form__full-row {
-  grid-column: 1 / -1;
-}
-
+/* Carte de section, comme .admin-page__section */
 .admin-form__section {
-  border: 2px solid var(--tc-navy);
-  border-radius: var(--tc-radius);
-  padding: 1rem;
+  display: block;
+  width: 100%;
+  min-inline-size: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  padding: 0.35rem 1.5rem 1.5rem;
+  border: 2px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
   background-color: var(--tc-white);
-  overflow: visible;
+  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.08);
 }
 
-/* Info, Ingrédients, Préparation — plus hautes, sans scroll interne */
-.admin-form__section:not(.admin-form__section--full-width) {
-  min-height: 520px;
-}
-
+/* Legende rentree dans la carte. Le filet suit le texte, pas la carte. */
 .admin-form__section > legend {
+  display: block;
+  float: left;
+  width: fit-content;
+  max-width: 100%;
+  /* Air sous le filet : le padding reste au-dessus du trait. */
+  margin: 0 0 1.15rem;
+  padding: 0.85rem 0 0.5rem;
+  box-sizing: border-box;
+  font-size: 1.25rem;
   font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--tc-navy);
-  padding: 0 0.5rem;
+  line-height: 1.3;
+  color: var(--tc-green-madras);
+  background-color: var(--tc-white);
+  border-bottom: 2px solid var(--tc-yellow-madras);
+}
+
+.admin-form__section > * + * {
+  margin-top: 1.15rem;
+}
+
+.admin-form__section > legend + * {
+  clear: both;
+  margin-top: 0;
 }
 
 .admin-form__field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
+  min-width: 0;
 }
 
 .admin-form__field label {
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--tc-text);
 }
 
-.admin-form__file {
-  padding: 0.5rem;
+.admin-recipe-form-page .input {
+  min-height: 2.75rem;
+  color: var(--tc-text);
   background-color: var(--tc-white);
 }
 
-.admin-form__group {
-  border: 1px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
-  padding: 1rem;
-  margin: 0;
+.admin-recipe-form-page select.input {
+  min-height: 2.75rem;
+}
+
+/* Colonne 1 : libelle Titre, saisie et temps.
+   Colonne 2 : photo. Avec une image, le haut part des lettres du titre
+   et le bas du cadre s arrete au bas des temps. */
+.admin-form__section--infos {
+  overflow: visible;
+}
+
+.admin-form__section--infos > legend {
+  position: relative;
+  z-index: 2;
+}
+
+.admin-form__infos-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(22rem, 26rem);
+  grid-template-rows: auto auto;
+  column-gap: 1.5rem;
+  row-gap: 0.4rem;
+  align-items: start;
+  overflow: visible;
+}
+
+.admin-form__infos-layout > .admin-form__field {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.admin-form__infos-main {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.15rem;
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  min-width: 0;
 }
 
-.admin-form__group legend {
-  font-weight: 600;
-  color: var(--tc-green-madras);
-  padding: 0 0.5rem;
+.admin-form__infos-main > .input {
+  min-width: 0;
 }
 
-.admin-form__textarea {
-  resize: vertical;
-  min-height: 100px;
-  font-family: inherit;
+.admin-form__times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
+  /* Bas de la rangée : les saisies restent sur la meme ligne si un libelle grandit. */
+  align-items: end;
 }
 
-.admin-form__add-btn {
-  width: 100%;
-  padding: 10px 16px;
+/* (min) et l etoile restent ensemble, sans reserver une 2e ligne si tout tient. */
+.admin-form__time-suffix {
+  white-space: nowrap;
+}
+
+/* Colonne photo : meme place avec ou sans image (le contenu change, pas la grille). */
+.admin-form__photo-column {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  min-width: 0;
+}
+
+/* Avec photo : la case couvre le libelle et les saisies.
+   Elle ne grandit pas : seule la colonne de gauche donne la hauteur. */
+.admin-form__photo-column--with-preview {
+  grid-row: 1 / -1;
+  align-self: stretch;
+  position: relative;
+  z-index: 1;
+}
+
+/* Pile image + cadre. Le haut remonte jusqu aux lettres de la legende.
+   Le bas reste colle au bas de la case, donc au bas des inputs temps. */
+.admin-form__photo-column--with-preview .admin-form__photo-stack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Doit suivre la legende : ligne 1,25rem * 1,3, padding bas 0,5rem, filet 2px, marge 1,15rem.
+     Le padding haut de la legende reste au-dessus des lettres : on ne le remonte pas. */
+  top: calc(-1 * (1.25rem * 1.3 + 0.5rem + 2px + 1.15rem));
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* La zone image prend tout le vide entre le haut des lettres et le cadre fichier. */
+.admin-form__photo-column--with-preview .admin-form__photo-fit {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: var(--tc-radius);
+  border: 2px solid var(--tc-green-madras);
+  background-color: var(--tc-background);
+}
+
+.admin-form__photo-column--with-preview .admin-form__photo-preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Pas de photo : meme cadre creme, texte centre, sans bordure en plus. */
+.admin-form__photo-column--with-preview .admin-form__photo-fit--empty {
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.admin-form__remove-btn {
-  width: auto;
-  align-self: flex-start;
-}
-
-.admin-form__error {
+.admin-form__photo-empty {
   margin: 0;
-  color: var(--tc-red-madras);
-  font-weight: 600;
+  color: var(--tc-text);
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: center;
 }
 
-.admin-form__submit-btn {
-  width: auto;
+/* Cadre compact : seulement le fichier, padding serre.
+   Moins haut, le flex donne ce gain a l image (flex 1) sans agrandir la section. */
+.admin-form__photo-field {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 0;
+  padding: 0.4rem;
+  background-color: var(--tc-background-alt);
+  border: 1px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
+}
+
+.admin-form__photo-column--with-preview .admin-form__photo-field {
+  flex-shrink: 0;
+}
+
+.admin-form__photo-field > .admin-form__file {
+  flex-shrink: 0;
+}
+
+/* L input fichier reste entier dans le cadre, sans deborder. */
+.admin-recipe-form-page .input.admin-form__file {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  overflow: hidden;
+  background-color: var(--tc-white);
+  border: 1px solid var(--tc-green-madras);
+}
+
+/* Bouton natif « Choisir un fichier » : memes couleurs que .btn / .btn--primary. */
+.admin-recipe-form-page .input.admin-form__file::file-selector-button {
+  margin: 0 0.65rem 0 0;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-yellow-madras);
+  color: var(--tc-white);
+  font-family: var(--tc-font);
+  cursor: pointer;
+  transition:
+    background-color 0.35s ease,
+    opacity 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.admin-recipe-form-page .input.admin-form__file::file-selector-button:hover {
+  background: var(--tc-green-madras);
+  border: 1px solid var(--tc-yellow-madras);
+  color: var(--tc-white);
+  opacity: 1;
+}
+
+/* Trois listes, champs alignes en bas si un libelle passe a la ligne */
+.admin-form__class-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+  align-items: end;
+}
+
+/* Lien secondaire : couleurs et hover viennent de .btn.btn--outline.
+   Centré sous les trois listes, largeur au texte, sans coller aux selects. */
+.admin-recipe-form-page .btn.admin-form__manage-link {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  clear: both;
+  margin-top: 1.35rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ingredients : lignes repliees comme les etapes, champs seulement sur la ligne ouverte. */
+.admin-form__ingredients {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.admin-form__ingredient {
+  min-width: 0;
+}
+
+.admin-form__ingredient--open {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.4rem;
+}
+
+.admin-form__ingredient-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--tc-text);
+}
+
+/* En-tete et saisies : memes colonnes, pour que les titres tombent sur les champs. */
+.admin-form__ingredient-fields {
+  border: 2px solid var(--tc-green-madras);
+  border-radius: var(--tc-radius);
+  overflow: hidden;
+}
+
+.admin-form__ingredient-head,
+.admin-form__ingredient-line {
+  display: grid;
+  grid-template-columns: 7.25rem 8.5rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: end;
+  padding: 0.85rem 0.75rem;
+}
+
+.admin-form__ingredient-head {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  align-items: center;
+  background-color: var(--tc-green-madras);
+  color: var(--tc-white);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.admin-form__ingredient-line {
+  background-color: var(--tc-white);
+  border-top: 1px solid var(--tc-green-madras);
+}
+
+.admin-form__ingredient-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.admin-form__ingredient-cell .input {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Libelle garde pour les lecteurs d ecran. L en-tete vert le remplace a l ecran. */
+.admin-form__ingredient-caption,
+.admin-form__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.admin-recipe-form-page .input.admin-form__textarea {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 8rem;
+  line-height: 1.5;
+  resize: vertical;
+  font-family: inherit;
+  color: var(--tc-text);
+  background-color: var(--tc-white);
+}
+
+.admin-form__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Etape repliee : pas de panneau creme, la ligne reste dans la carte. */
+.admin-form__step:not(.admin-form__step--open) {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  min-width: 0;
+}
+
+/* Ligne propre a l'etape : la corbeille reste a cote du texte.
+   Pas de colonne 1fr partagee qui aligne les actions de l'etape suivante.
+   Largeur bornee : le texte long se coupe avant la corbeille. */
+.admin-form__step-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.admin-form__step-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--tc-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+/* Survol de la zone qui rouvre l etape : fond, contour, texte souligne. */
+.admin-form__step-summary:hover {
+  background-color: rgba(46, 139, 87, 0.12);
+  border-color: var(--tc-green-madras);
+}
+
+.admin-form__step-summary:hover .admin-form__step-preview {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.admin-form__step-number {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--tc-green-madras);
+  color: var(--tc-white);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.admin-form__step-preview {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--tc-text);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.admin-form__step-preview--empty {
+  color: var(--tc-text-muted);
+  font-style: italic;
+}
+
+/* Corbeille discrete : icone seule, pas un gros bouton rouge. */
+.admin-form__step-delete {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
   display: inline-flex;
-  justify-self: center;
-  margin-top: 0.5rem;
-  padding: 10px 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0.35rem;
+  background: transparent;
+  color: var(--tc-red-madras);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.admin-recipe-form-page__back-link {
-  display: inline-block;
+.admin-form__step-delete:hover {
+  background-color: rgba(211, 47, 47, 0.12);
+}
+
+.admin-form__step-delete-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+}
+
+/* Etape ouverte : label et corbeille sur leur ligne, champ en dessous. */
+.admin-form__step--open {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  min-width: 0;
+}
+
+.admin-form__step--open label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--tc-text);
+}
+
+.admin-form__step--open .admin-form__textarea {
+  width: 100%;
+}
+
+/* 1 rem entre chaque ligne, avec un filet doux au milieu.
+   Place apres les margin: 0 des etapes, sinon le filet disparait. */
+.admin-form__ingredient + .admin-form__ingredient,
+.admin-form__steps > .admin-form__step + .admin-form__step {
   margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(44, 24, 16, 0.16);
+}
+
+/* Enregistrer : sous la carte Classification, centré, sans cadre. */
+.admin-form__actions {
+  display: flex;
+  justify-content: center;
+  /* Le formulaire espace les blocs de 1,35 rem : on revient à ~0,75 rem sous la carte. */
+  margin-top: calc(0.75rem - 1.35rem);
+  padding: 0;
+}
+
+/* Ingrédients et Préparation : le + est ancré sur la carte, en haut à droite. */
+.admin-form__section--with-add {
+  position: relative;
+}
+
+.admin-form__section--with-add > legend {
+  /* Le titre reste à gauche, le bouton occupe le coin droit. */
+  max-width: calc(100% - 3rem);
+}
+
+/* Petit + : jaune Madras et hover comme .btn / .btn--primary. */
+.admin-recipe-form-page .btn.admin-form__add-btn {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.5rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  margin: 0;
+  padding: 0;
+  background: var(--tc-yellow-madras);
   color: var(--tc-navy);
-  font-weight: 600;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
-@media (max-width: 900px) {
-  .admin-recipe-form-page .admin-form {
+.admin-recipe-form-page .btn.admin-form__add-btn:hover {
+  background: var(--tc-green-madras);
+  color: var(--tc-white);
+  border: 1px solid var(--tc-yellow-madras);
+  opacity: 0.9;
+}
+
+.admin-recipe-form-page .btn.admin-form__submit-btn {
+  width: auto;
+  min-width: 16rem;
+  padding: 12px 28px;
+  font-weight: 700;
+}
+
+.admin-recipe-form-page .input:focus-visible,
+.admin-recipe-form-page .btn:focus-visible,
+.admin-recipe-form-page .admin-form__step-summary:focus-visible,
+.admin-recipe-form-page .admin-form__step-delete:focus-visible,
+.admin-recipe-form-page a:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  .admin-form__section {
+    padding: 0.25rem 1rem 1.15rem;
+  }
+
+  .admin-form__section > legend {
+    font-size: 1.125rem;
+  }
+
+  .admin-recipe-form-page .btn.admin-form__add-btn {
+    right: 1rem;
+  }
+
+  .admin-form__infos-layout,
+  .admin-form__times,
+  .admin-form__class-row {
     grid-template-columns: 1fr;
   }
 
-  .admin-form__section:not(.admin-form__section--full-width) {
-    min-height: auto;
+  /* Empile label, saisie et photo. Le cadre ne reste pas en colonne 2. */
+  .admin-form__infos-layout > .admin-form__field,
+  .admin-form__infos-main,
+  .admin-form__photo-column,
+  .admin-form__photo-column--with-preview {
+    grid-column: auto;
+    grid-row: auto;
+    align-self: auto;
   }
 
-  .admin-form__section--full-width {
-    grid-column: auto;
+  .admin-form__photo-column,
+  .admin-form__photo-column--with-preview {
+    position: static;
+    height: auto;
+    margin-top: 0.75rem;
+  }
+
+  /* Plus de colonne a cote : la pile reprend le flux, sous les temps. */
+  .admin-form__photo-column--with-preview .admin-form__photo-stack {
+    position: static;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    height: auto;
+  }
+
+  .admin-form__photo-column--with-preview .admin-form__photo-fit {
+    flex: none;
+    height: 12rem;
+  }
+
+  .admin-form__ingredient-head {
+    display: none;
+  }
+
+  .admin-form__ingredients {
+    gap: 0;
+  }
+
+  .admin-form__ingredient-caption {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--tc-text-muted);
+  }
+
+  .admin-form__ingredient-line {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0.65rem;
+    padding: 0.85rem;
+    border-top: none;
+  }
+
+  .admin-form__ingredient-name {
+    grid-column: 1 / -1;
+  }
+
+  .admin-form__step-row {
+    flex-wrap: nowrap;
+    max-width: 100%;
+  }
+
+  .admin-recipe-form-page .btn.admin-form__submit-btn {
+    width: 100%;
+    min-width: 0;
   }
 }

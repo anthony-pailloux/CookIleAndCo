@@ -240,38 +240,46 @@ function AdminPage() {
         <h1 className="admin-page__title">Le Dashboard de Tetelle</h1>
       </header>
 
-      {/* Barre d'onglets : un seul panneau visible */}
-      <div
-        className="admin-page__tabs"
-        role="tablist"
-        aria-label="Sections du dashboard"
-      >
-        <button
-          type="button"
-          id="admin-tab-recipes"
-          role="tab"
-          className={recipesTabClassName}
-          aria-selected={activeTab === "recipes"}
-          aria-controls="admin-panel-recipes"
-          onClick={function () {
-            setActiveTab("recipes");
-          }}
+      {/* Onglets du dashboard, plus le lien vers les listes de classement. */}
+      <div className="admin-page__toolbar">
+        <div
+          className="admin-page__tabs"
+          role="tablist"
+          aria-label="Sections du dashboard"
         >
-          Mes recettes
-        </button>
-        <button
-          type="button"
-          id="admin-tab-admins"
-          role="tab"
-          className={adminsTabClassName}
-          aria-selected={activeTab === "admins"}
-          aria-controls="admin-panel-admins"
-          onClick={function () {
-            setActiveTab("admins");
-          }}
+          <button
+            type="button"
+            id="admin-tab-recipes"
+            role="tab"
+            className={recipesTabClassName}
+            aria-selected={activeTab === "recipes"}
+            aria-controls="admin-panel-recipes"
+            onClick={function () {
+              setActiveTab("recipes");
+            }}
+          >
+            Mes recettes
+          </button>
+          <button
+            type="button"
+            id="admin-tab-admins"
+            role="tab"
+            className={adminsTabClassName}
+            aria-selected={activeTab === "admins"}
+            aria-controls="admin-panel-admins"
+            onClick={function () {
+              setActiveTab("admins");
+            }}
+          >
+            Administrateurs
+          </button>
+        </div>
+        <Link
+          to="/dashboard-admins/referentiels"
+          className="admin-page__tab"
         >
-          Administrateurs
-        </button>
+          Catégories, origines, repas
+        </Link>
       </div>
 
       {activeTab === "admins" && (

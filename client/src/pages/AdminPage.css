@@ -7,14 +7,14 @@
   overflow-x: clip;
 }
 
-/* Bloc titre + email */
+/* Titre de page seul : plus de carte (fond, bordure, ombre). */
 .admin-page__header {
   text-align: center;
-  padding: 1.5rem 1.25rem;
+  padding: 0;
   margin-bottom: 2rem;
-  background-color: var(--tc-white);
-  border: 2px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .admin-page__title {
@@ -22,13 +22,30 @@
   font-size: 1.75rem;
 }
 
-/* Onglets : recettes par défaut, administrateurs à côté */
-.admin-page__tabs {
+/* Onglets + lien vers la page des listes de classement */
+.admin-page__toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 1.25rem;
+}
+
+.admin-page__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+a.admin-page__tab {
+  display: inline-block;
+  text-decoration: none;
+}
+
+a.admin-page__tab:hover {
+  color: var(--tc-green-madras);
 }
 
 .admin-page__tab {
@@ -220,7 +237,7 @@
   }
 
   .admin-page__header {
-    padding: 1rem;
+    padding: 0;
     margin-bottom: 1.25rem;
   }
 

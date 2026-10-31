@@ -23,7 +23,7 @@ function AdminRoute() {
     return <Navigate to="/" replace />;
   }
 
-  // Ici s affiche la page enfant (dashboard ou formulaire recette).
+  // Ici s affiche la page enfant (dashboard, formulaire recette ou referentiels).
   return (
     <>
       <Outlet />

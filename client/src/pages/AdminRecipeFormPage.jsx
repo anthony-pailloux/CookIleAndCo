@@ -16,7 +16,6 @@ import {
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
-import AdminReferenceField from "../components/AdminReferenceField.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
 import "./AdminRecipeFormPage.css";
@@ -55,6 +54,24 @@ function AdminRecipeFormPage() {
   ]);
 
   const [steps, setSteps] = useState([{ description: "" }]);
+
+  // Creation : la seule etape vide est ouverte. Modification : les etapes restent repliees.
+  let initialEditingStepIndex = 0;
+  if (recipeId !== undefined) {
+    initialEditingStepIndex = null;
+  }
+  const [editingStepIndex, setEditingStepIndex] = useState(
+    initialEditingStepIndex,
+  );
+
+  // Creation : le seul ingredient vide est ouvert. Modification : les lignes restent repliees.
+  let initialEditingIngredientIndex = 0;
+  if (recipeId !== undefined) {
+    initialEditingIngredientIndex = null;
+  }
+  const [editingIngredientIndex, setEditingIngredientIndex] = useState(
+    initialEditingIngredientIndex,
+  );
 
   const [loadingRecipe, setLoadingRecipe] = useState(false);
   const [recipeLoadFailed, setRecipeLoadFailed] = useState(false);
@@ -149,6 +166,10 @@ function AdminRecipeFormPage() {
             loadedSteps.push({ description: "" });
           }
           setSteps(loadedSteps);
+          // Page courte : on n ouvre aucune etape tant que l admin ne clique pas la ligne.
+          setEditingStepIndex(null);
+          // Meme choix pour les ingredients deja enregistres.
+          setEditingIngredientIndex(null);
         } catch (err) {
           setRecipeLoadFailed(true);
           showToast("Impossible de charger la recette.", "error");
@@ -170,6 +191,8 @@ function AdminRecipeFormPage() {
     }
     newIngredients.push({ quantity: "", unit: "", name: "" });
     setIngredients(newIngredients);
+    // Le nouvel ingredient s ouvre. L index vaut la longueur d avant l ajout.
+    setEditingIngredientIndex(ingredients.length);
   }
 
   // On met a jour un champ d une ligne, les autres restent identiques.
@@ -212,6 +235,17 @@ function AdminRecipeFormPage() {
       }
     }
     setIngredients(newIngredients);
+
+    // On recale l ingredient ouvert, sinon les champs montreraient la mauvaise ligne.
+    if (editingIngredientIndex === null) {
+      return;
+    }
+
+    if (editingIngredientIndex === ingredientIndex) {
+      setEditingIngredientIndex(null);
+    } else if (editingIngredientIndex > ingredientIndex) {
+      setEditingIngredientIndex(editingIngredientIndex - 1);
+    }
   }
 
   // Pareil que pour les ingredients, avec les etapes.
@@ -222,6 +256,8 @@ function AdminRecipeFormPage() {
     }
     newSteps.push({ description: "" });
     setSteps(newSteps);
+    // La nouvelle etape s ouvre. L index vaut la longueur d avant l ajout.
+    setEditingStepIndex(steps.length);
   }
 
   function updateStep(stepIndex, newDescription) {
@@ -248,6 +284,17 @@ function AdminRecipeFormPage() {
       }
     }
     setSteps(newSteps);
+
+    // On recale l etape ouverte, sinon le textarea montrerait la mauvaise ligne.
+    if (editingStepIndex === null) {
+      return;
+    }
+
+    if (editingStepIndex === stepIndex) {
+      setEditingStepIndex(null);
+    } else if (editingStepIndex > stepIndex) {
+      setEditingStepIndex(editingStepIndex - 1);
+    }
   }
 
   // D abord on sauve le texte de la recette, ensuite la photo si elle est choisie.
@@ -315,6 +362,35 @@ function AdminRecipeFormPage() {
     }
   }
 
+  // Meme corbeille que les etapes. Le clic ne remonte pas a la ligne.
+  function renderLineDeleteButton(ariaLabel, onRemove) {
+    return (
+      <button
+        type="button"
+        className="admin-form__step-delete"
+        aria-label={ariaLabel}
+        onClick={function (event) {
+          event.stopPropagation();
+          onRemove();
+        }}
+      >
+        <svg
+          className="admin-form__step-delete-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            fill="currentColor"
+            fillRule="evenodd"
+            d="M9 3h6v2h5v2h-1v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h5V3zm0 2h6V4H9v1zM7 7v12h10V7H7zm2 2h2v8H9V9zm4 0h2v8h-2V9z"
+          />
+        </svg>
+      </button>
+    );
+  }
+
   let pageTitle = "Nouvelle recette";
   if (isEditMode) {
     pageTitle = "Modifier la recette";
@@ -323,6 +399,28 @@ function AdminRecipeFormPage() {
   let submitLabel = "Enregistrer la recette";
   if (isEditMode) {
     submitLabel = "Mettre à jour la recette";
+  }
+
+  // Photo ou pas : la colonne garde la meme place (haut des lettres, bas aligne sur les temps).
+  const photoColumnClassName =
+    "admin-form__photo-column admin-form__photo-column--with-preview";
+
+  // Zone preview : l image enregistree, ou le texte « Aucune image » a la meme place.
+  let photoPreview = (
+    <div className="admin-form__photo-fit admin-form__photo-fit--empty">
+      <p className="admin-form__photo-empty">Aucune image</p>
+    </div>
+  );
+  if (isEditMode === true && currentPhotoUrl !== "") {
+    photoPreview = (
+      <div className="admin-form__photo-fit">
+        <img
+          className="admin-form__photo-preview"
+          src={currentPhotoUrl}
+          alt="Photo actuelle de la recette"
+        />
+      </div>
+    );
   }
 
   // En modification, on attend que la recette soit chargee avant d afficher le formulaire.
@@ -334,13 +432,10 @@ function AdminRecipeFormPage() {
     );
   }
 
-  // Impossible de charger la recette. On propose seulement de revenir au dashboard.
+  // Impossible de charger la recette. Le retour se fait via le lien Dashboard du header.
   if (isEditMode && recipeLoadFailed === true) {
     return (
       <main className="admin-page admin-recipe-form-page">
-        <Link to="/dashboard-admins" className="admin-recipe-form-page__back-link">
-          Retour au dashboard
-        </Link>
       </main>
     );
   }
@@ -352,11 +447,15 @@ function AdminRecipeFormPage() {
       </header>
 
       <form className="admin-form" onSubmit={handleSubmit}>
-        <fieldset className="admin-form__section">
+        <fieldset className="admin-form__section admin-form__section--infos">
           <legend>Informations générales</legend>
 
+          <div className="admin-form__infos-layout">
           <div className="admin-form__field">
             <label htmlFor="recipe-title">Titre *</label>
+          </div>
+
+          <div className="admin-form__infos-main">
             <input
               id="recipe-title"
               className="input"
@@ -366,199 +465,378 @@ function AdminRecipeFormPage() {
                 setTitle(capitalizeFirstLetter(event.target.value));
               }}
             />
-          </div>
 
-          <div className="admin-form__field">
-            <label htmlFor="recipe-cooking-time">
-              Temps de cuisson (min) *
-            </label>
-            <input
-              id="recipe-cooking-time"
-              className="input"
-              type="number"
-              min="1"
-              value={cookingTime}
-              onChange={function (event) {
-                setCookingTime(event.target.value);
-              }}
-            />
-          </div>
-
-          <div className="admin-form__field">
-            <label htmlFor="recipe-preparation-time">
-              Temps de préparation (min) *
-            </label>
-            <input
-              id="recipe-preparation-time"
-              className="input"
-              type="number"
-              min="1"
-              value={preparationTime}
-              onChange={function (event) {
-                setPreparationTime(event.target.value);
-              }}
-            />
-          </div>
-
-          <div className="admin-form__field">
-            <label htmlFor="recipe-photo">Photo</label>
-            {isEditMode && currentPhotoUrl !== "" && (
-              <img
-                className="admin-reference-field__preview"
-                src={currentPhotoUrl}
-                alt="Photo actuelle"
+          <div className="admin-form__times">
+            <div className="admin-form__field">
+              <label htmlFor="recipe-cooking-time">
+                Temps de cuisson <span className="admin-form__time-suffix">(min) *</span>
+              </label>
+              <input
+                id="recipe-cooking-time"
+                className="input"
+                type="number"
+                min="1"
+                value={cookingTime}
+                onChange={function (event) {
+                  setCookingTime(event.target.value);
+                }}
               />
-            )}
-            <input
-              id="recipe-photo"
-              className="input admin-form__file"
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={function (event) {
-                const selectedFile = event.target.files[0];
-                setPhotoFile(selectedFile);
-              }}
-            />
+            </div>
+
+            <div className="admin-form__field">
+              <label htmlFor="recipe-preparation-time">
+                Temps de préparation <span className="admin-form__time-suffix">(min) *</span>
+              </label>
+              <input
+                id="recipe-preparation-time"
+                className="input"
+                type="number"
+                min="1"
+                value={preparationTime}
+                onChange={function (event) {
+                  setPreparationTime(event.target.value);
+                }}
+              />
+            </div>
+          </div>
+          </div>
+
+          <div className={photoColumnClassName}>
+            <div className="admin-form__photo-stack">
+              {photoPreview}
+
+              <div className="admin-form__field admin-form__photo-field">
+                <input
+                  id="recipe-photo"
+                  className="input admin-form__file"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  aria-label="Photo de la recette"
+                  onChange={function (event) {
+                    const selectedFile = event.target.files[0];
+                    setPhotoFile(selectedFile);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
           </div>
         </fieldset>
 
-        <fieldset className="admin-form__section">
+        <fieldset className="admin-form__section admin-form__section--with-add">
           <legend>Ingrédients</legend>
 
-          {ingredients.map(function (ingredient, ingredientIndex) {
-            return (
-              <fieldset key={ingredientIndex} className="admin-form__group">
-                <legend>Ingrédient {ingredientIndex + 1} *</legend>
+          <div className="admin-form__ingredients">
+            {ingredients.map(function (ingredient, ingredientIndex) {
+              const lineNumber = ingredientIndex + 1;
+              const quantityId = "ingredient-quantity-" + ingredientIndex;
+              const unitId = "ingredient-unit-" + ingredientIndex;
+              const nameId = "ingredient-name-" + ingredientIndex;
 
-                <div className="admin-form__field">
-                  <label htmlFor={"ingredient-quantity-" + ingredientIndex}>
-                    Quantité
-                  </label>
-                  <input
-                    id={"ingredient-quantity-" + ingredientIndex}
-                    className="input"
-                    type="text"
-                    value={ingredient.quantity}
-                    onChange={function (event) {
-                      updateIngredient(
-                        ingredientIndex,
-                        "quantity",
-                        event.target.value,
-                      );
-                    }}
-                  />
-                </div>
+              let deleteButton = null;
+              if (ingredients.length > 1) {
+                deleteButton = renderLineDeleteButton(
+                  "Supprimer l'ingrédient " + lineNumber,
+                  function () {
+                    removeIngredient(ingredientIndex);
+                  },
+                );
+              }
 
-                <div className="admin-form__field">
-                  <label htmlFor={"ingredient-unit-" + ingredientIndex}>
-                    Unité
-                  </label>
-                  <input
-                    id={"ingredient-unit-" + ingredientIndex}
-                    className="input"
-                    type="text"
-                    value={ingredient.unit}
-                    onChange={function (event) {
-                      updateIngredient(
-                        ingredientIndex,
-                        "unit",
-                        event.target.value,
-                      );
-                    }}
-                  />
-                </div>
+              if (editingIngredientIndex === ingredientIndex) {
+                return (
+                  <div
+                    key={ingredientIndex}
+                    className="admin-form__ingredient admin-form__ingredient--open"
+                  >
+                    <div className="admin-form__step-row">
+                      <span className="admin-form__ingredient-title">
+                        Ingrédient {lineNumber}
+                      </span>
+                      {deleteButton}
+                    </div>
 
-                <div className="admin-form__field">
-                  <label htmlFor={"ingredient-name-" + ingredientIndex}>
-                    Nom *
-                  </label>
-                  <input
-                    id={"ingredient-name-" + ingredientIndex}
-                    className="input"
-                    type="text"
-                    value={ingredient.name}
-                    onChange={function (event) {
-                      updateIngredient(
-                        ingredientIndex,
-                        "name",
-                        event.target.value,
-                      );
-                    }}
-                  />
-                </div>
+                    <div className="admin-form__ingredient-fields">
+                      <div
+                        className="admin-form__ingredient-head"
+                        aria-hidden="true"
+                      >
+                        <span>Quantité</span>
+                        <span>Unité</span>
+                        <span>Nom *</span>
+                      </div>
 
-                {ingredients.length > 1 && (
-                  <button
-                    type="button"
-                    className="btn btn--danger admin-form__remove-btn"
+                      <div className="admin-form__ingredient-line">
+                        <div className="admin-form__ingredient-cell">
+                          <label
+                            className="admin-form__ingredient-caption"
+                            htmlFor={quantityId}
+                          >
+                            Quantité
+                            <span className="admin-form__sr-only">
+                              , ingrédient {lineNumber}
+                            </span>
+                          </label>
+                          <input
+                            id={quantityId}
+                            className="input"
+                            type="text"
+                            value={ingredient.quantity}
+                            onChange={function (event) {
+                              updateIngredient(
+                                ingredientIndex,
+                                "quantity",
+                                event.target.value,
+                              );
+                            }}
+                          />
+                        </div>
+
+                        <div className="admin-form__ingredient-cell">
+                          <label
+                            className="admin-form__ingredient-caption"
+                            htmlFor={unitId}
+                          >
+                            Unité
+                            <span className="admin-form__sr-only">
+                              , ingrédient {lineNumber}
+                            </span>
+                          </label>
+                          <input
+                            id={unitId}
+                            className="input"
+                            type="text"
+                            value={ingredient.unit}
+                            onChange={function (event) {
+                              updateIngredient(
+                                ingredientIndex,
+                                "unit",
+                                event.target.value,
+                              );
+                            }}
+                          />
+                        </div>
+
+                        <div className="admin-form__ingredient-cell admin-form__ingredient-name">
+                          <label
+                            className="admin-form__ingredient-caption"
+                            htmlFor={nameId}
+                          >
+                            Nom *
+                            <span className="admin-form__sr-only">
+                              , ingrédient {lineNumber}
+                            </span>
+                          </label>
+                          <input
+                            id={nameId}
+                            className="input"
+                            type="text"
+                            value={ingredient.name}
+                            onChange={function (event) {
+                              updateIngredient(
+                                ingredientIndex,
+                                "name",
+                                event.target.value,
+                              );
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              const previewParts = [];
+              if (
+                ingredient.quantity !== "" &&
+                ingredient.quantity !== null &&
+                ingredient.quantity !== undefined
+              ) {
+                previewParts.push(String(ingredient.quantity));
+              }
+              if (ingredient.unit !== "") {
+                previewParts.push(ingredient.unit);
+              }
+              if (ingredient.name !== "") {
+                previewParts.push(ingredient.name);
+              }
+
+              let previewText = "Ingrédient vide";
+              let previewClassName =
+                "admin-form__step-preview admin-form__step-preview--empty";
+              let previewTitle;
+              if (previewParts.length > 0) {
+                previewText = previewParts.join(" ");
+                previewClassName = "admin-form__step-preview";
+                previewTitle = previewText;
+              }
+
+              return (
+                <div key={ingredientIndex} className="admin-form__ingredient">
+                  {/* Clic sur le texte : ouvre cet ingredient pour le modifier. */}
+                  <div
+                    className="admin-form__step-row"
                     onClick={function () {
-                      removeIngredient(ingredientIndex);
+                      setEditingIngredientIndex(ingredientIndex);
                     }}
                   >
-                    Supprimer cet ingrédient
-                  </button>
-                )}
-              </fieldset>
-            );
-          })}
+                    <button type="button" className="admin-form__step-summary">
+                      <span className={previewClassName} title={previewTitle}>
+                        {previewText}
+                      </span>
+                    </button>
+                    {deleteButton}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           <button
             type="button"
-            className="btn admin-form__add-btn"
+            className="btn btn--primary admin-form__add-btn"
+            aria-label="Ajouter un ingrédient"
             onClick={addIngredient}
           >
-            + Ajouter un ingrédient
+            +
+          </button>
+        </fieldset>
+
+        <fieldset className="admin-form__section admin-form__section--with-add">
+          <legend>Préparation</legend>
+
+          <ol className="admin-form__steps">
+            {steps.map(function (step, stepIndex) {
+              const stepNumber = stepIndex + 1;
+
+              if (editingStepIndex === stepIndex) {
+                return (
+                  <li
+                    key={stepIndex}
+                    className="admin-form__step admin-form__step--open"
+                  >
+                    <div className="admin-form__step-row">
+                      <label htmlFor={"step-description-" + stepIndex}>
+                        Étape {stepNumber}
+                      </label>
+                      {steps.length > 1 && (
+                        <button
+                          type="button"
+                          className="admin-form__step-delete"
+                          aria-label={"Supprimer l'étape " + stepNumber}
+                          onClick={function (event) {
+                            // Ne pas laisser le clic remonter a la ligne.
+                            event.stopPropagation();
+                            removeStep(stepIndex);
+                          }}
+                        >
+                          <svg
+                            className="admin-form__step-delete-icon"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            focusable="false"
+                          >
+                            <path
+                              fill="currentColor"
+                              fillRule="evenodd"
+                              d="M9 3h6v2h5v2h-1v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h5V3zm0 2h6V4H9v1zM7 7v12h10V7H7zm2 2h2v8H9V9zm4 0h2v8h-2V9z"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <textarea
+                      id={"step-description-" + stepIndex}
+                      className="input admin-form__textarea"
+                      rows="4"
+                      value={step.description}
+                      onChange={function (event) {
+                        updateStep(stepIndex, event.target.value);
+                      }}
+                    />
+                  </li>
+                );
+              }
+
+              let previewText = "Étape vide";
+              let previewClassName =
+                "admin-form__step-preview admin-form__step-preview--empty";
+              let previewTitle;
+              if (step.description !== "") {
+                previewText = step.description;
+                previewClassName = "admin-form__step-preview";
+                previewTitle = step.description;
+              }
+
+              return (
+                <li key={stepIndex} className="admin-form__step">
+                  {/* Clic sur pastille + texte : meme action que l ancien bouton Modifier. */}
+                  <div
+                    className="admin-form__step-row"
+                    onClick={function () {
+                      setEditingStepIndex(stepIndex);
+                    }}
+                  >
+                    <button type="button" className="admin-form__step-summary">
+                      <span
+                        className="admin-form__step-number"
+                        aria-hidden="true"
+                      >
+                        {stepNumber}
+                      </span>
+                      <span className={previewClassName} title={previewTitle}>
+                        {previewText}
+                      </span>
+                    </button>
+                    {steps.length > 1 && (
+                      <button
+                        type="button"
+                        className="admin-form__step-delete"
+                        aria-label={"Supprimer l'étape " + stepNumber}
+                        onClick={function (event) {
+                          // Le clic sur la corbeille ne rouvre pas l etape.
+                          event.stopPropagation();
+                          removeStep(stepIndex);
+                        }}
+                      >
+                        <svg
+                          className="admin-form__step-delete-icon"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                            <path
+                              fill="currentColor"
+                              fillRule="evenodd"
+                              d="M9 3h6v2h5v2h-1v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h5V3zm0 2h6V4H9v1zM7 7v12h10V7H7zm2 2h2v8H9V9zm4 0h2v8h-2V9z"
+                            />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          <button
+            type="button"
+            className="btn btn--primary admin-form__add-btn"
+            aria-label="Ajouter une étape"
+            onClick={addStep}
+          >
+            +
           </button>
         </fieldset>
 
         <fieldset className="admin-form__section">
-          <legend>Préparation</legend>
-
-          {steps.map(function (step, stepIndex) {
-            return (
-              <fieldset key={stepIndex} className="admin-form__group">
-                <legend>Étape {stepIndex + 1} *</legend>
-
-                <div className="admin-form__field">
-                  <label htmlFor={"step-description-" + stepIndex}>
-                    Description *
-                  </label>
-                  <textarea
-                    id={"step-description-" + stepIndex}
-                    className="input admin-form__textarea"
-                    rows="4"
-                    value={step.description}
-                    onChange={function (event) {
-                      updateStep(stepIndex, event.target.value);
-                    }}
-                  />
-                </div>
-
-                {steps.length > 1 && (
-                  <button
-                    type="button"
-                    className="btn btn--danger admin-form__remove-btn"
-                    onClick={function () {
-                      removeStep(stepIndex);
-                    }}
-                  >
-                    Supprimer cette étape
-                  </button>
-                )}
-              </fieldset>
-            );
-          })}
-
-          <button
-            type="button"
-            className="btn admin-form__add-btn"
-            onClick={addStep}
-          >
-            + Ajouter une étape
-          </button>
+          <legend>Conseils de Tetelle</legend>
 
           <div className="admin-form__field">
-            <label htmlFor="recipe-tips">Conseils de Tetelle</label>
+            <label htmlFor="recipe-tips">Conseils et astuces</label>
             <textarea
               id="recipe-tips"
               className="input admin-form__textarea"
@@ -571,60 +849,91 @@ function AdminRecipeFormPage() {
           </div>
         </fieldset>
 
-        <fieldset className="admin-form__section admin-form__section--full-width">
+        <fieldset className="admin-form__section">
           <legend>Classification</legend>
 
-          {/* On peut aussi ajouter ou supprimer une categorie ici, sans changer de page. */}
-          <AdminReferenceField
-            label="Catégorie"
-            selectId="recipe-category"
-            emptyOptionLabel="Choisir une catégorie"
-            apiPath="/api/categories"
-            entityLabel="catégorie"
-            items={categories}
-            onItemsChange={setCategories}
-            selectedId={categoryId}
-            onSelectedIdChange={setCategoryId}
-            supportsImage={true}
-          />
+          <div className="admin-form__class-row">
+            <div className="admin-form__field">
+              <label htmlFor="recipe-category">Catégorie *</label>
+              <select
+                id="recipe-category"
+                className="input"
+                value={categoryId}
+                onChange={function (event) {
+                  setCategoryId(event.target.value);
+                }}
+              >
+                <option value="">Choisir une catégorie</option>
+                {categories.map(function (item) {
+                  return (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
-          <AdminReferenceField
-            label="Origine"
-            selectId="recipe-origin"
-            emptyOptionLabel="Choisir une origine"
-            apiPath="/api/origins"
-            entityLabel="origine"
-            items={origins}
-            onItemsChange={setOrigins}
-            selectedId={originId}
-            onSelectedIdChange={setOriginId}
-            supportsImage={true}
-          />
+            <div className="admin-form__field">
+              <label htmlFor="recipe-origin">Origine *</label>
+              <select
+                id="recipe-origin"
+                className="input"
+                value={originId}
+                onChange={function (event) {
+                  setOriginId(event.target.value);
+                }}
+              >
+                <option value="">Choisir une origine</option>
+                {origins.map(function (item) {
+                  return (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
-          <AdminReferenceField
-            label="Type de repas"
-            selectId="recipe-meal-type"
-            emptyOptionLabel="Choisir un type de repas"
-            apiPath="/api/mealTypes"
-            entityLabel="type de repas"
-            items={mealTypes}
-            onItemsChange={setMealTypes}
-            selectedId={mealTypeId}
-            onSelectedIdChange={setMealTypeId}
-          />
+            <div className="admin-form__field">
+              <label htmlFor="recipe-meal-type">Type de repas *</label>
+              <select
+                id="recipe-meal-type"
+                className="input"
+                value={mealTypeId}
+                onChange={function (event) {
+                  setMealTypeId(event.target.value);
+                }}
+              >
+                <option value="">Choisir un type de repas</option>
+                {mealTypes.map(function (item) {
+                  return (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+
+          <Link
+            to="/dashboard-admins/referentiels"
+            className="btn btn--outline admin-form__manage-link"
+          >
+            Gérer les catégories, origines et types de repas →
+          </Link>
         </fieldset>
 
-        <button
-          type="submit"
-          className="btn btn--primary admin-form__submit-btn admin-form__full-row"
-        >
-          {submitLabel}
-        </button>
+        <div className="admin-form__actions">
+          <button
+            type="submit"
+            className="btn btn--primary admin-form__submit-btn"
+          >
+            {submitLabel}
+          </button>
+        </div>
       </form>
-
-      <Link to="/dashboard-admins" className="admin-recipe-form-page__back-link">
-        Retour au dashboard
-      </Link>
     </main>
   );
 }
