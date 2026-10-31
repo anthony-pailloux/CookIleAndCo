@@ -1,10 +1,27 @@
 // Catalogue des recettes, avec recherche, filtres et pages.
 import "./RecipesPage.css";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { listRecipes } from "../services/recipeServices.js";
 import { listCategories, listOrigins, listMealTypes } from "../services/referenceServices.js";
 import RecipeCard from "../components/RecipeCard.jsx";
+
+function buildRecipesPageUrl(searchParams, pageNumber) {
+  const nextParams = new URLSearchParams(searchParams);
+
+  if (pageNumber <= 1) {
+    nextParams.delete("page");
+  } else {
+    nextParams.set("page", String(pageNumber));
+  }
+
+  const query = nextParams.toString();
+  if (query === "") {
+    return "/recettes";
+  }
+
+  return "/recettes?" + query;
+}
 
 function RecipesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,18 +67,6 @@ function RecipesPage() {
     if (!Number.isNaN(pageNumber) && pageNumber > 0) {
       currentPage = pageNumber;
     }
-  }
-
-  function goToPage(pageNumber) {
-    const nextParams = new URLSearchParams(searchParams);
-
-    if (pageNumber <= 1) {
-      nextParams.delete("page");
-    } else {
-      nextParams.set("page", String(pageNumber));
-    }
-
-    setSearchParams(nextParams);
   }
 
   // Ecrit un parametre dans l URL sans ecraser les autres (filtres + recherche)
@@ -151,14 +156,6 @@ function RecipesPage() {
         mealTypeFilter = repasFromUrl;
       }
 
-      console.log("loadRecipes — filtres:", {
-        category: categoryFilter,
-        origin: originFilter,
-        mealType: mealTypeFilter,
-        search: activeSearch,
-        page: currentPage,
-      });
-
       try {
         const response = await listRecipes({
           page: currentPage,
@@ -222,17 +219,63 @@ function RecipesPage() {
         "recipes-page__pagination-page recipes-page__pagination-page--active";
     }
 
-    pageButtons.push(
-      <button
-        key={pageNum}
-        type="button"
-        className={pageBtnClass}
-        onClick={() => {
-          goToPage(pageNum);
-        }}
+    if (pageNum === currentPage) {
+      pageButtons.push(
+        <Link
+          key={pageNum}
+          to={buildRecipesPageUrl(searchParams, pageNum)}
+          className={pageBtnClass}
+          aria-current="page"
+        >
+          {pageNum}
+        </Link>,
+      );
+    } else {
+      pageButtons.push(
+        <Link
+          key={pageNum}
+          to={buildRecipesPageUrl(searchParams, pageNum)}
+          className={pageBtnClass}
+        >
+          {pageNum}
+        </Link>,
+      );
+    }
+  }
+
+  let previousPageControl;
+  if (currentPage <= 1) {
+    previousPageControl = (
+      <button type="button" className="recipes-page__pagination-nav" disabled>
+        ← Préc
+      </button>
+    );
+  } else {
+    previousPageControl = (
+      <Link
+        className="recipes-page__pagination-nav"
+        to={buildRecipesPageUrl(searchParams, currentPage - 1)}
       >
-        {pageNum}
-      </button>,
+        ← Préc
+      </Link>
+    );
+  }
+
+  let nextPageControl;
+  if (currentPage >= totalPages) {
+    nextPageControl = (
+      <button type="button" className="recipes-page__pagination-nav" disabled>
+        Suiv →
+      </button>
+    );
+  } else {
+    nextPageControl = (
+      <Link
+        className="recipes-page__pagination-nav"
+        to={buildRecipesPageUrl(searchParams, currentPage + 1)}
+      >
+        Suiv →
+      </Link>
     );
   }
 
@@ -340,29 +383,11 @@ function RecipesPage() {
           className="recipes-page__pagination"
           aria-label="Pagination du catalogue"
         >
-          <button
-            type="button"
-            className="recipes-page__pagination-nav"
-            disabled={currentPage <= 1}
-            onClick={() => {
-              goToPage(currentPage - 1);
-            }}
-          >
-            ← Préc
-          </button>
+          {previousPageControl}
 
           {pageButtons}
 
-          <button
-            type="button"
-            className="recipes-page__pagination-nav"
-            disabled={currentPage >= totalPages}
-            onClick={() => {
-              goToPage(currentPage + 1);
-            }}
-          >
-            Suiv →
-          </button>
+          {nextPageControl}
         </nav>
       )}
     </main>

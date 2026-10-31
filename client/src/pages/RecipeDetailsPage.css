@@ -2,9 +2,18 @@
   max-width: 1180px;
   margin: 50px auto;
   padding: 2rem 1.5rem 3rem;
-  background-color: var(--tc-background-alt);
   border-radius: 25px;
-  border: 1px solid var(--tc-green-madras);
+  border: 1px solid transparent;
+  /* Même filet dégradé que les cadres de l'accueil. */
+  background:
+    linear-gradient(var(--tc-background-alt), var(--tc-background-alt)) padding-box,
+    linear-gradient(
+      90deg,
+      var(--tc-green-madras) 0%,
+      var(--tc-gold-madras) 42%,
+      var(--tc-yellow-madras) 58%,
+      var(--tc-green-madras) 100%
+    ) border-box;
   box-shadow: var(--tc-shadow);
 }
 
@@ -31,7 +40,6 @@
 }
 
 .recipe-detail__photo {
-  border: 1px solid var(--tc-border);
   border-radius: var(--tc-radius);
   overflow: hidden;
   background-color: var(--tc-background-alt);
@@ -95,9 +103,17 @@
   grid-template-columns: 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid var(--tc-green-madras);
+  border: 1px solid transparent;
   border-radius: var(--tc-radius);
-  background-color: var(--tc-background);
+  background:
+    linear-gradient(var(--tc-background), var(--tc-background)) padding-box,
+    linear-gradient(
+      90deg,
+      var(--tc-green-madras) 0%,
+      var(--tc-gold-madras) 42%,
+      var(--tc-yellow-madras) 58%,
+      var(--tc-green-madras) 100%
+    ) border-box;
   padding: 1.25rem 1.5rem;
 }
 
@@ -163,9 +179,17 @@
 
 /* Conseils de Tetelle */
 .recipe-detail__tips {
-  background-color: var(--tc-background);
-  border: 1px solid var(--tc-border);
+  border: 1px solid transparent;
   border-radius: var(--tc-radius);
+  background:
+    linear-gradient(var(--tc-background), var(--tc-background)) padding-box,
+    linear-gradient(
+      90deg,
+      var(--tc-green-madras) 0%,
+      var(--tc-gold-madras) 42%,
+      var(--tc-yellow-madras) 58%,
+      var(--tc-green-madras) 100%
+    ) border-box;
   padding: 1.125rem;
   margin-bottom: 2rem;
 }
@@ -177,9 +201,17 @@
 
 /* Commentaires */
 .recipe-detail__comments {
-  background-color: var(--tc-background);
-  border: 1px solid var(--tc-border);
+  border: 1px solid transparent;
   border-radius: var(--tc-radius);
+  background:
+    linear-gradient(var(--tc-background), var(--tc-background)) padding-box,
+    linear-gradient(
+      90deg,
+      var(--tc-green-madras) 0%,
+      var(--tc-gold-madras) 42%,
+      var(--tc-yellow-madras) 58%,
+      var(--tc-green-madras) 100%
+    ) border-box;
   padding: 1.125rem;
   margin-bottom: 2rem;
 }

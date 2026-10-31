@@ -389,7 +389,7 @@ function AdminReferenceField({
     imageUpdateButton = (
       <button
         type="button"
-        className="admin-reference-field__icon-btn admin-reference-field__icon-btn--image"
+        className="admin-reference-field__icon-btn"
         aria-label="Mettre à jour l'image"
         title="Mettre à jour l'image"
         disabled={hasSelection === false}

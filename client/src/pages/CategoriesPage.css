@@ -24,9 +24,18 @@
 .categories-page__section {
   margin-bottom: 2.5rem;
   padding: 1.5rem;
-  background-color: var(--tc-background-alt);
-  border: 1px solid var(--tc-green-madras);
+  border: 1px solid transparent;
   border-radius: var(--tc-radius);
+  /* Même filet dégradé que les cadres de l'accueil. */
+  background:
+    linear-gradient(var(--tc-background-alt), var(--tc-background-alt)) padding-box,
+    linear-gradient(
+      90deg,
+      var(--tc-green-madras) 0%,
+      var(--tc-gold-madras) 42%,
+      var(--tc-yellow-madras) 58%,
+      var(--tc-green-madras) 100%
+    ) border-box;
   box-shadow: var(--tc-shadow);
 }
 
@@ -72,14 +81,12 @@
   text-decoration: none;
   color: var(--tc-text);
   background-color: var(--tc-background);
-  border: 1px solid var(--tc-border);
   border-radius: var(--tc-radius);
   box-shadow: var(--tc-shadow);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .categories-page__card:hover {
-  border-color: var(--tc-navy);
   color: var(--tc-text);
   box-shadow: var(--tc-shadow-hover);
 }

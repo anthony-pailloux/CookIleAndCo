@@ -15,6 +15,11 @@ import EditIconButton from "../components/EditIconButton.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
+import {
+  applyRecipeDocumentSeo,
+  removeNoindexMeta,
+  restoreDefaultDocumentSeo,
+} from "../utils/recipeSeo.js";
 import "../components/Button.css";
 import "./RecipeDetailsPage.css";
 
@@ -53,6 +58,24 @@ function RecipeDetailsPage() {
 
     loadRecipeDetails();
   }, [id]);
+
+  useEffect(function () {
+    if (recipeDetails) {
+      applyRecipeDocumentSeo(recipeDetails);
+      return;
+    }
+
+    if (errorMessage !== "") {
+      restoreDefaultDocumentSeo();
+    }
+  }, [recipeDetails, errorMessage]);
+
+  useEffect(function () {
+    return function () {
+      restoreDefaultDocumentSeo();
+      removeNoindexMeta();
+    };
+  }, []);
 
   useEffect(() => {
     async function loadCommentsData() {

@@ -16,6 +16,8 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import originRoutes from './routes/originRoutes.js';
 import mealTypeRoutes from './routes/mealTypeRoutes.js';
 import captchaRoutes from './routes/captchaRoutes.js';
+import sitemapRoutes from './routes/sitemapRoutes.js';
+import { createServeClient } from './controllers/spaController.js';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -72,6 +74,9 @@ app.use('/api/origins', originRoutes);
 app.use('/api/mealTypes', mealTypeRoutes);
 app.use('/api/captcha', captchaRoutes);
 
+// Avant le fichier statique, sinon client/dist/sitemap.xml gagne
+app.use(sitemapRoutes);
+
 // En prod, Express sert aussi le site React compile
 const clientDistPath = path.join(dirname, '../client/dist');
 const indexHtmlPath = path.join(clientDistPath, 'index.html');
@@ -79,16 +84,7 @@ const hasClientBuild = fs.existsSync(indexHtmlPath);
 
 if (hasClientBuild) {
     app.use(express.static(clientDistPath));
-
-    app.use((req, res, next) => {
-        if (req.method !== 'GET') {
-            next();
-        } else if (req.path.startsWith('/api')) {
-            next();
-        } else {
-            res.sendFile(indexHtmlPath);
-        }
-    });
+    app.use(createServeClient(indexHtmlPath));
 }
 
 // 404 puis gestion des erreurs

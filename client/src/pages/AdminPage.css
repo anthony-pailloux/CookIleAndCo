@@ -250,13 +250,6 @@ a.admin-page__tab.admin-page__tab--active:hover {
   gap: 0.5rem;
 }
 
-.admin-recipes-table__actions .btn {
-  width: auto;
-  min-width: 5.5rem;
-  padding: 8px 10px;
-  font-size: 0.8125rem;
-}
-
 /* Tableau administrateurs */
 .admin-admins-table {
   margin-bottom: 1rem;
@@ -276,13 +269,6 @@ a.admin-page__tab.admin-page__tab--active:hover {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-}
-
-.admin-admins-table__actions .btn {
-  width: auto;
-  min-width: 5.5rem;
-  padding: 8px 10px;
-  font-size: 0.8125rem;
 }
 
 /* Mobile — cartes empilées au lieu du tableau */
@@ -402,12 +388,6 @@ a.admin-page__tab.admin-page__tab--active:hover {
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
-  }
-
-  .admin-recipes-table__actions .btn,
-  .admin-admins-table__actions .btn {
-    flex: 1 1 calc(50% - 0.25rem);
-    min-width: 0;
   }
 
   .admin-admins-table {

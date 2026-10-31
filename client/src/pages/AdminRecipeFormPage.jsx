@@ -354,8 +354,6 @@ function AdminRecipeFormPage() {
         try {
           await uploadRecipePhoto(savedRecipeId, photoFile);
         } catch (photoErr) {
-          console.log("la photo n a pas pu etre uploadee", savedRecipeId);
-
           if (isEditMode === false) {
             showToast(
               "Recette enregistrée, mais la photo n'a pas pu être envoyée.",

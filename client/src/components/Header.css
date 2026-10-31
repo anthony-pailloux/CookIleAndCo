@@ -184,8 +184,6 @@
   }
 
   .site-header__logo-link {
-    position: static;
-    transform: none;
     width: 100%;
     justify-content: center;
   }
@@ -231,10 +229,6 @@
   }
 
   .site-header__logo-link {
-    position: static;
-    left: auto;
-    top: auto;
-    transform: none;
     justify-self: start;
     min-width: 0;
     max-width: 100%;
@@ -271,10 +265,6 @@
   }
 
   .site-header__logout-btn {
-    position: static;
-    right: auto;
-    top: auto;
-    transform: none;
     max-width: 100%;
   }
 }
