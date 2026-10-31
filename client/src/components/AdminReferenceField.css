@@ -1,85 +1,329 @@
+/* Carte d'un référentiel : même langage que le formulaire recette. */
+
 .admin-reference-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.admin-reference-field__heading {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-inline-size: 0;
   margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--tc-navy);
-}
-
-.admin-reference-field__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.admin-reference-field__panel {
-  border: 1px solid var(--tc-navy);
+  padding: 0.35rem 1.5rem 1.5rem;
+  border: 2px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
-  padding: 0.75rem;
-  margin: 0;
+  background-color: var(--tc-white);
+  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.08);
+}
+
+/* Légende rentrée dans la carte. Le filet jaune suit le texte. */
+.admin-reference-field > legend {
+  display: block;
+  float: left;
+  width: fit-content;
+  max-width: calc(100% - 12rem);
+  margin: 0 0 1.15rem;
+  padding: 0.85rem 0 0.5rem;
+  box-sizing: border-box;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--tc-green-madras);
+  background-color: var(--tc-white);
+  border-bottom: 2px solid var(--tc-yellow-madras);
+}
+
+.admin-reference-field > * + * {
+  margin-top: 1.15rem;
+}
+
+.admin-reference-field > legend + * {
+  clear: both;
+  margin-top: 0;
+}
+
+.admin-reference-field__field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  min-height: 140px;
+  gap: 0.4rem;
+  min-width: 0;
 }
 
-.admin-reference-field__panel legend {
+.admin-reference-field__field label {
   font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--tc-green-madras);
-  padding: 0 0.35rem;
-}
-
-.admin-reference-field__hint {
-  margin: 0;
-  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--tc-text);
-  opacity: 0.85;
 }
 
-.admin-reference-field__selected-name {
-  margin: 0;
-  font-weight: 600;
-  color: var(--tc-navy);
-}
-
-.admin-reference-field__add-btn {
-  width: 100%;
-  padding: 10px 16px;
-  display: flex;
-  justify-content: center;
-}
-
-.admin-reference-field__delete-btn {
-  width: 100%;
-  margin-top: auto;
-}
-
-.admin-reference-field__file {
-  padding: 0.5rem;
+.admin-references-page .admin-reference-field .input {
+  min-height: 2.75rem;
+  color: var(--tc-text);
   background-color: var(--tc-white);
 }
 
-.admin-reference-field__panel--image {
-  max-width: 320px;
+.admin-references-page .admin-reference-field select.input {
+  min-height: 2.75rem;
 }
 
-.admin-reference-field__preview {
+.admin-reference-field__empty {
+  margin: 0;
+  color: var(--tc-text-muted);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Grille à gauche, aperçu en colonne à droite. */
+.admin-reference-field__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16rem;
+  column-gap: 1.25rem;
+  align-items: stretch;
+}
+
+.admin-reference-field__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  min-width: 0;
+}
+
+/* Type de repas : les trois champs restent sur une seule ligne. */
+.admin-reference-field__text-only {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 1rem 1.25rem;
+}
+
+.admin-reference-field__text-only > .admin-reference-field__field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.admin-reference-field__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
+  align-items: end;
+}
+
+.admin-reference-field__photo {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.admin-reference-field__photo-fit {
+  flex: 1 1 auto;
   width: 100%;
-  max-height: 160px;
-  object-fit: cover;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   border-radius: var(--tc-radius);
-  border: 1px solid var(--tc-navy);
+  border: 2px solid var(--tc-green-madras);
+  background-color: var(--tc-background);
 }
 
-/* Mobile */
+.admin-reference-field__photo-fit--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-reference-field__photo-empty {
+  margin: 0;
+  color: var(--tc-text);
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.admin-reference-field__photo-preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Cadre identique au select. Le bouton reste 4 px à l'intérieur. */
+.admin-reference-field__file-frame {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 4px 12px;
+  overflow: hidden;
+  background-color: var(--tc-white);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius);
+}
+
+.admin-references-page .admin-reference-field .input.admin-reference-field__file {
+  display: block;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  background: transparent;
+}
+
+.admin-references-page .input.admin-reference-field__file:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.admin-references-page .input.admin-reference-field__file::file-selector-button {
+  box-sizing: border-box;
+  height: 2.125rem;
+  max-height: 100%;
+  margin: 0 0.65rem 0 0;
+  padding: 0 0.6rem;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-yellow-madras);
+  color: var(--tc-white);
+  font-family: var(--tc-font);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: middle;
+  transition:
+    background-color 0.35s ease,
+    opacity 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.admin-references-page .input.admin-reference-field__file::file-selector-button:hover {
+  background: var(--tc-green-madras);
+  border: 1px solid var(--tc-yellow-madras);
+  color: var(--tc-white);
+  opacity: 1;
+}
+
+/* Icônes d'action : même ligne, coin haut droit de la carte. */
+.admin-reference-field__toolbar {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.5rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Image : même carré que le +, couleur or du bouton secondaire. */
+.admin-reference-field__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-gold-madras);
+  color: var(--tc-navy);
+  cursor: pointer;
+}
+
+.admin-reference-field__icon-btn:hover {
+  background: var(--tc-navy);
+  color: var(--tc-white);
+  border-color: var(--tc-navy);
+}
+
+.admin-reference-field__icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-reference-field__icon-btn:disabled:hover {
+  background: var(--tc-gold-madras);
+  color: var(--tc-navy);
+  opacity: 0.5;
+}
+
+.admin-reference-field__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+}
+
+/* Même bouton + que les cartes Ingrédients et Préparation. */
+.admin-references-page .btn.admin-form__add-btn {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  margin: 0;
+  padding: 0;
+  background: var(--tc-yellow-madras);
+  color: var(--tc-navy);
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-references-page .btn.admin-form__add-btn:hover {
+  background: var(--tc-green-madras);
+  color: var(--tc-white);
+  border: 1px solid var(--tc-yellow-madras);
+  opacity: 0.9;
+}
+
+.admin-references-page .admin-reference-field .input:focus-visible,
+.admin-references-page .admin-reference-field .btn:focus-visible,
+.admin-references-page .admin-reference-field .admin-reference-field__icon-btn:focus-visible,
+.admin-references-page .admin-reference-field .admin-form__step-delete:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 2px;
+}
+
 @media (max-width: 700px) {
-  .admin-reference-field__grid {
+  .admin-reference-field {
+    padding: 0.25rem 1rem 1.15rem;
+  }
+
+  .admin-reference-field > legend {
+    font-size: 1.125rem;
+  }
+
+  .admin-reference-field__toolbar {
+    right: 1rem;
+  }
+
+  .admin-reference-field__layout,
+  .admin-reference-field__pair {
     grid-template-columns: 1fr;
+  }
+
+  .admin-reference-field__text-only {
+    flex-wrap: wrap;
+  }
+
+  .admin-reference-field__text-only > .admin-reference-field__field {
+    flex: 1 1 100%;
+  }
+
+  .admin-reference-field__photo-fit {
+    flex: 0 0 auto;
+    height: 9rem;
   }
 }

@@ -1,6 +1,6 @@
 // Page du formulaire recette cote admin.
 // Sert a creer une recette ou a modifier une recette deja enregistree.
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   getRecipeById,
@@ -16,6 +16,8 @@ import {
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
+import AdminSectionNav from "../components/AdminSectionNav.jsx";
+import DeleteIconButton from "../components/DeleteIconButton.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
 import "./AdminRecipeFormPage.css";
@@ -37,6 +39,8 @@ function AdminRecipeFormPage() {
   // Photo choisie sur l ordinateur. On l envoie seulement en enregistrant.
   const [photoFile, setPhotoFile] = useState(null);
   const [currentPhotoUrl, setCurrentPhotoUrl] = useState("");
+  // Apercu local du fichier choisi, avant l enregistrement.
+  const [chosenPhotoUrl, setChosenPhotoUrl] = useState("");
   const [tips, setTips] = useState("");
 
   // Les trois listes deroulantes du formulaire.
@@ -181,6 +185,27 @@ function AdminRecipeFormPage() {
       loadRecipeForEdit();
     },
     [recipeId, isEditMode, showToast],
+  );
+
+  // Le fichier choisi s affiche tout de suite. On libere l URL au changement.
+  useEffect(
+    function () {
+      let objectUrl = "";
+
+      if (photoFile instanceof File) {
+        objectUrl = URL.createObjectURL(photoFile);
+        setChosenPhotoUrl(objectUrl);
+      } else {
+        setChosenPhotoUrl("");
+      }
+
+      return function () {
+        if (objectUrl !== "") {
+          URL.revokeObjectURL(objectUrl);
+        }
+      };
+    },
+    [photoFile],
   );
 
   // On fabrique un nouveau tableau. Sinon React ne voit pas le changement.
@@ -362,35 +387,6 @@ function AdminRecipeFormPage() {
     }
   }
 
-  // Meme corbeille que les etapes. Le clic ne remonte pas a la ligne.
-  function renderLineDeleteButton(ariaLabel, onRemove) {
-    return (
-      <button
-        type="button"
-        className="admin-form__step-delete"
-        aria-label={ariaLabel}
-        onClick={function (event) {
-          event.stopPropagation();
-          onRemove();
-        }}
-      >
-        <svg
-          className="admin-form__step-delete-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            fill="currentColor"
-            fillRule="evenodd"
-            d="M9 3h6v2h5v2h-1v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h5V3zm0 2h6V4H9v1zM7 7v12h10V7H7zm2 2h2v8H9V9zm4 0h2v8h-2V9z"
-          />
-        </svg>
-      </button>
-    );
-  }
-
   let pageTitle = "Nouvelle recette";
   if (isEditMode) {
     pageTitle = "Modifier la recette";
@@ -401,17 +397,23 @@ function AdminRecipeFormPage() {
     submitLabel = "Mettre à jour la recette";
   }
 
-  // Photo ou pas : la colonne garde la meme place (haut des lettres, bas aligne sur les temps).
-  const photoColumnClassName =
-    "admin-form__photo-column admin-form__photo-column--with-preview";
-
-  // Zone preview : l image enregistree, ou le texte « Aucune image » a la meme place.
+  // Priorite : fichier choisi, puis photo deja enregistree, sinon le texte vide.
   let photoPreview = (
     <div className="admin-form__photo-fit admin-form__photo-fit--empty">
       <p className="admin-form__photo-empty">Aucune image</p>
     </div>
   );
-  if (isEditMode === true && currentPhotoUrl !== "") {
+  if (chosenPhotoUrl !== "") {
+    photoPreview = (
+      <div className="admin-form__photo-fit">
+        <img
+          className="admin-form__photo-preview"
+          src={chosenPhotoUrl}
+          alt="Aperçu de la photo choisie"
+        />
+      </div>
+    );
+  } else if (isEditMode === true && currentPhotoUrl !== "") {
     photoPreview = (
       <div className="admin-form__photo-fit">
         <img
@@ -427,6 +429,7 @@ function AdminRecipeFormPage() {
   if (isEditMode && loadingRecipe === true) {
     return (
       <main className="admin-page admin-recipe-form-page">
+        <AdminSectionNav />
         <p className="admin-page__status">Chargement de la recette...</p>
       </main>
     );
@@ -436,6 +439,7 @@ function AdminRecipeFormPage() {
   if (isEditMode && recipeLoadFailed === true) {
     return (
       <main className="admin-page admin-recipe-form-page">
+        <AdminSectionNav />
       </main>
     );
   }
@@ -446,80 +450,84 @@ function AdminRecipeFormPage() {
         <h1 className="admin-page__title">{pageTitle}</h1>
       </header>
 
+      <AdminSectionNav />
+
       <form className="admin-form" onSubmit={handleSubmit}>
         <fieldset className="admin-form__section admin-form__section--infos">
           <legend>Informations générales</legend>
 
           <div className="admin-form__infos-layout">
-          <div className="admin-form__field">
-            <label htmlFor="recipe-title">Titre *</label>
-          </div>
+            <div className="admin-form__infos-grid">
+              <div className="admin-form__infos-pair">
+                <div className="admin-form__field">
+                  <label htmlFor="recipe-title">Titre *</label>
+                  <input
+                    id="recipe-title"
+                    className="input"
+                    type="text"
+                    value={title}
+                    onChange={function (event) {
+                      setTitle(capitalizeFirstLetter(event.target.value));
+                    }}
+                  />
+                </div>
 
-          <div className="admin-form__infos-main">
-            <input
-              id="recipe-title"
-              className="input"
-              type="text"
-              value={title}
-              onChange={function (event) {
-                setTitle(capitalizeFirstLetter(event.target.value));
-              }}
-            />
+                <div className="admin-form__field">
+                  <label htmlFor="recipe-photo">Photo</label>
+                  <div className="admin-form__file-frame">
+                    <input
+                      id="recipe-photo"
+                      className="input admin-form__file"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      aria-label="Photo de la recette"
+                      onChange={function (event) {
+                        const selectedFile = event.target.files[0];
+                        setPhotoFile(selectedFile);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
 
-          <div className="admin-form__times">
-            <div className="admin-form__field">
-              <label htmlFor="recipe-cooking-time">
-                Temps de cuisson <span className="admin-form__time-suffix">(min) *</span>
-              </label>
-              <input
-                id="recipe-cooking-time"
-                className="input"
-                type="number"
-                min="1"
-                value={cookingTime}
-                onChange={function (event) {
-                  setCookingTime(event.target.value);
-                }}
-              />
-            </div>
+              <div className="admin-form__infos-pair">
+                <div className="admin-form__field">
+                  <label htmlFor="recipe-cooking-time">
+                    Temps de cuisson <span className="admin-form__time-suffix">(min) *</span>
+                  </label>
+                  <input
+                    id="recipe-cooking-time"
+                    className="input"
+                    type="number"
+                    min="1"
+                    value={cookingTime}
+                    onChange={function (event) {
+                      setCookingTime(event.target.value);
+                    }}
+                  />
+                </div>
 
-            <div className="admin-form__field">
-              <label htmlFor="recipe-preparation-time">
-                Temps de préparation <span className="admin-form__time-suffix">(min) *</span>
-              </label>
-              <input
-                id="recipe-preparation-time"
-                className="input"
-                type="number"
-                min="1"
-                value={preparationTime}
-                onChange={function (event) {
-                  setPreparationTime(event.target.value);
-                }}
-              />
-            </div>
-          </div>
-          </div>
-
-          <div className={photoColumnClassName}>
-            <div className="admin-form__photo-stack">
-              {photoPreview}
-
-              <div className="admin-form__field admin-form__photo-field">
-                <input
-                  id="recipe-photo"
-                  className="input admin-form__file"
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  aria-label="Photo de la recette"
-                  onChange={function (event) {
-                    const selectedFile = event.target.files[0];
-                    setPhotoFile(selectedFile);
-                  }}
-                />
+                <div className="admin-form__field">
+                  <label htmlFor="recipe-preparation-time">
+                    Temps de préparation <span className="admin-form__time-suffix">(min) *</span>
+                  </label>
+                  <input
+                    id="recipe-preparation-time"
+                    className="input"
+                    type="number"
+                    min="1"
+                    value={preparationTime}
+                    onChange={function (event) {
+                      setPreparationTime(event.target.value);
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+
+            <div className="admin-form__photo-column">
+              {photoPreview}
+            </div>
           </div>
         </fieldset>
 
@@ -535,11 +543,13 @@ function AdminRecipeFormPage() {
 
               let deleteButton = null;
               if (ingredients.length > 1) {
-                deleteButton = renderLineDeleteButton(
-                  "Supprimer l'ingrédient " + lineNumber,
-                  function () {
-                    removeIngredient(ingredientIndex);
-                  },
+                deleteButton = (
+                  <DeleteIconButton
+                    ariaLabel={"Supprimer l'ingrédient " + lineNumber}
+                    onClick={function () {
+                      removeIngredient(ingredientIndex);
+                    }}
+                  />
                 );
               }
 
@@ -721,30 +731,12 @@ function AdminRecipeFormPage() {
                         Étape {stepNumber}
                       </label>
                       {steps.length > 1 && (
-                        <button
-                          type="button"
-                          className="admin-form__step-delete"
-                          aria-label={"Supprimer l'étape " + stepNumber}
-                          onClick={function (event) {
-                            // Ne pas laisser le clic remonter a la ligne.
-                            event.stopPropagation();
+                        <DeleteIconButton
+                          ariaLabel={"Supprimer l'étape " + stepNumber}
+                          onClick={function () {
                             removeStep(stepIndex);
                           }}
-                        >
-                          <svg
-                            className="admin-form__step-delete-icon"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            focusable="false"
-                          >
-                            <path
-                              fill="currentColor"
-                              fillRule="evenodd"
-                              d="M9 3h6v2h5v2h-1v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h5V3zm0 2h6V4H9v1zM7 7v12h10V7H7zm2 2h2v8H9V9zm4 0h2v8h-2V9z"
-                            />
-                          </svg>
-                        </button>
+                        />
                       )}
                     </div>
                     <textarea
@@ -791,30 +783,12 @@ function AdminRecipeFormPage() {
                       </span>
                     </button>
                     {steps.length > 1 && (
-                      <button
-                        type="button"
-                        className="admin-form__step-delete"
-                        aria-label={"Supprimer l'étape " + stepNumber}
-                        onClick={function (event) {
-                          // Le clic sur la corbeille ne rouvre pas l etape.
-                          event.stopPropagation();
+                      <DeleteIconButton
+                        ariaLabel={"Supprimer l'étape " + stepNumber}
+                        onClick={function () {
                           removeStep(stepIndex);
                         }}
-                      >
-                        <svg
-                          className="admin-form__step-delete-icon"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                          focusable="false"
-                        >
-                            <path
-                              fill="currentColor"
-                              fillRule="evenodd"
-                              d="M9 3h6v2h5v2h-1v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h5V3zm0 2h6V4H9v1zM7 7v12h10V7H7zm2 2h2v8H9V9zm4 0h2v8h-2V9z"
-                            />
-                        </svg>
-                      </button>
+                      />
                     )}
                   </div>
                 </li>
@@ -916,13 +890,6 @@ function AdminRecipeFormPage() {
               </select>
             </div>
           </div>
-
-          <Link
-            to="/dashboard-admins/referentiels"
-            className="btn btn--outline admin-form__manage-link"
-          >
-            Gérer les catégories, origines et types de repas →
-          </Link>
         </fieldset>
 
         <div className="admin-form__actions">

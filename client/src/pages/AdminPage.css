@@ -4,7 +4,7 @@
   margin: 0 auto;
   padding: 2rem 1.5rem 3rem;
   min-width: 0;
-  overflow-x: clip;
+  /* Pas d'overflow ici : il bloquerait le position sticky de la barre d'onglets. */
 }
 
 /* Titre de page seul : plus de carte (fond, bordure, ombre). */
@@ -22,13 +22,35 @@
   font-size: 1.75rem;
 }
 
-/* Onglets + lien vers la page des listes de classement */
+/* Onglets : restent visibles en haut pendant le défilement. */
 .admin-page__toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-bottom: 0;
+  padding: 0.5rem 0 1.25rem;
+  /* Laisse voir le contenu qui défile sous la barre. */
+  background-color: color-mix(in srgb, var(--tc-background) 72%, transparent);
+}
+
+/* Trait vert bord à bord, seulement quand la barre est collée en haut. */
+.admin-page__toolbar--scrolled::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  /* 100vw inclut la barre de défilement ; --admin-scrollbar la retire. */
+  width: calc(100vw - var(--admin-scrollbar, 0px));
+  height: 0;
+  /* border-box global avalerait ce trait dans une hauteur nulle. */
+  box-sizing: content-box;
+  transform: translateX(-50%);
+  border-bottom: 2px solid var(--tc-green-madras);
+  pointer-events: none;
 }
 
 .admin-page__tabs {
@@ -74,6 +96,12 @@ a.admin-page__tab:hover {
 .admin-page__tab--active:hover {
   background-color: var(--tc-green-madras);
   filter: brightness(1.08);
+}
+
+/* Le lien global (a:hover) repasse en vert : le bouton plein doit rester blanc. */
+a.admin-page__tab.admin-page__tab--active,
+a.admin-page__tab.admin-page__tab--active:hover {
+  color: var(--tc-white);
 }
 
 .admin-page__tab:focus-visible {
@@ -136,15 +164,6 @@ a.admin-page__tab:hover {
   gap: 0.75rem;
 }
 
-.admin-page__add-btn {
-  width: fit-content;
-  display: inline-flex;
-  margin-bottom: 1rem;
-  padding: 10px 16px;
-  text-decoration: none;
-  color: var(--tc-white);
-}
-
 /* Conteneur scroll horizontal si le tableau dépasse (desktop) */
 .admin-page__table-wrap {
   max-width: 100%;
@@ -181,18 +200,50 @@ a.admin-page__tab:hover {
   background-color: var(--tc-background-alt);
 }
 
+.admin-recipes-table__photo-link {
+  display: inline-block;
+  line-height: 0;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: box-shadow 0.2s ease;
+}
+
+.admin-recipes-table__photo-link:hover {
+  /* Contour bleu marine, comme les cartes recettes. */
+  box-shadow: 0 0 0 2px var(--tc-navy);
+}
+
+.admin-recipes-table__photo-link:focus-visible {
+  outline: 2px solid var(--tc-link);
+  outline-offset: 2px;
+}
+
 .admin-recipes-table img {
   object-fit: cover;
   border-radius: 4px;
   display: block;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* Colonne Actions recettes : boutons côte à côte */
+.admin-recipes-table__photo-link:hover img {
+  transform: scale(1.08);
+  filter: brightness(0.88);
+}
+
+/* Colonne Actions : titre et boutons au centre de la case. */
+.admin-recipes-table__actions-col {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .admin-recipes-table__actions {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 }
 
@@ -220,6 +271,7 @@ a.admin-page__tab:hover {
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 }
 
@@ -345,7 +397,7 @@ a.admin-page__tab:hover {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: stretch;
+    justify-content: center;
     gap: 0.5rem;
   }
 

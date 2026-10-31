@@ -87,16 +87,6 @@
   margin: 0;
 }
 
-.recipe-detail__edit-btn {
-  flex-shrink: 0;
-  width: auto;
-  min-width: 5.5rem;
-  padding: 8px 10px;
-  font-size: 0.8125rem;
-  text-decoration: none;
-  box-sizing: border-box;
-}
-
 /* --- Ingrédients + Préparation --- */
 .recipe-detail__body {
   display: grid;
@@ -212,6 +202,10 @@
 .recipe-detail__comment-item p {
   margin: 0.35rem 0 0;
   line-height: 1.5;
+}
+
+.recipe-detail__comment-item .admin-form__step-delete {
+  margin-top: 0.75rem;
 }
 
 .recipe-detail__comment-form {

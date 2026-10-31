@@ -1,7 +1,5 @@
-// Page dashboard : gerer les categories, origines et types de repas.
-// Le composant AdminReferenceField fait le CRUD. On ne le reecrit pas.
+// Page dashboard : gérer les catégories, origines et types de repas.
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   listCategories,
   listOrigins,
@@ -9,6 +7,7 @@ import {
 } from "../services/referenceServices.js";
 import { useToast } from "../context/ToastContext.jsx";
 import AdminReferenceField from "../components/AdminReferenceField.jsx";
+import AdminSectionNav from "../components/AdminSectionNav.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
 import "./AdminReferencesPage.css";
@@ -20,7 +19,7 @@ function AdminReferencesPage() {
   const [origins, setOrigins] = useState([]);
   const [mealTypes, setMealTypes] = useState([]);
 
-  // Sert seulement a choisir la ligne a modifier ou a supprimer dans chaque bloc.
+  // Sert seulement à choisir la ligne à modifier ou à supprimer dans chaque bloc.
   const [categoryId, setCategoryId] = useState("");
   const [originId, setOriginId] = useState("");
   const [mealTypeId, setMealTypeId] = useState("");
@@ -50,74 +49,68 @@ function AdminReferencesPage() {
     [showToast],
   );
 
+  let pageBody = (
+    <p className="admin-page__status">Chargement des listes...</p>
+  );
+
+  if (loadingLists === false) {
+    pageBody = (
+      <div className="admin-references-page__stack">
+        <AdminReferenceField
+          label="Catégorie"
+          selectId="reference-category"
+          emptyOptionLabel="Choisir une catégorie"
+          apiPath="/api/categories"
+          entityLabel="catégorie"
+          items={categories}
+          onItemsChange={setCategories}
+          selectedId={categoryId}
+          onSelectedIdChange={setCategoryId}
+          supportsImage={true}
+          article="une"
+        />
+
+        <AdminReferenceField
+          label="Origine"
+          selectId="reference-origin"
+          emptyOptionLabel="Choisir une origine"
+          apiPath="/api/origins"
+          entityLabel="origine"
+          items={origins}
+          onItemsChange={setOrigins}
+          selectedId={originId}
+          onSelectedIdChange={setOriginId}
+          supportsImage={true}
+          article="une"
+        />
+
+        <AdminReferenceField
+          label="Type de repas"
+          selectId="reference-meal-type"
+          emptyOptionLabel="Choisir un type de repas"
+          apiPath="/api/mealTypes"
+          entityLabel="type de repas"
+          items={mealTypes}
+          onItemsChange={setMealTypes}
+          selectedId={mealTypeId}
+          onSelectedIdChange={setMealTypeId}
+          article="un"
+        />
+      </div>
+    );
+  }
+
   return (
     <main className="admin-page admin-references-page">
       <header className="admin-page__header">
         <h1 className="admin-page__title">
           Catégories, origines et types de repas
         </h1>
-        <p className="admin-references-page__intro">
-          Ces listes servent à classer les recettes.
-        </p>
-        <Link
-          to="/dashboard-admins"
-          className="admin-references-page__back-link"
-        >
-          Retour au dashboard
-        </Link>
       </header>
 
-      {loadingLists === true && (
-        <p className="admin-page__status">Chargement des listes...</p>
-      )}
+      <AdminSectionNav />
 
-      {loadingLists === false && (
-        <div className="admin-references-page__list">
-          <section className="admin-references-page__block">
-            <AdminReferenceField
-              label="Catégorie"
-              selectId="reference-category"
-              emptyOptionLabel="Choisir une catégorie"
-              apiPath="/api/categories"
-              entityLabel="catégorie"
-              items={categories}
-              onItemsChange={setCategories}
-              selectedId={categoryId}
-              onSelectedIdChange={setCategoryId}
-              supportsImage={true}
-            />
-          </section>
-
-          <section className="admin-references-page__block">
-            <AdminReferenceField
-              label="Origine"
-              selectId="reference-origin"
-              emptyOptionLabel="Choisir une origine"
-              apiPath="/api/origins"
-              entityLabel="origine"
-              items={origins}
-              onItemsChange={setOrigins}
-              selectedId={originId}
-              onSelectedIdChange={setOriginId}
-              supportsImage={true}
-            />
-          </section>
-
-          <section className="admin-references-page__block">
-            <AdminReferenceField
-              label="Type de repas"
-              selectId="reference-meal-type"
-              emptyOptionLabel="Choisir un type de repas"
-              apiPath="/api/mealTypes"
-              entityLabel="type de repas"
-              items={mealTypes}
-              onItemsChange={setMealTypes}
-              selectedId={mealTypeId}
-              onSelectedIdChange={setMealTypeId}
-            />
-          </section>
-        </div>
-      )}
+      {pageBody}
     </main>
   );
 }

@@ -10,6 +10,8 @@ import {
 import { getCaptcha } from "../services/captchaServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
+import DeleteIconButton from "../components/DeleteIconButton.jsx";
+import EditIconButton from "../components/EditIconButton.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
@@ -209,16 +211,16 @@ function RecipeDetailsPage() {
           <div className="recipe-detail__title-row">
             <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
             {auth.admin !== null && (
-              <Link
+              <EditIconButton
                 to={
                   "/dashboard-admins/recettes/" +
                   recipeDetails.id +
                   "/modifier"
                 }
-                className="btn btn--outline recipe-detail__edit-btn"
-              >
-                Modifier
-              </Link>
+                ariaLabel={
+                  'Modifier la recette "' + recipeDetails.title + '"'
+                }
+              />
             )}
           </div>
           <div className="recipe-detail__badges">
@@ -405,15 +407,14 @@ function RecipeDetailsPage() {
                   <strong>{comment.pseudo}</strong>
                   <p>{comment.content}</p>
                   {auth.admin !== null && (
-                    <button
-                      type="button"
-                      className="recipe-detail__share-link"
+                    <DeleteIconButton
+                      ariaLabel={
+                        'Supprimer le commentaire de "' + comment.pseudo + '"'
+                      }
                       onClick={function () {
                         handleDeleteComment(comment.id, comment.pseudo);
                       }}
-                    >
-                      Supprimer
-                    </button>
+                    />
                   )}
                 </li>
               );

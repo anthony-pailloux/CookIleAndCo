@@ -4,13 +4,18 @@ import { listRecipes, deleteRecipe } from "../services/recipeServices.js";
 import { createAdmin, listAdmins, deleteAdmin, updateAdmin } from "../services/authServices.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
-import { Link } from "react-router-dom";
-import Button from "../components/Button.jsx";
+import { Link, useLocation } from "react-router-dom";
+import DeleteIconButton from "../components/DeleteIconButton.jsx";
+import EditIconButton from "../components/EditIconButton.jsx";
+import AdminSectionNav, {
+  isAdminsDashboardSection,
+} from "../components/AdminSectionNav.jsx";
 import "../components/Button.css";
 import "./AdminPage.css";
 
 function AdminPage() {
   const { showToast } = useToast();
+  const location = useLocation();
 
   const [recipes, setRecipes] = useState([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
@@ -28,8 +33,6 @@ function AdminPage() {
   const [editAdminEmail, setEditAdminEmail] = useState("");
   const [editAdminPassword, setEditAdminPassword] = useState("");
   const [editAdminFormError, setEditAdminFormError] = useState("");
-
-  const [activeTab, setActiveTab] = useState("recipes");
 
   async function loadAdminsList() {
     setLoadingAdmins(true);
@@ -186,18 +189,9 @@ function AdminPage() {
     }
   }
 
-  let recipesTabClassName;
-  if (activeTab === "recipes") {
-    recipesTabClassName = "admin-page__tab admin-page__tab--active";
-  } else {
-    recipesTabClassName = "admin-page__tab";
-  }
-
-  let adminsTabClassName;
-  if (activeTab === "admins") {
-    adminsTabClassName = "admin-page__tab admin-page__tab--active";
-  } else {
-    adminsTabClassName = "admin-page__tab";
+  let activeTab = "recipes";
+  if (isAdminsDashboardSection(location.search) === true) {
+    activeTab = "admins";
   }
 
   function goToPage(pageNumber) {
@@ -240,55 +234,10 @@ function AdminPage() {
         <h1 className="admin-page__title">Le Dashboard de Tetelle</h1>
       </header>
 
-      {/* Onglets du dashboard, plus le lien vers les listes de classement. */}
-      <div className="admin-page__toolbar">
-        <div
-          className="admin-page__tabs"
-          role="tablist"
-          aria-label="Sections du dashboard"
-        >
-          <button
-            type="button"
-            id="admin-tab-recipes"
-            role="tab"
-            className={recipesTabClassName}
-            aria-selected={activeTab === "recipes"}
-            aria-controls="admin-panel-recipes"
-            onClick={function () {
-              setActiveTab("recipes");
-            }}
-          >
-            Mes recettes
-          </button>
-          <button
-            type="button"
-            id="admin-tab-admins"
-            role="tab"
-            className={adminsTabClassName}
-            aria-selected={activeTab === "admins"}
-            aria-controls="admin-panel-admins"
-            onClick={function () {
-              setActiveTab("admins");
-            }}
-          >
-            Administrateurs
-          </button>
-        </div>
-        <Link
-          to="/dashboard-admins/referentiels"
-          className="admin-page__tab"
-        >
-          Catégories, origines, repas
-        </Link>
-      </div>
+      <AdminSectionNav />
 
       {activeTab === "admins" && (
-      <section
-        className="admin-page__section admin-page__section--admins"
-        id="admin-panel-admins"
-        role="tabpanel"
-        aria-labelledby="admin-tab-admins"
-      >
+      <section className="admin-page__section admin-page__section--admins">
         <h2 className="admin-page__section-title">Administrateurs</h2>
 
         {loadingAdmins === true && (
@@ -307,7 +256,7 @@ function AdminPage() {
               <thead>
                 <tr>
                   <th>Email</th>
-                  <th>Actions</th>
+                  <th className="admin-recipes-table__actions-col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -315,25 +264,28 @@ function AdminPage() {
                   return (
                     <tr key={admin.id}>
                       <td data-label="Email">{admin.email}</td>
-                      <td data-label="Actions">
+                      <td
+                        className="admin-recipes-table__actions-col"
+                        data-label="Actions"
+                      >
                         {admin.isProtected === false && (
                           <div className="admin-admins-table__actions">
-                            <Button
-                              className="btn--outline"
+                            <EditIconButton
+                              ariaLabel={
+                                "Modifier l'administrateur " + admin.email
+                              }
                               onClick={function () {
                                 handleStartEditAdmin(admin);
                               }}
-                            >
-                              Modifier
-                            </Button>
-                            <Button
-                              className="btn--danger"
+                            />
+                            <DeleteIconButton
+                              ariaLabel={
+                                "Supprimer l'administrateur " + admin.email
+                              }
                               onClick={function () {
                                 handleDeleteAdmin(admin.id, admin.email);
                               }}
-                            >
-                              Supprimer
-                            </Button>
+                            />
                           </div>
                         )}
                         {admin.isProtected === true && (
@@ -456,19 +408,8 @@ function AdminPage() {
       )}
 
       {activeTab === "recipes" && (
-      <section
-        className="admin-page__section"
-        id="admin-panel-recipes"
-        role="tabpanel"
-        aria-labelledby="admin-tab-recipes"
-      >
+      <section className="admin-page__section">
         <h2 className="admin-page__section-title">Mes recettes</h2>
-        <Link
-          to="/dashboard-admins/recettes/nouvelle"
-          className="btn admin-page__add-btn"
-        >
-          + Ajouter une recette
-        </Link>
 
         {loadingRecipes === true && (
           <p className="admin-page__status">Chargement des recettes...</p>
@@ -486,7 +427,7 @@ function AdminPage() {
                   <th>Photo</th>
                   <th>Titre</th>
                   <th>Catégorie</th>
-                  <th>Actions</th>
+                  <th className="admin-recipes-table__actions-col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -496,35 +437,45 @@ function AdminPage() {
                   return (
                     <tr key={recipe.id}>
                       <td data-label="Photo">
-                        <img
-                          src={photoUrl}
-                          alt={recipe.title}
-                          width="60"
-                          height="60"
-                        />
+                        {/* Lien vers la fiche publique, pas vers le formulaire admin. */}
+                        <Link
+                          className="admin-recipes-table__photo-link"
+                          to={"/recettes/" + recipe.id}
+                          aria-label={"Voir la fiche : " + recipe.title}
+                        >
+                          <img
+                            src={photoUrl}
+                            alt={recipe.title}
+                            width="60"
+                            height="60"
+                          />
+                        </Link>
                       </td>
                       <td data-label="Titre">{recipe.title}</td>
                       <td data-label="Catégorie">{recipe.category.name}</td>
-                      <td data-label="Actions">
+                      <td
+                        className="admin-recipes-table__actions-col"
+                        data-label="Actions"
+                      >
                         <div className="admin-recipes-table__actions">
-                          <Link
+                          <EditIconButton
                             to={
                               "/dashboard-admins/recettes/" +
                               recipe.id +
                               "/modifier"
                             }
-                            className="btn btn--outline"
-                          >
-                            Modifier
-                          </Link>
-                          <Button
-                            className="btn--danger"
+                            ariaLabel={
+                              'Modifier la recette "' + recipe.title + '"'
+                            }
+                          />
+                          <DeleteIconButton
+                            ariaLabel={
+                              'Supprimer la recette "' + recipe.title + '"'
+                            }
                             onClick={function () {
                               handleDeleteRecipe(recipe.id, recipe.title);
                             }}
-                          >
-                            Supprimer
-                          </Button>
+                          />
                         </div>
                       </td>
                     </tr>

@@ -1,72 +1,12 @@
-/* Page des listes de classement. Chaque bloc est une carte admin. */
+/* Page des référentiels : même rythme vertical que le formulaire recette. */
 
 .admin-references-page .admin-page__header {
   margin-bottom: 1.5rem;
 }
 
-.admin-references-page__intro {
-  margin: 0.35rem 0 0;
-  color: var(--tc-text-muted);
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
-
-.admin-references-page__back-link {
-  display: inline-block;
-  margin-top: 0.75rem;
-  padding-bottom: 0.12rem;
-  color: var(--tc-navy);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 2px solid var(--tc-yellow-madras);
-}
-
-.admin-references-page__back-link:hover {
-  color: var(--tc-red-madras);
-  border-bottom-color: var(--tc-red-madras);
-}
-
-.admin-references-page__back-link:focus-visible {
-  outline: 2px solid var(--tc-navy);
-  outline-offset: 3px;
-}
-
-.admin-references-page__list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Meme carte que .admin-page__section : fond blanc, bord vert, ombre legere */
-.admin-references-page__block {
+.admin-references-page__stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.35rem;
   min-width: 0;
-  background-color: var(--tc-white);
-  border: 2px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
-  padding: 1.25rem 1.5rem 1.5rem;
-  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.08);
-}
-
-.admin-references-page__block .admin-reference-field__heading {
-  margin: 0 0 1rem;
-  padding-bottom: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--tc-green-madras);
-  border-bottom: 2px solid var(--tc-yellow-madras);
-}
-
-.admin-references-page__block .admin-reference-field__panel {
-  background-color: var(--tc-background-alt);
-  border: 1px solid var(--tc-green-madras);
-}
-
-@media (max-width: 700px) {
-  .admin-references-page__block {
-    padding: 1rem;
-  }
-
-  .admin-references-page__block .admin-reference-field__heading {
-    font-size: 1.125rem;
-  }
 }

@@ -75,52 +75,25 @@
   min-height: 2.75rem;
 }
 
-/* Colonne 1 : libelle Titre, saisie et temps.
-   Colonne 2 : photo. Avec une image, le haut part des lettres du titre
-   et le bas du cadre s arrete au bas des temps. */
-.admin-form__section--infos {
-  overflow: visible;
-}
-
-.admin-form__section--infos > legend {
-  position: relative;
-  z-index: 2;
-}
-
+/* Grille de champs a gauche, apercu en colonne a droite (comme la carte Categorie). */
 .admin-form__infos-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(22rem, 26rem);
-  grid-template-rows: auto auto;
-  column-gap: 1.5rem;
-  row-gap: 0.4rem;
-  align-items: start;
-  overflow: visible;
+  grid-template-columns: minmax(0, 1fr) 16rem;
+  column-gap: 1.25rem;
+  align-items: stretch;
 }
 
-.admin-form__infos-layout > .admin-form__field {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.admin-form__infos-main {
+.admin-form__infos-grid {
   display: flex;
   flex-direction: column;
   gap: 1.15rem;
-  grid-column: 1;
-  grid-row: 2;
-  align-self: start;
   min-width: 0;
 }
 
-.admin-form__infos-main > .input {
-  min-width: 0;
-}
-
-.admin-form__times {
+.admin-form__infos-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem 1.25rem;
-  /* Bas de la rangée : les saisies restent sur la meme ligne si un libelle grandit. */
   align-items: end;
 }
 
@@ -129,43 +102,16 @@
   white-space: nowrap;
 }
 
-/* Colonne photo : meme place avec ou sans image (le contenu change, pas la grille). */
 .admin-form__photo-column {
-  grid-column: 2;
-  grid-row: 2;
-  align-self: start;
-  min-width: 0;
-}
-
-/* Avec photo : la case couvre le libelle et les saisies.
-   Elle ne grandit pas : seule la colonne de gauche donne la hauteur. */
-.admin-form__photo-column--with-preview {
-  grid-row: 1 / -1;
-  align-self: stretch;
-  position: relative;
-  z-index: 1;
-}
-
-/* Pile image + cadre. Le haut remonte jusqu aux lettres de la legende.
-   Le bas reste colle au bas de la case, donc au bas des inputs temps. */
-.admin-form__photo-column--with-preview .admin-form__photo-stack {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* Doit suivre la legende : ligne 1,25rem * 1,3, padding bas 0,5rem, filet 2px, marge 1,15rem.
-     Le padding haut de la legende reste au-dessus des lettres : on ne le remonte pas. */
-  top: calc(-1 * (1.25rem * 1.3 + 0.5rem + 2px + 1.15rem));
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   min-width: 0;
   min-height: 0;
 }
 
-/* La zone image prend tout le vide entre le haut des lettres et le cadre fichier. */
-.admin-form__photo-column--with-preview .admin-form__photo-fit {
-  flex: 1 1 0%;
+.admin-form__photo-fit {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
   min-height: 0;
   overflow: hidden;
   border-radius: var(--tc-radius);
@@ -173,16 +119,7 @@
   background-color: var(--tc-background);
 }
 
-.admin-form__photo-column--with-preview .admin-form__photo-preview {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-}
-
-/* Pas de photo : meme cadre creme, texte centre, sans bordure en plus. */
-.admin-form__photo-column--with-preview .admin-form__photo-fit--empty {
+.admin-form__photo-fit--empty {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -196,54 +133,63 @@
   text-align: center;
 }
 
-/* Cadre compact : seulement le fichier, padding serre.
-   Moins haut, le flex donne ce gain a l image (flex 1) sans agrandir la section. */
-.admin-form__photo-field {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  margin-top: 0;
-  padding: 0.4rem;
-  background-color: var(--tc-background-alt);
-  border: 1px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
-}
-
-.admin-form__photo-column--with-preview .admin-form__photo-field {
-  flex-shrink: 0;
-}
-
-.admin-form__photo-field > .admin-form__file {
-  flex-shrink: 0;
-}
-
-/* L input fichier reste entier dans le cadre, sans deborder. */
-.admin-recipe-form-page .input.admin-form__file {
+.admin-form__photo-preview {
   display: block;
-  box-sizing: border-box;
   width: 100%;
-  max-width: 100%;
-  min-width: 0;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Cadre identique aux autres inputs. Le bouton reste 4 px a l interieur. */
+.admin-form__file-frame {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
   height: 2.75rem;
   min-height: 2.75rem;
   margin: 0;
-  padding: 0.35rem 0.7rem;
+  padding: 4px 12px;
   overflow: hidden;
   background-color: var(--tc-white);
-  border: 1px solid var(--tc-green-madras);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius);
 }
 
-/* Bouton natif « Choisir un fichier » : memes couleurs que .btn / .btn--primary. */
+.admin-recipe-form-page .input.admin-form__file {
+  display: block;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  background: transparent;
+}
+
 .admin-recipe-form-page .input.admin-form__file::file-selector-button {
+  box-sizing: border-box;
+  height: 2.125rem;
+  max-height: 100%;
   margin: 0 0.65rem 0 0;
-  padding: 0.25rem 0.6rem;
+  padding: 0 0.6rem;
   border: 1px solid var(--tc-navy);
   border-radius: var(--tc-radius);
   background: var(--tc-yellow-madras);
   color: var(--tc-white);
   font-family: var(--tc-font);
+  font-size: 0.85rem;
+  line-height: 1;
   cursor: pointer;
+  vertical-align: middle;
   transition:
     background-color 0.35s ease,
     opacity 0.35s ease,
@@ -263,18 +209,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem 1.25rem;
   align-items: end;
-}
-
-/* Lien secondaire : couleurs et hover viennent de .btn.btn--outline.
-   Centré sous les trois listes, largeur au texte, sans coller aux selects. */
-.admin-recipe-form-page .btn.admin-form__manage-link {
-  display: flex;
-  width: fit-content;
-  max-width: 100%;
-  clear: both;
-  margin-top: 1.35rem;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Ingredients : lignes repliees comme les etapes, champs seulement sur la ligne ouverte. */
@@ -468,34 +402,6 @@
   font-style: italic;
 }
 
-/* Corbeille discrete : icone seule, pas un gros bouton rouge. */
-.admin-form__step-delete {
-  flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-radius: 0.35rem;
-  background: transparent;
-  color: var(--tc-red-madras);
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.admin-form__step-delete:hover {
-  background-color: rgba(211, 47, 47, 0.12);
-}
-
-.admin-form__step-delete-icon {
-  width: 1.1rem;
-  height: 1.1rem;
-  display: block;
-}
-
 /* Etape ouverte : label et corbeille sur leur ligne, champ en dessous. */
 .admin-form__step--open {
   display: flex;
@@ -607,41 +513,18 @@
   }
 
   .admin-form__infos-layout,
-  .admin-form__times,
+  .admin-form__infos-pair,
   .admin-form__class-row {
     grid-template-columns: 1fr;
   }
 
-  /* Empile label, saisie et photo. Le cadre ne reste pas en colonne 2. */
-  .admin-form__infos-layout > .admin-form__field,
-  .admin-form__infos-main,
-  .admin-form__photo-column,
-  .admin-form__photo-column--with-preview {
-    grid-column: auto;
-    grid-row: auto;
-    align-self: auto;
+  .admin-form__infos-layout {
+    row-gap: 1.15rem;
   }
 
-  .admin-form__photo-column,
-  .admin-form__photo-column--with-preview {
-    position: static;
-    height: auto;
-    margin-top: 0.75rem;
-  }
-
-  /* Plus de colonne a cote : la pile reprend le flux, sous les temps. */
-  .admin-form__photo-column--with-preview .admin-form__photo-stack {
-    position: static;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-    height: auto;
-  }
-
-  .admin-form__photo-column--with-preview .admin-form__photo-fit {
-    flex: none;
-    height: 12rem;
+  .admin-form__photo-fit {
+    flex: 0 0 auto;
+    height: 9rem;
   }
 
   .admin-form__ingredient-head {

@@ -89,23 +89,6 @@ a:hover {
   border: 1px solid var(--tc-yellow-madras);
 }
 
-/* Rouge madras — priorité sur .btn jaune de Button.css */
-.btn.btn--danger {
-  width: auto;
-  padding: 10px;
-  border: none;
-  border-radius: var(--tc-radius);
-  background: var(--tc-red-madras);
-  color: var(--tc-white);
-  cursor: pointer;
-}
-
-.btn.btn--danger:hover {
-  background: var(--tc-primary-hover);
-  opacity: 1;
-  border: none;
-}
-
 /* Secondaire — or Madras, distinct du jaune primaire */
 .btn.btn--outline {
   width: auto;
