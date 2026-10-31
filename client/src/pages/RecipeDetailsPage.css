@@ -5,6 +5,7 @@
   background-color: var(--tc-background-alt);
   border-radius: 25px;
   border: 1px solid var(--tc-green-madras);
+  box-shadow: var(--tc-shadow);
 }
 
 /* États chargement / erreur */
@@ -34,6 +35,7 @@
   border-radius: var(--tc-radius);
   overflow: hidden;
   background-color: var(--tc-background-alt);
+  box-shadow: var(--tc-shadow);
 }
 
 .recipe-detail__photo img {

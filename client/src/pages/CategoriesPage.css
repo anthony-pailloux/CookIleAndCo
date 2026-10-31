@@ -27,6 +27,7 @@
   background-color: var(--tc-background-alt);
   border: 1px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
+  box-shadow: var(--tc-shadow);
 }
 
 .categories-page__section h2 {
@@ -73,11 +74,14 @@
   background-color: var(--tc-background);
   border: 1px solid var(--tc-border);
   border-radius: var(--tc-radius);
+  box-shadow: var(--tc-shadow);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .categories-page__card:hover {
   border-color: var(--tc-navy);
   color: var(--tc-text);
+  box-shadow: var(--tc-shadow-hover);
 }
 
 .categories-page__photo {

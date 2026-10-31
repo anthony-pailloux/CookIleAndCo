@@ -5,7 +5,6 @@ import { useSearchParams } from "react-router-dom";
 import { listRecipes } from "../services/recipeServices.js";
 import { listCategories, listOrigins, listMealTypes } from "../services/referenceServices.js";
 import RecipeCard from "../components/RecipeCard.jsx";
-import "../components/Button.css";
 
 function RecipesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,7 +38,6 @@ function RecipesPage() {
   const [selectedMealType, setSelectedMealType] = useState(initialMealType);
   const [selectedOrigin, setSelectedOrigin] = useState(initialOrigin);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const [searchText, setSearchText] = useState(activeSearch);
 
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -101,16 +99,6 @@ function RecipesPage() {
     const value = event.target.value;
     setSelectedCategory(value);
     applyQueryParam("categorie", value);
-  }
-
-  function applySearchToUrl(value) {
-    const trimmed = value.trim();
-    applyQueryParam("q", trimmed);
-  }
-
-  function handleSearchSubmit(event) {
-    event.preventDefault();
-    applySearchToUrl(searchText);
   }
 
   // Recopie les filtres depuis l URL
@@ -268,26 +256,6 @@ function RecipesPage() {
   return (
     <main className="recipes-page">
       <h1 className="recipes-page__title">Toutes les recettes</h1>
-
-      <form className="recipes-page__search" onSubmit={handleSearchSubmit}>
-        <input
-          className="recipes-page__search-input"
-          type="search"
-          placeholder="Rechercher une recette..."
-          value={searchText}
-          onChange={(event) => {
-            const value = event.target.value;
-            setSearchText(value);
-
-            if (value.trim() === "") {
-              applySearchToUrl("");
-            }
-          }}
-        />
-        <button type="submit" className="btn recipes-page__search-btn">
-          Rechercher
-        </button>
-      </form>
 
       <div className="recipes-page__filters">
         <div className="field field--filter">

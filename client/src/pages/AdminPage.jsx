@@ -17,10 +17,18 @@ function AdminPage() {
   const { showToast } = useToast();
   const location = useLocation();
 
+  // q ne touche pas section=admins (onglet comptes). La loupe du header ecrit q ici.
+  let adminSearch = "";
+  const adminSearchFromUrl = new URLSearchParams(location.search).get("q");
+  if (adminSearchFromUrl !== null) {
+    adminSearch = adminSearchFromUrl.trim();
+  }
+
   const [recipes, setRecipes] = useState([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [trackedSearch, setTrackedSearch] = useState(adminSearch);
 
   const [admins, setAdmins] = useState([]);
   const [loadingAdmins, setLoadingAdmins] = useState(true);
@@ -33,6 +41,12 @@ function AdminPage() {
   const [editAdminEmail, setEditAdminEmail] = useState("");
   const [editAdminPassword, setEditAdminPassword] = useState("");
   const [editAdminFormError, setEditAdminFormError] = useState("");
+
+  // Nouvelle recherche : page 1 avant le chargement, pas avec l ancienne page.
+  if (trackedSearch !== adminSearch) {
+    setTrackedSearch(adminSearch);
+    setCurrentPage(1);
+  }
 
   async function loadAdminsList() {
     setLoadingAdmins(true);
@@ -56,6 +70,7 @@ function AdminPage() {
       const response = await listRecipes({
         page: pageToLoad,
         limit: 12,
+        search: adminSearch,
       });
 
       setRecipes(response.data);
@@ -86,7 +101,7 @@ function AdminPage() {
   useEffect(() => {
     loadAdminRecipes(currentPage);
     // showToast n est pas une dependance : une nouvelle fonction recrerait la liste en boucle
-  }, [currentPage]);
+  }, [currentPage, adminSearch]);
 
   useEffect(() => {
     loadAdminsList();
@@ -415,9 +430,19 @@ function AdminPage() {
           <p className="admin-page__status">Chargement des recettes...</p>
         )}
 
-        {loadingRecipes === false && recipes.length === 0 && (
-          <p className="admin-page__status">Aucune recette pour le moment.</p>
-        )}
+        {loadingRecipes === false &&
+          recipes.length === 0 &&
+          adminSearch === "" && (
+            <p className="admin-page__status">Aucune recette pour le moment.</p>
+          )}
+
+        {loadingRecipes === false &&
+          recipes.length === 0 &&
+          adminSearch !== "" && (
+            <p className="admin-page__status">
+              Aucune recette trouvée pour « {adminSearch} ».
+            </p>
+          )}
 
         {loadingRecipes === false && recipes.length > 0 && (
           <div className="admin-page__table-wrap">

@@ -10,10 +10,17 @@
   display: flex;
   justify-content: center;
   text-align: center;
+  box-shadow: var(--tc-shadow);
   transition:
     background-color 0.35s ease,
     opacity 0.35s ease,
-    border-color 0.35s ease;
+    border-color 0.35s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn:disabled,
+.btn:disabled:hover {
+  box-shadow: none;
 }
 
 .btn--primary:hover {

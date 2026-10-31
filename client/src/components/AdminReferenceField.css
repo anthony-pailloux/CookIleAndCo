@@ -10,7 +10,7 @@
   border: 2px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
   background-color: var(--tc-white);
-  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.08);
+  box-shadow: var(--tc-shadow);
 }
 
 /* Légende rentrée dans la carte. Le filet jaune suit le texte. */
@@ -279,6 +279,11 @@
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1;
+}
+
+.admin-references-page .btn.admin-form__add-btn,
+.admin-references-page .btn.admin-form__add-btn:hover {
+  box-shadow: none;
 }
 
 .admin-references-page .btn.admin-form__add-btn:hover {

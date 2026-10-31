@@ -1,8 +1,10 @@
 .site-header {
   position: relative;
+  z-index: 40;
   padding: 0.75rem 1.5rem;
   border-bottom: 3px solid var(--tc-yellow-madras);
   color: var(--tc-yellow-madras);
+  box-shadow: var(--tc-shadow);
 }
 
 .site-header__inner {
@@ -28,6 +30,12 @@
   height: 80px;
   max-width: 315px;
   object-fit: contain;
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.site-header__logo-link:hover .site-header__logo {
+  transform: scale(1.04);
 }
 
 .site-header__nav {
@@ -55,7 +63,7 @@
 }
 
 .site-header__link--active {
-  border-bottom-color: var(--tc-white);
+  border-bottom-color: var(--tc-yellow-madras);
 }
 
 /* Bouton déconnexion admin */
@@ -73,10 +81,93 @@
   cursor: pointer;
   white-space: nowrap;
   z-index: 2;
+  box-shadow: var(--tc-shadow);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .site-header__logout-btn:hover {
   background-color: var(--tc-primary-hover);
+  box-shadow: var(--tc-shadow-hover);
+}
+
+/* Loupe + deconnexion sur la meme ligne. Le panneau est hors flux. */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  z-index: 2;
+}
+
+.site-header__search-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--tc-yellow-madras);
+  border-radius: var(--tc-radius);
+  background-color: transparent;
+  color: var(--tc-white);
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-header__search-toggle:hover {
+  background-color: transparent;
+  color: var(--tc-yellow-madras);
+  border-color: var(--tc-yellow-madras);
+}
+
+.site-header__search-toggle:focus-visible {
+  outline: 2px solid var(--tc-yellow-madras);
+  outline-offset: 2px;
+}
+
+.site-header__search-toggle--open {
+  background-color: transparent;
+  color: var(--tc-yellow-madras);
+  border-color: var(--tc-yellow-madras);
+}
+
+.site-header__search-icon {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.site-header__search-panel {
+  position: absolute;
+  top: 100%;
+  right: 1rem;
+  z-index: 30;
+  width: min(20rem, calc(100vw - 2rem));
+  margin-top: 0.35rem;
+  padding: 0.5rem;
+  background-color: var(--tc-white);
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  box-shadow: var(--tc-shadow);
+}
+
+.site-header__search-input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background-color: var(--tc-white);
+  color: var(--tc-text);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.site-header__search-input:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 2px;
 }
 
 /* Mobile */
@@ -114,8 +205,12 @@
     font-size: 0.9375rem;
   }
 
-  .site-header__logout-btn {
+  .site-header__actions {
     margin-top: 0.25rem;
+  }
+
+  .site-header__search-panel {
+    right: 1rem;
   }
 }
 
@@ -164,14 +259,32 @@
     font-size: 1.0625rem;
   }
 
+  .site-header__actions {
+    justify-self: end;
+    grid-column: 3;
+    grid-row: 1;
+    max-width: 100%;
+  }
+
+  .site-header__search-panel {
+    right: 2rem;
+  }
+
   .site-header__logout-btn {
     position: static;
     right: auto;
     top: auto;
     transform: none;
-    justify-self: end;
-    grid-column: 3;
-    grid-row: 1;
     max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header__logo {
+    transition: none;
+  }
+
+  .site-header__logo-link:hover .site-header__logo {
+    transform: none;
   }
 }

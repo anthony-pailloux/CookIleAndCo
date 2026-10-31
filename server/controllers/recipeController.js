@@ -8,6 +8,23 @@ import RecipeIngredient from '../models/RecipeIngredient.js';
 import RecipeStep from '../models/RecipeStep.js';
 import { Op } from 'sequelize';
 
+// Sequelize 6 lie Op.like, sans clause ESCAPE.
+// MySQL utilise \ par defaut pour LIKE : on le prefixe devant \, % et _.
+function escapeLikeWildcards(value) {
+    let escaped = '';
+
+    for (let index = 0; index < value.length; index++) {
+        const character = value[index];
+
+        if (character === '\\' || character === '%' || character === '_') {
+            escaped = escaped + '\\' + character;
+        } else {
+            escaped = escaped + character;
+        }
+    }
+
+    return escaped;
+}
 
 export async function listRecipes(req, res) {
     // Pagination
@@ -38,17 +55,32 @@ export async function listRecipes(req, res) {
 
     const offset = (pageFromUrl - 1) * limitFromUrl;
 
-    
-    
-
     // filtres
     const searchQuery = req.query.q;
     let recipeWhere = {};
 
     if (searchQuery !== undefined && searchQuery !== '') {
-        recipeWhere.title = {
-            [Op.like]: '%' + searchQuery + '%',
-        };
+        if (typeof searchQuery !== 'string') {
+            res.status(400).json({ error: 'Paramètre de recherche invalide' });
+            return;
+        }
+
+        const trimmedSearch = searchQuery.trim();
+
+        if (trimmedSearch.length > 80) {
+            res.status(400).json({
+                error: 'La recherche ne peut pas dépasser 80 caractères',
+            });
+            return;
+        }
+
+        if (trimmedSearch !== '') {
+            const escapedSearch = escapeLikeWildcards(trimmedSearch);
+
+            recipeWhere.title = {
+                [Op.like]: '%' + escapedSearch + '%',
+            };
+        }
     }
 
     const filterOrigin = req.query.origine;

@@ -22,7 +22,7 @@
   border: 2px solid var(--tc-green-madras);
   border-radius: var(--tc-radius);
   background-color: var(--tc-white);
-  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.08);
+  box-shadow: var(--tc-shadow);
 }
 
 /* Legende rentree dans la carte. Le filet suit le texte, pas la carte. */
@@ -474,6 +474,11 @@
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1;
+}
+
+.admin-recipe-form-page .btn.admin-form__add-btn,
+.admin-recipe-form-page .btn.admin-form__add-btn:hover {
+  box-shadow: none;
 }
 
 .admin-recipe-form-page .btn.admin-form__add-btn:hover {

@@ -8,11 +8,12 @@
   background: var(--tc-white);
   text-decoration: none;
   color: var(--tc-white);
+  box-shadow: var(--tc-shadow);
   transition: box-shadow 0.2s ease;
 }
 
 .recipe-card:hover {
-  box-shadow: 0 2px 8px rgba(27, 58, 107, 0.15);
+  box-shadow: var(--tc-shadow-hover);
   color: var(--tc-white);
 }
 

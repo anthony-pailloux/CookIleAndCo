@@ -105,6 +105,7 @@
 /* Bordure en dégradé : le padding du cadre = l'épaisseur, le fond intérieur reste opaque */
 .home__frame {
   padding: 1px 0;
+  box-shadow: var(--tc-shadow);
   background: linear-gradient(
     90deg,
     var(--tc-green-madras) 0%,
@@ -194,11 +195,14 @@
   background-color: var(--tc-background);
   border: 1px solid var(--tc-border);
   border-radius: var(--tc-radius);
+  box-shadow: var(--tc-shadow);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .home__categories-card:hover {
   border-color: var(--tc-navy);
   color: var(--tc-text);
+  box-shadow: var(--tc-shadow-hover);
 }
 
 .home__categories-photo {
@@ -275,11 +279,12 @@
   .home__frame {
     padding: 1px;
     border-radius: 25px;
-    overflow: hidden;
   }
 
+  /* Le rognage reste sur l'intérieur : l'ombre du cadre n'est pas coupée. */
   .home__frame-inner {
     border-radius: 24px;
+    overflow: hidden;
   }
 
   .home__about .home__frame-inner {
