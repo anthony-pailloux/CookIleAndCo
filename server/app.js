@@ -5,8 +5,9 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import fileStoreFactory from 'session-file-store';
+import connectSessionSequelize from 'connect-session-sequelize';
 
+import sequelize from './config/database.js';
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -35,15 +36,13 @@ const cookieSecure = process.env.COOKIE_SECURE === 'true';
 
 app.set('trust proxy', 1);
 
-// On garde la session dans un dossier, pendant 1 heure
-const sessionDurationSeconds = 1 * 60 * 60;
-const sessionsPath = path.join(dirname, 'sessions');
-const FileStore = fileStoreFactory(session);
-const sessionStore = new FileStore({
-    path: sessionsPath,
-    ttl: sessionDurationSeconds,
-    retries: 0,
-    logFn: function () {},
+// Sessions en base MySQL, pendant 1 heure (cookie et ligne SQL)
+const sessionDurationMs = 60 * 60 * 1000;
+const SequelizeStore = connectSessionSequelize(session.Store);
+const sessionStore = new SequelizeStore({
+    db: sequelize,
+    tableName: 'sessions',
+    expiration: sessionDurationMs,
 });
 
 app.use(session({
@@ -56,7 +55,7 @@ app.use(session({
         httpOnly: true,
         sameSite: 'lax',
         secure: cookieSecure,
-        maxAge: sessionDurationSeconds * 1000,
+        maxAge: sessionDurationMs,
     },
 }));
 
