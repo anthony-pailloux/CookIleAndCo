@@ -1,5 +1,6 @@
 // Construit l app Express. Session, CORS, puis les URLs /api.
 import express from 'express';
+import compression from 'compression';
 import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
@@ -23,6 +24,9 @@ import { createServeClient } from './controllers/spaController.js';
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+
+// Gzip du HTML, JS, CSS, JSON et SVG. Les images déjà compressées sont ignorées.
+app.use(compression());
 
 app.use(express.json());
 
@@ -63,7 +67,11 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'Route GET /api/health / Connecter' });
 });
 
-app.use('/uploads', express.static('uploads'));
+// Noms de fichiers uniques (Date.now) : cache 7 jours, même URL.
+const uploadsMaxAgeMs = 7 * 24 * 60 * 60 * 1000;
+app.use('/uploads', express.static('uploads', {
+    maxAge: uploadsMaxAgeMs,
+}));
 
 // Chaque URL /api pointe vers un fichier dans routes/
 app.use('/api/auth', authRoutes);
@@ -81,8 +89,21 @@ const clientDistPath = path.join(dirname, '../client/dist');
 const indexHtmlPath = path.join(clientDistPath, 'index.html');
 const hasClientBuild = fs.existsSync(indexHtmlPath);
 
+// Fichiers hashés Vite : cache long. index.html : pas de cache long.
+function setClientStaticHeaders(res, filePath) {
+    const normalizedPath = filePath.split('\\').join('/');
+
+    if (normalizedPath.includes('/assets/')) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (normalizedPath.endsWith('/index.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+    }
+}
+
 if (hasClientBuild) {
-    app.use(express.static(clientDistPath));
+    app.use(express.static(clientDistPath, {
+        setHeaders: setClientStaticHeaders,
+    }));
     app.use(createServeClient(indexHtmlPath));
 }
 

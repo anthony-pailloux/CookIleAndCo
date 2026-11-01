@@ -36,8 +36,10 @@ function Header() {
   const auth = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const headerRef = useRef(null);
   const searchInputRef = useRef(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   // Session ici pour afficher Dashboard si un admin est encore connecte.
@@ -55,10 +57,18 @@ function Header() {
     [isSearchOpen],
   );
 
-  // Echap ferme le panneau, y compris si le focus n est plus dans le champ.
+  // Un changement de page referme le menu mobile.
   useEffect(
     function () {
-      if (isSearchOpen === false) {
+      setIsMenuOpen(false);
+    },
+    [location.pathname],
+  );
+
+  // Echap ferme la recherche ou le menu, meme si le focus est ailleurs.
+  useEffect(
+    function () {
+      if (isSearchOpen === false && isMenuOpen === false) {
         return;
       }
 
@@ -66,6 +76,7 @@ function Header() {
         if (event.key === "Escape") {
           event.preventDefault();
           setIsSearchOpen(false);
+          setIsMenuOpen(false);
         }
       }
 
@@ -75,10 +86,37 @@ function Header() {
         document.removeEventListener("keydown", handleEscape);
       };
     },
-    [isSearchOpen],
+    [isSearchOpen, isMenuOpen],
+  );
+
+  // Un clic en dehors du header referme le menu mobile.
+  useEffect(
+    function () {
+      if (isMenuOpen === false) {
+        return;
+      }
+
+      function handlePointerDown(event) {
+        if (headerRef.current === null) {
+          return;
+        }
+
+        if (headerRef.current.contains(event.target) === false) {
+          setIsMenuOpen(false);
+        }
+      }
+
+      document.addEventListener("pointerdown", handlePointerDown);
+
+      return function removePointerDown() {
+        document.removeEventListener("pointerdown", handlePointerDown);
+      };
+    },
+    [isMenuOpen],
   );
 
   async function handleLogout() {
+    setIsMenuOpen(false);
     await logout();
     auth.setAdmin(null);
   }
@@ -87,8 +125,24 @@ function Header() {
     if (isSearchOpen === true) {
       setIsSearchOpen(false);
     } else {
+      setIsMenuOpen(false);
       setSearchText(readRecipeSearch(location));
       setIsSearchOpen(true);
+    }
+  }
+
+  function handleToggleMenu() {
+    if (isMenuOpen === true) {
+      setIsMenuOpen(false);
+    } else {
+      setIsSearchOpen(false);
+      setIsMenuOpen(true);
+    }
+  }
+
+  function handleNavClick(event) {
+    if (event.target.closest("a") !== null) {
+      setIsMenuOpen(false);
     }
   }
 
@@ -171,8 +225,92 @@ function Header() {
     searchControls = "site-header-search";
   }
 
+  let menuToggleLabel = "Ouvrir le menu";
+  if (isMenuOpen === true) {
+    menuToggleLabel = "Fermer le menu";
+  }
+
+  let navClassName = "site-header__nav";
+  if (isMenuOpen === true) {
+    navClassName = "site-header__nav site-header__nav--open";
+  }
+
+  let menuIcon;
+  if (isMenuOpen === true) {
+    menuIcon = (
+      <svg
+        className="site-header__menu-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <line
+          x1="6"
+          y1="6"
+          x2="18"
+          y2="18"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <line
+          x1="18"
+          y1="6"
+          x2="6"
+          y2="18"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  } else {
+    menuIcon = (
+      <svg
+        className="site-header__menu-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <line
+          x1="4"
+          y1="7"
+          x2="20"
+          y2="7"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <line
+          x1="4"
+          y1="12"
+          x2="20"
+          y2="12"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <line
+          x1="4"
+          y1="17"
+          x2="20"
+          y2="17"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
   return (
-    <header className="site-header bg-green-textured">
+    <header ref={headerRef} className="site-header bg-green-textured">
       <div className="site-header__inner">
         <Link to="/" className="site-header__logo-link">
           <img
@@ -185,7 +323,12 @@ function Header() {
           />
         </Link>
 
-        <nav className="site-header__nav" aria-label="Navigation principale">
+        <nav
+          id="site-header-menu"
+          className={navClassName}
+          aria-label="Navigation principale"
+          onClick={handleNavClick}
+        >
           <NavLink to="/" end className={getNavLinkClass}>
             Accueil
           </NavLink>
@@ -202,6 +345,16 @@ function Header() {
             <NavLink to="/dashboard-admins" className={getNavLinkClass}>
               Dashboard
             </NavLink>
+          )}
+
+          {auth.admin !== null && (
+            <button
+              type="button"
+              className="site-header__logout-btn site-header__logout-btn--menu"
+              onClick={handleLogout}
+            >
+              Déconnexion
+            </button>
           )}
         </nav>
 
@@ -269,10 +422,21 @@ function Header() {
             )}
           </div>
 
+          <button
+            type="button"
+            className="site-header__menu-toggle"
+            aria-label={menuToggleLabel}
+            aria-expanded={isMenuOpen}
+            aria-controls="site-header-menu"
+            onClick={handleToggleMenu}
+          >
+            {menuIcon}
+          </button>
+
           {auth.admin !== null && (
             <button
               type="button"
-              className="site-header__logout-btn"
+              className="site-header__logout-btn site-header__logout-btn--bar"
               onClick={handleLogout}
             >
               Déconnexion

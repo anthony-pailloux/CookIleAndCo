@@ -1,4 +1,6 @@
 .recipe-detail {
+  /* Même gouttière que les cartes de la liste (1.5rem de chaque côté). */
+  width: min(1180px, calc(100% - 3rem));
   max-width: 1180px;
   margin: 50px auto;
   padding: 2rem 1.5rem 3rem;
@@ -103,6 +105,8 @@
   grid-template-columns: 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
+  min-width: 0;
+  overflow: hidden; /* le contenu reste dans les coins arrondis */
   border: 1px solid transparent;
   border-radius: var(--tc-radius);
   background:
@@ -147,6 +151,10 @@
 }
 
 /* Étapes numérotées */
+.recipe-detail__steps {
+  min-width: 0;
+}
+
 .recipe-detail__step-list {
   list-style: none;
   padding: 0;
@@ -157,6 +165,7 @@
   display: flex;
   gap: 0.75rem;
   margin-bottom: 1rem;
+  min-width: 0;
 }
 
 .recipe-detail__step-num {
@@ -175,6 +184,8 @@
 .recipe-detail__step-text {
   margin: 0;
   line-height: 1.5;
+  min-width: 0;
+  overflow-wrap: anywhere; /* coupe une longue chaîne sans espaces */
 }
 
 /* Conseils de Tetelle */

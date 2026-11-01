@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 8rem;
-  /* Le bouton catégories est hors flux : la place est sous le dernier cadre. */
+  /* Les boutons catégories et origines sont hors flux : la place est sous le dernier cadre. */
   padding-bottom: 7rem;
 }
 
@@ -16,8 +16,10 @@
   justify-content: center;
   text-align: center;
   padding: 3.5rem 1.5rem;
-  /* Header mobile dans le flux : padding, logo 78px, nav, actions, bordure. */
-  --home-header-offset: calc(4.75rem + 105.39px);
+  /* Header mobile : padding 1rem + bordure 3px + logo (max 112px, à côté de loupe + burger). */
+  --home-header-offset: calc(
+    1rem + 3px + min(112px, (100vw - 7.5rem) * 276 / 720)
+  );
   min-height: calc(100vh - var(--home-header-offset));
   min-height: calc(100dvh - var(--home-header-offset));
   width: 100%;
@@ -83,10 +85,11 @@
   font-style: italic;
 }
 
-/* Sections — même largeur ; titre et bouton hors du cadre */
+/* Sections — même largeur, sans encadré : titre au-dessus du contenu */
 .home__about,
 .home__recipes,
-.home__categories {
+.home__categories,
+.home__origins {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -99,18 +102,13 @@
   align-self: center;
   background: transparent;
   border: none;
+  box-shadow: none;
 }
 
-/* L'ombre (0 6px 20px) du cadre tombe dans le vide.
-   Même compensation sous À propos et sous Quelques recettes. */
-.home__about,
-.home__recipes {
-  margin-bottom: 1.5rem;
-}
-
-/* Le bouton flotte sous le cadre sans allonger la section. */
+/* Le bouton flotte sous la section sans l'allonger. */
 .home__recipes,
-.home__categories {
+.home__categories,
+.home__origins {
   position: relative;
 }
 
@@ -120,21 +118,17 @@
   color: var(--tc-text);
 }
 
-/* Bordure en dégradé : le padding du cadre = l'épaisseur, le fond intérieur reste opaque */
+/* Plus de cadre : le bloc ne porte ni bordure, ni ombre, ni fond de boîte. */
 .home__frame {
-  padding: 1px 0;
-  box-shadow: var(--tc-shadow);
-  background: linear-gradient(
-    90deg,
-    var(--tc-green-madras) 0%,
-    var(--tc-gold-madras) 42%,
-    var(--tc-yellow-madras) 58%,
-    var(--tc-green-madras) 100%
-  );
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 .home__frame-inner {
-  background-color: var(--tc-background-alt);
+  background-color: transparent;
 }
 
 /* À propos */
@@ -142,7 +136,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
-  padding: 1.25rem 1.5rem;
+  padding: 0;
 }
 
 .home__about-img {
@@ -162,10 +156,27 @@
   color: var(--tc-text);
 }
 
+/* Le volet prend la place du texte dans la grille. */
+.home__about-details {
+  min-width: 0;
+}
+
+.home__about-summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--tc-navy);
+}
+
+.home__about-summary:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 2px;
+}
+
 /* Quelques recettes */
 .home__recipes .home__frame-inner,
-.home__categories .home__frame-inner {
-  padding: 1.5rem;
+.home__categories .home__frame-inner,
+.home__origins .home__frame-inner {
+  padding: 0;
 }
 
 .home__recipes-empty {
@@ -174,17 +185,192 @@
   margin: 0;
 }
 
-.home__recipes-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+.home__recipes-carousel {
+  width: 100%;
+}
+
+/* Les contrôles sont en overlay : ils ne changent pas la hauteur du carrousel. */
+.home__recipes-stage {
+  position: relative;
+  width: 100%;
+}
+
+.home__recipes-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.home__recipes-track {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   gap: 1.25rem;
-  list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 500ms ease;
+}
+
+.home__recipes-track--instant {
+  transition: none;
 }
 
 .home__recipes-item {
+  flex: 0 0 100%;
   min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home__recipes-track {
+    transition: none;
+  }
+}
+
+/* Cartes recettes de l'accueil : plus hautes et titre plus lisible que le catalogue. */
+.home__recipes-item .recipe-card__photo img {
+  aspect-ratio: 5 / 4;
+}
+
+.home__recipes-item .recipe-card__title {
+  font-size: 1.125rem;
+}
+
+.home__recipes-item .recipe-card__caption {
+  padding: 2.4rem 1rem 1.35rem;
+}
+
+.home__recipes-arrow,
+.home__recipes-play {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--tc-navy);
+  font-family: var(--tc-font);
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.home__recipes-arrow {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.35rem;
+}
+
+.home__recipes-arrow--prev {
+  left: 0.4rem;
+}
+
+.home__recipes-arrow--next {
+  right: 0.4rem;
+}
+
+.home__recipes-play {
+  top: 0.4rem;
+  right: 0.4rem;
+}
+
+.home__recipes-arrow:hover,
+.home__recipes-arrow:focus-visible,
+.home__recipes-play:hover,
+.home__recipes-play:focus-visible {
+  background-color: rgba(255, 255, 255, 0.72);
+  color: var(--tc-navy);
+}
+
+.home__recipes-carousel:hover .home__recipes-arrow,
+.home__recipes-carousel:hover .home__recipes-play,
+.home__recipes-carousel:focus-within .home__recipes-arrow,
+.home__recipes-carousel:focus-within .home__recipes-play {
+  opacity: 1;
+  pointer-events: auto;
+  background-color: rgba(255, 255, 255, 0.72);
+  color: var(--tc-navy);
+}
+
+.home__recipes-arrow:focus-visible,
+.home__recipes-play:focus-visible,
+.home__recipes-dot:focus-visible {
+  outline: 2px solid var(--tc-yellow-madras);
+  outline-offset: 2px;
+}
+
+.home__recipes-glyph--pause {
+  display: inline-flex;
+  gap: 3px;
+  height: 0.6rem;
+}
+
+.home__recipes-glyph--pause span {
+  display: block;
+  width: 2px;
+  height: 100%;
+  background-color: currentColor;
+  border-radius: 1px;
+}
+
+.home__recipes-glyph--play {
+  display: block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent currentColor;
+}
+
+.home__recipes-dots {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.home__recipes-dot {
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0 0 0.2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.home__recipes-dot::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 1px rgba(27, 58, 107, 0.7);
+}
+
+.home__recipes-dot--current::before {
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--tc-yellow-madras);
+  box-shadow: 0 0 0 1px var(--tc-navy);
 }
 
 /* Parcourir par catégorie */
@@ -228,7 +414,7 @@
 .home__categories-photo img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 
@@ -238,10 +424,10 @@
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 1.75rem 0.5rem 0.55rem;
+  padding: 2.25rem 0.7rem 0.75rem;
   font-family: var(--tc-font-heading);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 1.05rem;
   line-height: 1.35;
   text-align: center;
   color: var(--tc-white);
@@ -258,9 +444,85 @@
   color: var(--tc-white);
 }
 
+/* Parcourir par origines — même cartes que les catégories */
+.home__origins-status {
+  text-align: center;
+  color: var(--tc-text-muted);
+  margin: 0;
+}
+
+.home__origins-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home__origins-card {
+  display: block;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  color: var(--tc-text);
+  background-color: var(--tc-background);
+  border-radius: var(--tc-radius);
+  box-shadow: var(--tc-shadow);
+  transition: box-shadow 0.2s ease;
+}
+
+.home__origins-card:hover {
+  color: var(--tc-text);
+  box-shadow: var(--tc-shadow-hover);
+}
+
+.home__origins-card:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 3px;
+}
+
+.home__origins-photo {
+  position: relative;
+  background-color: var(--tc-background-alt);
+}
+
+.home__origins-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.home__origins-name {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 2.25rem 0.7rem 0.75rem;
+  font-family: var(--tc-font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--tc-white);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  background: linear-gradient(
+    to top,
+    rgba(44, 24, 16, 0.92) 0%,
+    rgba(44, 24, 16, 0.78) 46%,
+    rgba(44, 24, 16, 0) 100%
+  );
+}
+
+.home__origins-card:hover .home__origins-name {
+  color: var(--tc-white);
+}
+
 /* Boutons CTA centrés (override .btn width: 100%) */
 .home__recipes .home__recipes-cta,
-.home__categories .home__categories-cta {
+.home__categories .home__categories-cta,
+.home__origins .home__origins-cta {
   display: flex;
   width: fit-content;
   position: absolute;
@@ -289,7 +551,8 @@
 
   .home__about,
   .home__recipes,
-  .home__categories {
+  .home__categories,
+  .home__origins {
     width: min(1180px, calc(100% - 3rem));
   }
 
@@ -298,28 +561,27 @@
   }
 
   .home__frame {
-    padding: 1px;
-    border-radius: 25px;
+    padding: 0;
+    border-radius: 0;
   }
 
-  /* Le rognage reste sur l'intérieur : l'ombre du cadre n'est pas coupée. */
   .home__frame-inner {
-    border-radius: 24px;
-    overflow: hidden;
+    border-radius: 0;
+    overflow: visible;
   }
 
+  /* Tablette : une colonne. La photo prend toute la largeur utile et garde son ratio. */
   .home__about .home__frame-inner {
-    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-    gap: 2rem;
-    padding: 1.5rem 2rem;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+    align-items: start;
   }
 
   .home__about-img {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    height: auto;
   }
 
   .home__about-text p {
@@ -328,18 +590,53 @@
   }
 
   .home__recipes .home__frame-inner,
-  .home__categories .home__frame-inner {
-    padding: 1.75rem 2rem;
+  .home__categories .home__frame-inner,
+  .home__origins .home__frame-inner {
+    padding: 0;
   }
 
-  .home__recipes-grid {
+  .home__recipes-item {
+    flex-basis: calc((100% - 1.25rem) / 2);
+  }
+
+  .home__recipes-item .recipe-card__title {
+    font-size: 1.3rem;
+  }
+
+  .home__categories-grid,
+  .home__origins-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 
-  .home__categories-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
+  .home__categories-name,
+  .home__origins-name {
+    font-size: 1.2rem;
+    padding: 2.5rem 0.85rem 0.9rem;
+  }
+}
+
+/* À propos seulement : deux colonnes quand le texte a assez de largeur. */
+@media (min-width: 1024px) {
+  .home__about .home__frame-inner {
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .home__about-img {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Grand écran : le texte est déplié, le bouton ne s'affiche pas. */
+  .home__about-summary {
+    display: none;
   }
 }
 

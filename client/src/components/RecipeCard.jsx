@@ -7,9 +7,12 @@ import "./RecipeCard.css";
 function RecipeCard({ recipe, isFirstCard, showTimes }) {
   const photoSource = getRecipePhotoUrl(recipe.photo);
 
+  // Eager seulement pour la première carte du catalogue (au-dessus de la ligne de flottaison).
   let imageLoading = "lazy";
+  let imageFetchPriority = "low";
   if (isFirstCard) {
     imageLoading = "eager";
+    imageFetchPriority = "auto";
   }
 
   let displayTimes = true;
@@ -34,6 +37,7 @@ function RecipeCard({ recipe, isFirstCard, showTimes }) {
           src={photoSource}
           alt={recipe.title}
           loading={imageLoading}
+          fetchPriority={imageFetchPriority}
           onError={(event) => {
             event.currentTarget.src = placeholderPhoto;
           }}
