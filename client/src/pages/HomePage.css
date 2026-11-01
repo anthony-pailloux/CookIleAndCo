@@ -3,8 +3,9 @@
 .home {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding-bottom: 2rem;
+  gap: 8rem;
+  /* Le bouton catégories est hors flux : la place est sous le dernier cadre. */
+  padding-bottom: 7rem;
 }
 
 /* Hero — photo en cover, du bas du header jusqu'au bas de l'écran */
@@ -98,6 +99,19 @@
   align-self: center;
   background: transparent;
   border: none;
+}
+
+/* L'ombre (0 6px 20px) du cadre tombe dans le vide.
+   Même compensation sous À propos et sous Quelques recettes. */
+.home__about,
+.home__recipes {
+  margin-bottom: 1.5rem;
+}
+
+/* Le bouton flotte sous le cadre sans allonger la section. */
+.home__recipes,
+.home__categories {
+  position: relative;
 }
 
 .home__heading {
@@ -249,8 +263,13 @@
 .home__categories .home__categories-cta {
   display: flex;
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% + 1.25rem);
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
   padding: 10px 16px;
   text-decoration: none;
   color: var(--tc-white);
