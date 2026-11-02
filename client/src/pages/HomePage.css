@@ -396,7 +396,7 @@
   text-decoration: none;
   color: var(--tc-text);
   background-color: var(--tc-background);
-  border-radius: var(--tc-radius);
+  border-radius: var(--tc-card-radius);
   box-shadow: var(--tc-shadow);
   transition: box-shadow 0.2s ease;
 }
@@ -467,7 +467,7 @@
   text-decoration: none;
   color: var(--tc-text);
   background-color: var(--tc-background);
-  border-radius: var(--tc-radius);
+  border-radius: var(--tc-card-radius);
   box-shadow: var(--tc-shadow);
   transition: box-shadow 0.2s ease;
 }

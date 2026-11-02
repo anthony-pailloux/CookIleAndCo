@@ -25,6 +25,8 @@
   --tc-text-muted: #6b3d22;
   --tc-border: var(--tc-green-madras);
   --tc-radius: 6px;
+  /* Coins des cartes : plus ronds que les champs et boutons (6px). */
+  --tc-card-radius: 16px;
   /* Brun du texte sur fond crème : repos net, survol un cran au-dessus. */
   --tc-shadow: 0 6px 20px rgba(44, 24, 16, 0.32);
   --tc-shadow-hover: 0 12px 28px rgba(44, 24, 16, 0.42);
@@ -117,12 +119,6 @@ a:hover {
 .btn.btn--outline:disabled:hover {
   background: var(--tc-gold-madras);
   color: var(--tc-navy);
-}
-
-.alert-error {
-  color: var(--tc-primary);
-  font-size: 14px;
-  margin-bottom: var(--tc-spacing);
 }
 
 .bg-green-textured {

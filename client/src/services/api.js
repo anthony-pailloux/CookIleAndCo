@@ -63,7 +63,9 @@ async function readApiResponse(response) {
 
     if (!response.ok) {
         const message = buildApiErrorMessage(data);
-        throw new Error(message);
+        const error = new Error(message);
+        error.status = response.status;
+        throw error;
     }
 
     return data;
@@ -81,6 +83,11 @@ export async function postToApi(path, body) {
 
 export async function putToApi(path, body) {
     const response = await requestFromApi('PUT', path, body);
+    return await readApiResponse(response);
+}
+
+export async function patchToApi(path, body) {
+    const response = await requestFromApi('PATCH', path, body);
     return await readApiResponse(response);
 }
 

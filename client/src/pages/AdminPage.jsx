@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { listRecipes, deleteRecipe } from "../services/recipeServices.js";
 import { createAdmin, listAdmins, deleteAdmin, updateAdmin } from "../services/authServices.js";
 import { useToast } from "../context/ToastContext.jsx";
+import Feedback, { useFeedback } from "../components/Feedback.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { Link, useLocation } from "react-router-dom";
 import DeleteIconButton from "../components/DeleteIconButton.jsx";
@@ -15,6 +16,7 @@ import "./AdminPage.css";
 
 function AdminPage() {
   const { showToast } = useToast();
+  const { confirm } = useFeedback();
   const location = useLocation();
 
   // q ne touche pas section=admins (onglet comptes). La loupe du header ecrit q ici.
@@ -137,9 +139,15 @@ function AdminPage() {
   }
 
   async function handleDeleteRecipe(recipeId, recipeTitle) {
-    const confirmed = window.confirm(
-      'Supprimer la recette "' + recipeTitle + '" ?',
-    );
+    const confirmed = await confirm({
+      title: "Supprimer la recette",
+      message:
+        "La recette « " +
+        recipeTitle +
+        " » sera supprimée, avec sa photo, ses ingrédients et ses étapes.",
+      tone: "error",
+      confirmLabel: "Supprimer",
+    });
 
     if (confirmed === false) {
       return;
@@ -176,9 +184,12 @@ function AdminPage() {
   }
 
   async function handleDeleteAdmin(adminId, adminEmail) {
-    const confirmed = window.confirm(
-      "Supprimer l'administrateur \"" + adminEmail + '" ?',
-    );
+    const confirmed = await confirm({
+      title: "Supprimer l'administrateur",
+      message: "Le compte « " + adminEmail + " » sera supprimé.",
+      tone: "error",
+      confirmLabel: "Supprimer",
+    });
 
     if (confirmed === false) {
       return;
@@ -355,7 +366,7 @@ function AdminPage() {
               </div>
 
               {editAdminFormError !== "" && (
-                <p className="alert-error">{editAdminFormError}</p>
+                <Feedback tone="error">{editAdminFormError}</Feedback>
               )}
 
               <div className="admin-page__form-actions">
@@ -412,7 +423,7 @@ function AdminPage() {
           </div>
 
           {adminFormError !== "" && (
-            <p className="alert-error">{adminFormError}</p>
+            <Feedback tone="error">{adminFormError}</Feedback>
           )}
 
           <button type="submit" className="btn">

@@ -10,6 +10,10 @@ class MealType extends Model {
             foreignKey: 'mealTypeId',
             as: 'recipes',
         });
+        MealType.hasMany(models.PlanningEntry, {
+            foreignKey: 'mealTypeId',
+            as: 'planningEntries',
+        });
     }
 }
 

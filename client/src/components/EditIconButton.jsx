@@ -1,4 +1,4 @@
-// Bouton crayon pour modifier : fond bleu marine, icône blanche.
+// Bouton crayon pour modifier : fond marine foncé, icône jaune madras.
 // Lien si `to` est fourni, sinon bouton. Le libellé reste dans aria-label.
 import { Link } from "react-router-dom";
 import "./EditIconButton.css";

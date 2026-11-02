@@ -312,6 +312,17 @@ function Header() {
   return (
     <header ref={headerRef} className="site-header bg-green-textured">
       <div className="site-header__inner">
+        <button
+          type="button"
+          className="site-header__menu-toggle"
+          aria-label={menuToggleLabel}
+          aria-expanded={isMenuOpen}
+          aria-controls="site-header-menu"
+          onClick={handleToggleMenu}
+        >
+          {menuIcon}
+        </button>
+
         <Link to="/" className="site-header__logo-link">
           <img
             src={logoCookIle}
@@ -421,17 +432,6 @@ function Header() {
               </form>
             )}
           </div>
-
-          <button
-            type="button"
-            className="site-header__menu-toggle"
-            aria-label={menuToggleLabel}
-            aria-expanded={isMenuOpen}
-            aria-controls="site-header-menu"
-            onClick={handleToggleMenu}
-          >
-            {menuIcon}
-          </button>
 
           {auth.admin !== null && (
             <button

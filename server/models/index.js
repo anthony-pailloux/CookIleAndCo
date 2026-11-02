@@ -7,6 +7,10 @@ import Recipe from './Recipe.js';
 import RecipeIngredient from './RecipeIngredient.js';
 import RecipeStep from "./RecipeStep.js";
 import Comment from './Comment.js';
+import PlanningEntry from './PlanningEntry.js';
+import Planning from './Planning.js';
+import ShoppingList from './ShoppingList.js';
+import ShoppingListItem from './ShoppingListItem.js';
 
 const models = {
     Admin,
@@ -17,6 +21,10 @@ const models = {
     RecipeIngredient,
     RecipeStep,
     Comment,
+    Planning,
+    PlanningEntry,
+    ShoppingList,
+    ShoppingListItem,
 };
 
 Object.values(models).forEach(function (model) {

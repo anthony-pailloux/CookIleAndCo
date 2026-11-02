@@ -1,6 +1,6 @@
-// Petit message a l ecran (succes ou erreur).
+// Petit message a l ecran (succes ou erreur), rendu par Feedback.
 import { createContext, useCallback, useContext, useState } from "react";
-import "../components/Toast.css";
+import Feedback from "../components/Feedback.jsx";
 
 const ToastContext = createContext(null);
 
@@ -19,23 +19,28 @@ export function ToastProvider({ children }) {
     }, 3500);
   }, []);
 
-  let toastClassName = "toast";
+  let toastTone = "info";
   if (toastType === "success") {
-    toastClassName = "toast toast--success";
+    toastTone = "success";
   } else if (toastType === "error") {
-    toastClassName = "toast toast--error";
+    toastTone = "error";
   }
 
   const contextValue = { showToast };
 
+  let toastNode = null;
+  if (toastVisible) {
+    toastNode = (
+      <Feedback variant="toast" tone={toastTone}>
+        {toastMessage}
+      </Feedback>
+    );
+  }
+
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      {toastVisible && (
-        <div className={toastClassName} role="status">
-          {toastMessage}
-        </div>
-      )}
+      {toastNode}
     </ToastContext.Provider>
   );
 }

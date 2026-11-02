@@ -19,8 +19,8 @@
   min-inline-size: 0;
   margin: 0;
   padding: 0.35rem 1.5rem 1.5rem;
-  border: 2px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
+  border-radius: var(--tc-card-radius);
   background-color: var(--tc-white);
   box-shadow: var(--tc-shadow);
 }
@@ -114,8 +114,8 @@
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  border-radius: var(--tc-radius);
-  border: 2px solid var(--tc-green-madras);
+  border-radius: var(--tc-card-radius);
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
   background-color: var(--tc-background);
 }
 
@@ -153,7 +153,7 @@
   padding: 4px 12px;
   overflow: hidden;
   background-color: var(--tc-white);
-  border: 1px solid var(--tc-border);
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
   border-radius: var(--tc-radius);
 }
 
@@ -238,8 +238,8 @@
 
 /* En-tete et saisies : memes colonnes, pour que les titres tombent sur les champs. */
 .admin-form__ingredient-fields {
-  border: 2px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
+  border-radius: var(--tc-card-radius);
   overflow: hidden;
 }
 
@@ -265,7 +265,7 @@
 
 .admin-form__ingredient-line {
   background-color: var(--tc-white);
-  border-top: 1px solid var(--tc-green-madras);
+  border-top: 1px solid color-mix(in srgb, var(--tc-green-madras) 22%, transparent);
 }
 
 .admin-form__ingredient-cell {

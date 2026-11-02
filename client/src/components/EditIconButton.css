@@ -1,5 +1,5 @@
-/* Crayon : même carré que la corbeille, fond bleu marine, icône blanche.
-   Le survol assombrit seulement le fond. */
+/* Crayon : fond marine foncé, bordure et icône jaune madras.
+   Au survol, le fond passe au bleu marine et l'icône devient blanche. */
 
 .admin-form__edit {
   flex-shrink: 0;
@@ -10,10 +10,10 @@
   justify-content: center;
   margin: 0;
   padding: 0;
-  border: 1px solid var(--tc-navy);
+  border: 1px solid var(--tc-yellow-madras);
   border-radius: var(--tc-radius);
-  background: var(--tc-navy);
-  color: var(--tc-white);
+  background: #122848;
+  color: var(--tc-yellow-madras);
   opacity: 1;
   cursor: pointer;
   text-decoration: none;
@@ -21,8 +21,8 @@
 
 .admin-form__edit:hover:not(:disabled),
 .admin-form__edit:focus-visible:not(:disabled) {
-  background: #122848;
-  border-color: var(--tc-navy);
+  background: var(--tc-navy);
+  border-color: var(--tc-yellow-madras);
   color: var(--tc-white);
   cursor: pointer;
 }
@@ -30,9 +30,9 @@
 /* Rien de sélectionné : même teinte, pas de survol, curseur interdit. */
 .admin-form__edit:disabled,
 .admin-form__edit:disabled:hover {
-  background: var(--tc-navy);
-  border-color: var(--tc-navy);
-  color: var(--tc-white);
+  background: #122848;
+  border-color: var(--tc-yellow-madras);
+  color: var(--tc-yellow-madras);
   opacity: 1;
   cursor: not-allowed;
 }

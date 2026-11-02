@@ -72,11 +72,17 @@ function AdminSectionNav() {
   let createRecipeActive = false;
   let adminsActive = false;
   let referencesActive = false;
+  let planningActive = false;
+  let shoppingListActive = false;
 
   if (pathname === "/dashboard-admins/recettes/nouvelle") {
     createRecipeActive = true;
   } else if (pathname.startsWith("/dashboard-admins/referentiels")) {
     referencesActive = true;
+  } else if (pathname.startsWith("/dashboard-admins/planning")) {
+    planningActive = true;
+  } else if (pathname.startsWith("/dashboard-admins/liste-courses")) {
+    shoppingListActive = true;
   } else if (
     pathname === "/dashboard-admins" &&
     isAdminsDashboardSection(location.search) === true
@@ -92,6 +98,8 @@ function AdminSectionNav() {
   let createRecipeClassName = getSectionClassName(createRecipeActive);
   let adminsClassName = getSectionClassName(adminsActive);
   let referencesClassName = getSectionClassName(referencesActive);
+  let planningClassName = getSectionClassName(planningActive);
+  let shoppingListClassName = getSectionClassName(shoppingListActive);
 
   let recipesAriaCurrent;
   if (recipesActive) {
@@ -111,6 +119,16 @@ function AdminSectionNav() {
   let referencesAriaCurrent;
   if (referencesActive) {
     referencesAriaCurrent = "page";
+  }
+
+  let planningAriaCurrent;
+  if (planningActive) {
+    planningAriaCurrent = "page";
+  }
+
+  let shoppingListAriaCurrent;
+  if (shoppingListActive) {
+    shoppingListAriaCurrent = "page";
   }
 
   let toolbarClassName = "admin-page__toolbar";
@@ -147,6 +165,22 @@ function AdminSectionNav() {
           aria-current={referencesAriaCurrent}
         >
           Catégories, origines, repas
+        </Link>
+        <Link
+          to="/dashboard-admins/planning"
+          id="admin-tab-planning"
+          className={planningClassName}
+          aria-current={planningAriaCurrent}
+        >
+          Planning
+        </Link>
+        <Link
+          to="/dashboard-admins/liste-courses"
+          id="admin-tab-shopping-list"
+          className={shoppingListClassName}
+          aria-current={shoppingListAriaCurrent}
+        >
+          Liste de courses
         </Link>
         <Link
           to="/dashboard-admins?section=admins"

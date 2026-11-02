@@ -10,6 +10,8 @@ import CategoriesPage from "./pages/CategoriesPage.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import AdminRecipeFormPage from "./pages/AdminRecipeFormPage.jsx";
 import AdminReferencesPage from "./pages/AdminReferencesPage.jsx";
+import PlanningPage from "./pages/PlanningPage.jsx";
+import ShoppingListPage from "./pages/ShoppingListPage.jsx";
 
 function App() {
   return (
@@ -30,6 +32,9 @@ function App() {
             <Route path="recettes/nouvelle" element={<AdminRecipeFormPage />} />
             <Route path="recettes/:id/modifier" element={<AdminRecipeFormPage />} />
             <Route path="referentiels" element={<AdminReferencesPage />} />
+            <Route path="planning" element={<PlanningPage />} />
+            <Route path="liste-courses" element={<ShoppingListPage />} />
+            <Route path="liste-courses/:id" element={<ShoppingListPage />} />
           </Route>
 
           <Route path="/recettes" element={<RecipesPage />} />

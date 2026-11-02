@@ -1,0 +1,47 @@
+/* Mettre à jour : même carré que le crayon, fond bleu marine, icône blanche.
+   Le survol assombrit seulement le fond. */
+
+.admin-form__update {
+  flex-shrink: 0;
+  width: 2.125rem;
+  height: 2.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--tc-navy);
+  border-radius: var(--tc-radius);
+  background: var(--tc-navy);
+  color: var(--tc-white);
+  opacity: 1;
+  cursor: pointer;
+}
+
+.admin-form__update:hover:not(:disabled),
+.admin-form__update:focus-visible:not(:disabled) {
+  background: #122848;
+  border-color: var(--tc-navy);
+  color: var(--tc-white);
+  cursor: pointer;
+}
+
+.admin-form__update:disabled,
+.admin-form__update:disabled:hover {
+  background: var(--tc-navy);
+  border-color: var(--tc-navy);
+  color: var(--tc-white);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.admin-form__update:focus-visible {
+  outline: 2px solid var(--tc-yellow-madras);
+  outline-offset: 2px;
+}
+
+.admin-form__update-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+}

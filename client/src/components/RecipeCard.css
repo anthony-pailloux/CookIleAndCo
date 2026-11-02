@@ -2,7 +2,7 @@
 
 .recipe-card {
   display: block;
-  border-radius: var(--tc-radius);
+  border-radius: var(--tc-card-radius);
   overflow: hidden;
   background: var(--tc-white);
   text-decoration: none;

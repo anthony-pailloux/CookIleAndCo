@@ -1,24 +1,27 @@
+// Ligne d'ingrédient : mesure (quantité + unité) séparée du nom.
 function IngredientItem({ ingredient }) {
-  const parts = [];
+  const measureParts = [];
 
   if (ingredient.quantity) {
-    parts.push(ingredient.quantity);
+    measureParts.push(ingredient.quantity);
   }
 
   if (ingredient.unit) {
-    parts.push(ingredient.unit);
+    measureParts.push(ingredient.unit);
   }
 
-  if (ingredient.name) {
-    parts.push(ingredient.name);
+  let measure = "";
+  if (measureParts.length > 0) {
+    measure = measureParts.join(" ");
   }
 
   return (
-    <>
-      <p>
-        {parts.join(" ")}
-      </p>
-    </>
+    <p className="recipe-detail__ingredient">
+      {measure !== "" && (
+        <span className="recipe-detail__ingredient-qty">{measure}</span>
+      )}
+      <span className="recipe-detail__ingredient-name">{ingredient.name}</span>
+    </p>
   );
 }
 

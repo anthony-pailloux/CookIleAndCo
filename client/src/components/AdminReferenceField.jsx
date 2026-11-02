@@ -9,6 +9,7 @@ import {
   uploadReferenceImage,
 } from "../services/referenceServices.js";
 import { useToast } from "../context/ToastContext.jsx";
+import { useFeedback } from "./Feedback.jsx";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter.js";
 import DeleteIconButton from "./DeleteIconButton.jsx";
@@ -29,6 +30,7 @@ function AdminReferenceField({
   article,
 }) {
   const { showToast } = useToast();
+  const { confirm } = useFeedback();
 
   // Image optionnelle : true seulement si le parent le demande.
   let imageSupported = false;
@@ -185,9 +187,12 @@ function AdminReferenceField({
     }
 
     const itemName = findItemName(selectedId);
-    const confirmed = window.confirm(
-      "Supprimer " + entityLabel + ' "' + itemName + '" ?',
-    );
+    const confirmed = await confirm({
+      title: "Confirmer la suppression",
+      message: "Supprimer " + entityLabel + " « " + itemName + " » ?",
+      tone: "error",
+      confirmLabel: "Supprimer",
+    });
 
     if (confirmed === false) {
       return;

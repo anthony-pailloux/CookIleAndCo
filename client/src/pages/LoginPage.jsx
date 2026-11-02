@@ -2,6 +2,7 @@
 import { login } from "../services/authServices.js";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import Feedback from "../components/Feedback.jsx";
 import "./LoginPage.css";
 import "../components/Button.css";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +60,7 @@ function LoginPage() {
             />
           </div>
 
-          {errorMessage !== "" && <p className="alert-error">{errorMessage}</p>}
+          {errorMessage !== "" && <Feedback tone="error">{errorMessage}</Feedback>}
 
           <button type="submit" className="btn">
             Se connecter

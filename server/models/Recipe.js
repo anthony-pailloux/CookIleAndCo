@@ -31,6 +31,10 @@ class Recipe extends Model {
             foreignKey: 'recipeId',
             as: 'comments',
         });
+        Recipe.hasMany(models.PlanningEntry, {
+            foreignKey: 'recipeId',
+            as: 'planningEntries',
+        });
     }
 }
 

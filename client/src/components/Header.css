@@ -180,7 +180,7 @@
   outline-offset: 2px;
 }
 
-/* Mobile — logo, puis loupe et burger. La nav est dans le panneau. */
+/* Mobile — burger à gauche, logo au centre, loupe à droite. */
 @media (max-width: 767px) {
   .site-header {
     padding: 0.5rem 0.75rem;
@@ -188,7 +188,7 @@
 
   .site-header__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 0.5rem;
     row-gap: 0;
@@ -196,8 +196,16 @@
     width: 100%;
   }
 
-  .site-header__logo-link {
+  .site-header__menu-toggle {
+    display: inline-flex;
     grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    align-self: start;
+  }
+
+  .site-header__logo-link {
+    grid-column: 2;
     grid-row: 1;
     width: 100%;
     justify-content: center;
@@ -212,16 +220,12 @@
 
   .site-header__actions {
     display: flex;
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
     align-self: start;
     justify-self: end;
     margin-top: 0;
     gap: 0.5rem;
-  }
-
-  .site-header__menu-toggle {
-    display: inline-flex;
   }
 
   .site-header__menu-toggle[aria-expanded="true"] {
@@ -282,7 +286,8 @@
 
   .site-header__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    /* Colonne 3 : au moins la largeur loupe + Déconnexion, sinon elle déborde sur Dashboard */
+    grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
     align-items: center;
     column-gap: 1rem;
     width: 100%;

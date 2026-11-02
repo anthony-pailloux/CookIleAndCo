@@ -49,7 +49,7 @@
   /* border-box global avalerait ce trait dans une hauteur nulle. */
   box-sizing: content-box;
   transform: translateX(-50%);
-  border-bottom: 2px solid var(--tc-green-madras);
+  border-bottom: 1px solid color-mix(in srgb, var(--tc-green-madras) 40%, transparent);
   pointer-events: none;
 }
 
@@ -73,7 +73,8 @@ a.admin-page__tab:hover {
 .admin-page__tab {
   margin: 0;
   padding: 0.65rem 1.15rem;
-  border: 2px solid var(--tc-green-madras);
+  /* Filet léger : le fond suffit pour l'onglet actif. */
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 40%, transparent);
   border-radius: var(--tc-radius);
   background-color: var(--tc-white);
   color: var(--tc-green-madras);
@@ -90,6 +91,7 @@ a.admin-page__tab:hover {
 
 .admin-page__tab--active {
   background-color: var(--tc-green-madras);
+  border-color: transparent;
   color: var(--tc-white);
 }
 
@@ -112,8 +114,8 @@ a.admin-page__tab.admin-page__tab--active:hover {
 /* Sections (recettes, administrateurs…) */
 .admin-page__section {
   background-color: var(--tc-white);
-  border: 2px solid var(--tc-green-madras);
-  border-radius: var(--tc-radius);
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
+  border-radius: var(--tc-card-radius);
   padding: 1.25rem 1.5rem 1.5rem;
   min-width: 0;
   overflow-x: clip;
@@ -124,6 +126,11 @@ a.admin-page__tab.admin-page__tab--active:hover {
 
 .admin-page__section--admins {
   margin-bottom: 2rem;
+}
+
+/* Champs des pages admin : filet léger, le vert plein reste réservé au public. */
+.admin-page .input {
+  border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
 }
 
 .admin-page__section-title {
@@ -180,14 +187,16 @@ a.admin-page__tab.admin-page__tab--active:hover {
   width: 100%;
   border-collapse: collapse;
   margin-top: 0.5rem;
-  border: 2px solid var(--tc-green-madras);
+  /* La section porte déjà le cadre : pas de second contour autour du tableau. */
+  border: none;
   background-color: var(--tc-white);
 }
 
 .admin-recipes-table th,
 .admin-recipes-table td {
   padding: 0.75rem;
-  border: 1px solid var(--tc-green-madras);
+  border: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--tc-green-madras) 22%, transparent);
   text-align: left;
   vertical-align: middle;
   color: var(--tc-text);
@@ -317,8 +326,8 @@ a.admin-page__tab.admin-page__tab--active:hover {
   .admin-recipes-table tbody tr {
     display: block;
     margin-bottom: 1rem;
-    border: 2px solid var(--tc-green-madras);
-    border-radius: var(--tc-radius);
+    border: 1px solid color-mix(in srgb, var(--tc-green-madras) 35%, transparent);
+    border-radius: var(--tc-card-radius);
     background-color: var(--tc-white);
     overflow: hidden;
   }
@@ -338,7 +347,7 @@ a.admin-page__tab.admin-page__tab--active:hover {
     gap: 0.75rem;
     padding: 0.625rem 0.75rem;
     border: none;
-    border-bottom: 1px solid var(--tc-green-madras);
+    border-bottom: 1px solid color-mix(in srgb, var(--tc-green-madras) 22%, transparent);
     text-align: right;
     word-break: break-word;
   }

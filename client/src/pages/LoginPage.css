@@ -14,7 +14,7 @@
   padding: 1.5rem 1.25rem 1.25rem;
   background-color: var(--tc-white);
   border: 1px solid var(--tc-border);
-  border-radius: var(--tc-radius);
+  border-radius: var(--tc-card-radius);
   box-shadow: var(--tc-shadow);
 }
 

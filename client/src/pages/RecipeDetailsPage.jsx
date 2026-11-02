@@ -15,6 +15,7 @@ import EditIconButton from "../components/EditIconButton.jsx";
 import placeholderPhoto from "../assets/No_Image_Available.jpg";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
+import Feedback, { useFeedback } from "../components/Feedback.jsx";
 import {
   applyRecipeDocumentSeo,
   removeNoindexMeta,
@@ -39,6 +40,7 @@ function RecipeDetailsPage() {
 
   const { id } = useParams();
   const { showToast } = useToast();
+  const { confirm } = useFeedback();
 
   useEffect(() => {
     async function loadRecipeDetails() {
@@ -127,9 +129,12 @@ function RecipeDetailsPage() {
   }
 
   async function handleDeleteComment(commentId, pseudo) {
-    const confirmed = window.confirm(
-      'Supprimer le commentaire de "' + pseudo + '" ?',
-    );
+    const confirmed = await confirm({
+      title: "Supprimer le commentaire",
+      message: "Le commentaire de « " + pseudo + " » sera retiré de la recette.",
+      tone: "error",
+      confirmLabel: "Supprimer",
+    });
 
     if (confirmed === false) {
       return;
@@ -176,21 +181,6 @@ function RecipeDetailsPage() {
 
   const recipeShareUrl = window.location.origin + "/recettes/" + id;
 
-  function handleShareFacebook() {
-    const facebookUrl =
-      "https://www.facebook.com/sharer/sharer.php?u=" +
-      encodeURIComponent(recipeShareUrl);
-
-    window.open(facebookUrl, "_blank", "noopener,noreferrer");
-  }
-
-  function handleShareWhatsApp() {
-    let message = recipeDetails.title + " — Cook'île & Co " + recipeShareUrl;
-    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
-
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-  }
-
   async function handleCopyLink() {
     try {
       await navigator.clipboard.writeText(recipeShareUrl);
@@ -200,19 +190,22 @@ function RecipeDetailsPage() {
     }
   }
 
-  async function handleShareMain() {
-    if (navigator.share) {
-      try {
-        await navigator.share({
+  function handleShareMain() {
+    // Appel direct dans le clic : un await avant share() ferait perdre le geste.
+    if (typeof navigator.share === 'function') {
+      navigator
+        .share({
           title: recipeDetails.title,
           text: "Découvre cette recette sur Cook'île & Co",
           url: recipeShareUrl,
+        })
+        .catch(function (err) {
+          if (err.name === 'AbortError') {
+            // Feuille fermée : pas de copie du lien, pas de message d'erreur.
+          }
         });
-      } catch (err) {
-        // Annulation utilisateur, on ne fait rien
-      }
     } else {
-      await handleCopyLink();
+      handleCopyLink();
     }
   }
 
@@ -228,11 +221,86 @@ function RecipeDetailsPage() {
               event.currentTarget.src = placeholderPhoto;
             }}
           />
-        </div>
-
-        <div className="recipe-detail__intro">
-          <div className="recipe-detail__title-row">
-            <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
+          {/* Icône sur la photo : partage natif, ou copie du lien si indisponible. */}
+          <button
+            type="button"
+            className="recipe-detail__share-icon"
+            aria-label="Partager cette recette"
+            onClick={handleShareMain}
+          >
+            <svg
+              className="recipe-detail__share-icon-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <circle
+                cx="6"
+                cy="12"
+                r="2.15"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <circle
+                cx="17"
+                cy="7"
+                r="2.15"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <circle
+                cx="17"
+                cy="17"
+                r="2.15"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <line
+                x1="8.1"
+                y1="11.1"
+                x2="14.9"
+                y2="8.1"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <line
+                x1="8.1"
+                y1="12.9"
+                x2="14.9"
+                y2="15.9"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+          {/* Titre posé sur le bas de la photo. Le voile ne couvre que le texte. */}
+          <div className="recipe-detail__overlay">
+            <div className="recipe-detail__overlay-copy">
+              <div className="recipe-detail__badges">
+                <span className="recipe-detail__badge">
+                  {recipeDetails.category.name}
+                </span>
+                <span className="recipe-detail__badge">
+                  {recipeDetails.origin.name}
+                </span>
+                <span className="recipe-detail__badge">
+                  {recipeDetails.mealType.name}
+                </span>
+              </div>
+              <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
+              <p className="recipe-detail__time">
+                Préparation ⏱ {recipeDetails.preparationTime} min · Cuisson ⏱{" "}
+                {recipeDetails.cookingTime} min
+              </p>
+            </div>
             {auth.admin !== null && (
               <EditIconButton
                 to={
@@ -246,55 +314,6 @@ function RecipeDetailsPage() {
               />
             )}
           </div>
-          <div className="recipe-detail__badges">
-            <span className="recipe-detail__badge">
-              {recipeDetails.category.name}
-            </span>
-            <span className="recipe-detail__badge">
-              {recipeDetails.origin.name}
-            </span>
-            <span className="recipe-detail__badge">
-              {recipeDetails.mealType.name}
-            </span>
-          </div>
-          <p className="recipe-detail__time">
-            Préparation ⏱ {recipeDetails.preparationTime} min · Cuisson ⏱{" "}
-            {recipeDetails.cookingTime} min
-          </p>
-          <section className="recipe-detail__share recipe-detail__share--hero">
-            <button
-              type="button"
-              className="btn btn--primary recipe-detail__share-main"
-              onClick={handleShareMain}
-            >
-              Partager cette recette
-            </button>
-            <p className="recipe-detail__share-links">
-              <button
-                type="button"
-                className="recipe-detail__share-link"
-                onClick={handleShareFacebook}
-              >
-                Facebook
-              </button>
-              <span> · </span>
-              <button
-                type="button"
-                className="recipe-detail__share-link"
-                onClick={handleShareWhatsApp}
-              >
-                WhatsApp
-              </button>
-              <span> · </span>
-              <button
-                type="button"
-                className="recipe-detail__share-link"
-                onClick={handleCopyLink}
-              >
-                Copier le lien
-              </button>
-            </p>
-          </section>
         </div>
       </section>
 
@@ -404,7 +423,9 @@ function RecipeDetailsPage() {
           </div>
 
           {commentError && (
-            <p className="recipe-detail__comment-error">{commentError}</p>
+            <Feedback tone="error" className="recipe-detail__comment-error">
+              {commentError}
+            </Feedback>
           )}
 
           <button
