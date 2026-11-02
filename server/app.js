@@ -21,6 +21,8 @@ import captchaRoutes from './routes/captchaRoutes.js';
 import sitemapRoutes from './routes/sitemapRoutes.js';
 import planningRoutes from './routes/planningRoutes.js';
 import shoppingListRoutes from './routes/shoppingListRoutes.js';
+import recipeViewRoutes from './routes/recipeViewRoutes.js';
+import adminStatsRoutes from './routes/adminStatsRoutes.js';
 import { createServeClient } from './controllers/spaController.js';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -84,6 +86,8 @@ app.use('/api/mealTypes', mealTypeRoutes);
 app.use('/api/captcha', captchaRoutes);
 app.use('/api/plannings', planningRoutes);
 app.use('/api/shopping-lists', shoppingListRoutes);
+app.use('/api/recipe-views', recipeViewRoutes);
+app.use('/api/admin/stats', adminStatsRoutes);
 
 // Avant le fichier statique, sinon client/dist/sitemap.xml gagne
 app.use(sitemapRoutes);

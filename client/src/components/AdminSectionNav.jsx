@@ -74,6 +74,7 @@ function AdminSectionNav() {
   let referencesActive = false;
   let planningActive = false;
   let shoppingListActive = false;
+  let statsActive = false;
 
   if (pathname === "/dashboard-admins/recettes/nouvelle") {
     createRecipeActive = true;
@@ -83,6 +84,8 @@ function AdminSectionNav() {
     planningActive = true;
   } else if (pathname.startsWith("/dashboard-admins/liste-courses")) {
     shoppingListActive = true;
+  } else if (pathname.startsWith("/dashboard-admins/statistiques")) {
+    statsActive = true;
   } else if (
     pathname === "/dashboard-admins" &&
     isAdminsDashboardSection(location.search) === true
@@ -100,6 +103,7 @@ function AdminSectionNav() {
   let referencesClassName = getSectionClassName(referencesActive);
   let planningClassName = getSectionClassName(planningActive);
   let shoppingListClassName = getSectionClassName(shoppingListActive);
+  let statsClassName = getSectionClassName(statsActive);
 
   let recipesAriaCurrent;
   if (recipesActive) {
@@ -129,6 +133,11 @@ function AdminSectionNav() {
   let shoppingListAriaCurrent;
   if (shoppingListActive) {
     shoppingListAriaCurrent = "page";
+  }
+
+  let statsAriaCurrent;
+  if (statsActive) {
+    statsAriaCurrent = "page";
   }
 
   let toolbarClassName = "admin-page__toolbar";
@@ -181,6 +190,14 @@ function AdminSectionNav() {
           aria-current={shoppingListAriaCurrent}
         >
           Liste de courses
+        </Link>
+        <Link
+          to="/dashboard-admins/statistiques"
+          id="admin-tab-stats"
+          className={statsClassName}
+          aria-current={statsAriaCurrent}
+        >
+          Statistiques
         </Link>
         <Link
           to="/dashboard-admins?section=admins"

@@ -7,6 +7,7 @@ import Recipe from './Recipe.js';
 import RecipeIngredient from './RecipeIngredient.js';
 import RecipeStep from "./RecipeStep.js";
 import Comment from './Comment.js';
+import RecipeView from './RecipeView.js';
 import PlanningEntry from './PlanningEntry.js';
 import Planning from './Planning.js';
 import ShoppingList from './ShoppingList.js';
@@ -21,6 +22,7 @@ const models = {
     RecipeIngredient,
     RecipeStep,
     Comment,
+    RecipeView,
     Planning,
     PlanningEntry,
     ShoppingList,

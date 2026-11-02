@@ -7,6 +7,7 @@ import {
   createRecipeComment,
   deleteRecipeComment,
 } from "../services/recipeServices.js";
+import { recordPageView } from "../services/recipeViewServices.js";
 import { getCaptcha } from "../services/captchaServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import IngredientItem from "../components/IngredientItem.jsx";
@@ -23,6 +24,9 @@ import {
 } from "../utils/recipeSeo.js";
 import "../components/Button.css";
 import "./RecipeDetailsPage.css";
+
+// Bloque le second envoi de StrictMode, puis se libère au vrai départ de la fiche.
+let recordedRecipeViewId = null;
 
 function RecipeDetailsPage() {
   const [recipeDetails, setRecipeDetails] = useState(null);
@@ -98,6 +102,49 @@ function RecipeDetailsPage() {
       loadCommentsData();
     }
   }, [id, loading, errorMessage]);
+
+  let loadedRecipeId = null;
+  if (recipeDetails) {
+    loadedRecipeId = recipeDetails.id;
+  }
+
+  useEffect(function () {
+    if (loading) {
+      return;
+    }
+
+    if (errorMessage !== "") {
+      return;
+    }
+
+    if (loadedRecipeId === null) {
+      return;
+    }
+
+    if (String(loadedRecipeId) !== String(id)) {
+      return;
+    }
+
+    if (recordedRecipeViewId === loadedRecipeId) {
+      return;
+    }
+
+    recordedRecipeViewId = loadedRecipeId;
+
+    recordPageView("recipe", loadedRecipeId).catch(function () {
+      // Échec réseau ou refus : la fiche reste lisible, sans message.
+    });
+
+    return function () {
+      const sentId = loadedRecipeId;
+
+      setTimeout(function () {
+        if (recordedRecipeViewId === sentId) {
+          recordedRecipeViewId = null;
+        }
+      }, 0);
+    };
+  }, [id, loading, errorMessage, loadedRecipeId]);
 
   async function handleCommentSubmit(event) {
     event.preventDefault();

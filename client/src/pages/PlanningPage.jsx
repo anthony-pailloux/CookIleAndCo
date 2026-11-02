@@ -200,7 +200,6 @@ function PlanningPage() {
           setPlannings(loadedPlannings);
 
           const loadedLists = await listShoppingLists();
-          console.log("PlanningPage — listes:", loadedLists.length);
           setShoppingLists(loadedLists);
 
           if (loadedPlannings.length > 0) {

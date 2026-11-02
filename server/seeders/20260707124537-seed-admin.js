@@ -51,7 +51,7 @@ export default {
     // on cree le compte admin
     await queryInterface.bulkInsert('admins', [adminRow]);
 
-    console.log('seed admin, compte inséré :', adminEmail);
+    console.log('seed admin, compte inséré');
   },
 
   async down() {

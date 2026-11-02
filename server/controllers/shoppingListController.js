@@ -100,8 +100,6 @@ export async function listShoppingLists(req, res) {
         });
     }
 
-    console.log('GET /api/shopping-lists — count:', data.length);
-
     res.status(200).json(data);
 }
 

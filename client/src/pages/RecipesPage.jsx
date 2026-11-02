@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { listRecipes } from "../services/recipeServices.js";
 import { listCategories, listOrigins, listMealTypes } from "../services/referenceServices.js";
+import { recordPageView } from "../services/recipeViewServices.js";
 import RecipeCard from "../components/RecipeCard.jsx";
 
 function buildRecipesPageUrl(searchParams, pageNumber) {
@@ -22,6 +23,9 @@ function buildRecipesPageUrl(searchParams, pageNumber) {
 
   return "/recettes?" + query;
 }
+
+// Bloque le second envoi de StrictMode, puis se libère au départ de la page.
+let catalogPageViewSent = false;
 
 function RecipesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -105,6 +109,24 @@ function RecipesPage() {
     setSelectedCategory(value);
     applyQueryParam("categorie", value);
   }
+
+  useEffect(function () {
+    if (catalogPageViewSent) {
+      return;
+    }
+
+    catalogPageViewSent = true;
+
+    recordPageView("catalog").catch(function () {
+      // Échec réseau : le catalogue reste utilisable.
+    });
+
+    return function () {
+      setTimeout(function () {
+        catalogPageViewSent = false;
+      }, 0);
+    };
+  }, []);
 
   // Recopie les filtres depuis l URL
   useEffect(() => {

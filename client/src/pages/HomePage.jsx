@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { listRecipes } from "../services/recipeServices.js";
 import { listCategories, listOrigins } from "../services/referenceServices.js";
+import { recordPageView } from "../services/recipeViewServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import RecipeCard from "../components/RecipeCard.jsx";
 import "./HomePage.css";
@@ -34,6 +35,9 @@ function readAboutSideBySide() {
   return false;
 }
 
+// Bloque le second envoi de StrictMode, puis se libère au départ de la page.
+let homePageViewSent = false;
+
 function HomePage() {
   const [featuredRecipes, setFeaturedRecipes] = useState([]);
   const [slideIndex, setSlideIndex] = useState(0);
@@ -49,12 +53,29 @@ function HomePage() {
   const carouselRef = useRef(null);
   const keyboardModeRef = useRef(false);
 
+  useEffect(function () {
+    if (homePageViewSent) {
+      return;
+    }
+
+    homePageViewSent = true;
+
+    recordPageView("home").catch(function () {
+      // Échec réseau : l'accueil reste utilisable.
+    });
+
+    return function () {
+      setTimeout(function () {
+        homePageViewSent = false;
+      }, 0);
+    };
+  }, []);
+
   useEffect(() => {
     async function loadFeaturedRecipes() {
       try {
         // Liste déjà triée par createdAt DESC : les 5 premières sont les plus récentes.
         const response = await listRecipes({ page: 1, limit: 5 });
-        console.log("HomePage — 5 dernières recettes:", response.data);
 
         if (Array.isArray(response.data)) {
           setFeaturedRecipes(response.data);
@@ -305,7 +326,6 @@ function HomePage() {
   function handleAboutToggle(event) {
     // Le navigateur a ouvert ou fermé le <details> : on retient cet état.
     // À partir de 1024 px l'ouverture est forcée : ce n'est pas un clic à mémoriser.
-    console.log("HomePage — volet à propos ouvert:", event.currentTarget.open);
     if (isAboutSideBySide === false) {
       setIsAboutOpen(event.currentTarget.open);
     }
@@ -414,7 +434,6 @@ function HomePage() {
     async function loadOrigins() {
       try {
         const response = await listOrigins();
-        console.log("HomePage — origines:", response.data);
 
         if (Array.isArray(response.data)) {
           setOrigins(response.data.slice(0, 3));
@@ -422,7 +441,6 @@ function HomePage() {
           setOrigins([]);
         }
       } catch (err) {
-        console.log("HomePage — origines erreur:", err);
         setOrigins([]);
       }
 

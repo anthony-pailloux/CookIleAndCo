@@ -2,12 +2,34 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listCategories, listOrigins } from "../services/referenceServices.js";
+import { recordPageView } from "../services/recipeViewServices.js";
 import { getRecipePhotoUrl } from "../utils/recipePhotoUrl.js";
 import "./CategoriesPage.css";
+
+// Bloque le second envoi de StrictMode, puis se libère au départ de la page.
+let categoriesPageViewSent = false;
 
 function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [origins, setOrigins] = useState([]);
+
+  useEffect(function () {
+    if (categoriesPageViewSent) {
+      return;
+    }
+
+    categoriesPageViewSent = true;
+
+    recordPageView("categories").catch(function () {
+      // Échec réseau : la page reste utilisable.
+    });
+
+    return function () {
+      setTimeout(function () {
+        categoriesPageViewSent = false;
+      }, 0);
+    };
+  }, []);
 
   useEffect(() => {
     async function loadData() {
