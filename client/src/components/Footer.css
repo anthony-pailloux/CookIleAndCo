@@ -1,37 +1,169 @@
+/* Pied de page — mobile first */
+
+/* Le fond vient de la classe bg-green-textured, la même que le header : ne pas le redéfinir ici. */
 .site-footer {
-  border-top: 3px solid var(--tc-yellow-madras);
-  color: var(--tc-yellow-madras);
-  padding: 1rem 1.5rem;
-  text-align: center;
-  font-size: 0.875rem;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
   margin-top: 0;
+  border-top: 3px solid var(--tc-yellow-madras);
+  color: var(--tc-white);
 }
 
-.site-footer p {
-  margin: 0 0 0.25rem;
+/* Même largeur utile que les sections de l'accueil. */
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  width: min(1180px, calc(100% - 2rem));
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2.5rem 0 1.25rem;
 }
 
-.site-footer a {
+/* Marque */
+.site-footer__brand {
+  min-width: 0;
+}
+
+.site-footer__name {
+  margin: 0 0 0.35rem;
+  font-family: var(--tc-font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+}
+
+/* 19px gras : assez grand pour rester lisible en blanc sur ce vert. */
+.site-footer__tagline {
+  margin: 0;
+  font-size: 1.1875rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Filet décoratif, comme sous les titres de l'accueil ; jaune car l'or s'efface sur le vert. */
+.site-footer__brand::after {
+  content: "";
   display: block;
-  font-size: 0.8125rem;
-  opacity: 0.92;
-  color: inherit;
-  text-decoration: none;
+  width: 3.5rem;
+  height: 2px;
+  margin-top: 1rem;
+  background-color: var(--tc-yellow-madras);
 }
 
-.site-footer a:hover {
+/* Navigation */
+.site-footer__nav {
+  min-width: 0;
+}
+
+/* Surtitre : blanc pur, ni jaune ni blanc atténué, trop peu contrastés sur le vert. */
+.site-footer__eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.25rem;
+  row-gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Liens : hauteur de 44px pour le doigt ; le texte reste blanc dans tous les états. */
+.site-footer__link,
+.site-footer__credit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  border-radius: var(--tc-radius);
+  color: var(--tc-white);
   text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
+  transition: text-decoration-color 0.2s ease;
 }
 
+/* Comme les liens du header, en un peu plus grand et plus gras pour le contraste. */
+.site-footer__link {
+  font-family: var(--tc-font-heading);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* Survol : seul le soulignement jaune apparaît (un texte jaune serait illisible ici). */
+.site-footer__link:hover,
+.site-footer__credit:hover {
+  color: var(--tc-white);
+  text-decoration-color: var(--tc-yellow-madras);
+}
+
+/* Focus clavier : contour blanc, le plus contrasté sur le vert. */
+.site-footer__link:focus-visible,
+.site-footer__credit:focus-visible {
+  outline: 2px solid var(--tc-white);
+  outline-offset: 2px;
+}
+
+/* Mentions : séparées du reste par un trait fin. */
+.site-footer__bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.site-footer__copyright {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Tablette et bureau : marque à gauche, navigation à droite, mentions sur une ligne. */
 @media (min-width: 768px) {
-  .site-footer {
-    padding: 1.25rem 2rem;
-    font-size: 0.9375rem;
+  .site-footer__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 3rem;
+    row-gap: 2.5rem;
+    align-items: start;
+    width: min(1180px, calc(100% - 3rem));
+    padding: 3.5rem 0 1.5rem;
   }
 
-  .site-footer a {
-    font-size: 0.875rem;
+  .site-footer__name {
+    font-size: 1.75rem;
+  }
+
+  .site-footer__tagline {
+    font-size: 1.25rem;
+  }
+
+  .site-footer__links {
+    column-gap: 2.25rem;
+  }
+
+  .site-footer__bottom {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer__link,
+  .site-footer__credit {
+    transition: none;
   }
 }

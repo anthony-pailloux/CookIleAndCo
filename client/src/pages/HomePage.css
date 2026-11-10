@@ -110,12 +110,40 @@
 .home__categories,
 .home__origins {
   position: relative;
+  /* Même écart en-tête / contenu que dans À propos. */
+  gap: 1.5rem;
 }
 
-.home__heading {
+/* En-tête commun aux quatre sections : surtitre, titre, filet or. */
+.home__section-header {
+  min-width: 0;
+}
+
+/* Surtitre : brun et non or, pour garder un contraste suffisant. */
+.home__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tc-text-muted);
+}
+
+.home__title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.75rem;
+  line-height: 1.2;
   color: var(--tc-text);
+}
+
+/* Filet or décoratif sous le titre. */
+.home__section-header::after {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-top: 1rem;
+  background-color: var(--tc-gold-madras);
 }
 
 /* Plus de cadre : le bloc ne porte ni bordure, ni ombre, ni fond de boîte. */
@@ -143,37 +171,6 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   padding: 0;
-}
-
-.home__about-header {
-  min-width: 0;
-}
-
-/* Surtitre : brun et non or, pour garder un contraste suffisant. */
-.home__about-eyebrow {
-  margin: 0 0 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--tc-text-muted);
-}
-
-.home__about-title {
-  margin: 0;
-  font-size: 1.75rem;
-  line-height: 1.2;
-  color: var(--tc-text);
-}
-
-/* Filet or décoratif sous le titre. */
-.home__about-header::after {
-  content: "";
-  display: block;
-  width: 3.5rem;
-  height: 2px;
-  margin-top: 1rem;
-  background-color: var(--tc-gold-madras);
 }
 
 /* La marge réserve la place du cadre : rien ne dépasse de la section. */
@@ -267,7 +264,7 @@
   width: 100%;
 }
 
-/* Les contrôles sont en overlay : ils ne changent pas la hauteur du carrousel. */
+/* Les flèches sont en overlay sur les photos ; repères et pause sont dessous. */
 .home__recipes-stage {
   position: relative;
   width: 100%;
@@ -287,7 +284,8 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  transition: transform 500ms ease;
+  /* Départ franc, arrivée en douceur. */
+  transition: transform 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .home__recipes-track--instant {
@@ -324,118 +322,169 @@
   padding: 2.4rem 1rem 1.35rem;
 }
 
+/* Boutons : zone tactile de 44px, transparente ; le dessin est la pastille. */
 .home__recipes-arrow,
 .home__recipes-play {
-  position: absolute;
-  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: none;
   border-radius: 50%;
   background-color: transparent;
   color: var(--tc-navy);
-  font-family: var(--tc-font);
-  line-height: 1;
   cursor: pointer;
-  box-shadow: none;
-  opacity: 0;
-  pointer-events: none;
 }
 
+/* Flèches toujours visibles, à mi-hauteur des photos. */
 .home__recipes-arrow {
+  position: absolute;
+  z-index: 2;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.35rem;
 }
 
 .home__recipes-arrow--prev {
-  left: 0.4rem;
+  left: 0.5rem;
 }
 
 .home__recipes-arrow--next {
-  right: 0.4rem;
+  right: 0.5rem;
 }
 
-.home__recipes-play {
-  top: 0.4rem;
-  right: 0.4rem;
-}
-
-.home__recipes-arrow:hover,
-.home__recipes-arrow:focus-visible,
-.home__recipes-play:hover,
-.home__recipes-play:focus-visible {
-  background-color: rgba(255, 255, 255, 0.72);
-  color: var(--tc-navy);
-}
-
-.home__recipes-carousel:hover .home__recipes-arrow,
-.home__recipes-carousel:hover .home__recipes-play,
-.home__recipes-carousel:focus-within .home__recipes-arrow,
-.home__recipes-carousel:focus-within .home__recipes-play {
-  opacity: 1;
-  pointer-events: auto;
-  background-color: rgba(255, 255, 255, 0.72);
-  color: var(--tc-navy);
-}
-
-.home__recipes-arrow:focus-visible,
-.home__recipes-play:focus-visible,
-.home__recipes-dot:focus-visible {
-  outline: 2px solid var(--tc-yellow-madras);
-  outline-offset: 2px;
-}
-
-.home__recipes-glyph--pause {
+/* Pastille commune aux flèches et à lecture / pause : blanche, liseré or, ombre douce. */
+/* Lisible quelle que soit la photo dessous ; l'or reste décoratif. */
+.home__recipes-disc {
   display: inline-flex;
-  gap: 3px;
-  height: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--tc-gold-madras);
+  border-radius: 50%;
+  background-color: var(--tc-white);
+  color: var(--tc-navy);
+  box-shadow: 0 2px 8px rgba(44, 24, 16, 0.32);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease;
 }
 
-.home__recipes-glyph--pause span {
+/* Glyphes SVG : même trait fin et arrondi pour chevrons et pause. */
+.home__recipes-icon {
   display: block;
-  width: 2px;
-  height: 100%;
-  background-color: currentColor;
-  border-radius: 1px;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.home__recipes-glyph--play {
-  display: block;
-  width: 0;
-  height: 0;
-  margin-left: 2px;
-  border-style: solid;
-  border-width: 5px 0 5px 8px;
-  border-color: transparent transparent transparent currentColor;
+/* Triangle de lecture : plein, coins adoucis par le trait. */
+.home__recipes-icon--solid {
+  fill: currentColor;
 }
 
-.home__recipes-dots {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
+/* Survol (souris seulement) : la pastille passe en bleu marine. */
+@media (hover: hover) {
+  .home__recipes-arrow:hover .home__recipes-disc,
+  .home__recipes-play:hover .home__recipes-disc {
+    border-color: var(--tc-navy);
+    background-color: var(--tc-navy);
+    color: var(--tc-white);
+  }
+}
+
+/* Appui : la pastille s'enfonce légèrement. */
+.home__recipes-arrow:active .home__recipes-disc,
+.home__recipes-play:active .home__recipes-disc {
+  transform: scale(0.94);
+}
+
+/* Focus clavier : anneau blanc puis bleu marine, visible sur photo comme sur fond clair. */
+.home__recipes-arrow:focus-visible,
+.home__recipes-play:focus-visible {
+  outline: none;
+}
+
+.home__recipes-arrow:focus-visible .home__recipes-disc,
+.home__recipes-play:focus-visible .home__recipes-disc {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--tc-white);
+}
+
+.home__recipes-dot:focus-visible {
+  outline: 2px solid var(--tc-navy);
+  outline-offset: -2px;
+  border-radius: var(--tc-radius);
+}
+
+/* Avec une souris : flèches masquées au repos, révélées au survol des photos. */
+/* Sur écran tactile (pas de survol), elles restent toujours visibles. */
+@media (hover: hover) {
+  /* Masquées mais toujours atteignables au clavier ; pas de clic par erreur. */
+  .home__recipes-arrow {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  /* Les flèches sont dans la scène : passer de la photo à la flèche ne les éteint pas. */
+  .home__recipes-stage:hover .home__recipes-arrow,
+  .home__recipes-arrow:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Clavier dans la scène : les deux flèches s'affichent. Règle à part : */
+  /* un navigateur sans :has() l'ignore et garde la règle du dessus. */
+  .home__recipes-stage:has(:focus-visible) .home__recipes-arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: reduce) {
+  .home__recipes-arrow {
+    transition: none;
+  }
+}
+
+/* Barre sous les photos : dans le flux, elle ne recouvre plus les titres. */
+.home__recipes-nav {
   display: flex;
   align-items: center;
-  max-width: 100%;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Repères de position : petits traits, celui de la recette affichée est plus long. */
+.home__recipes-dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow-x: auto;
 }
 
+/* Bouton haut de 44px autour d'un trait fin : facile à toucher. */
 .home__recipes-dot {
   display: inline-flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0 0 0.2rem;
+  height: 2.75rem;
+  padding: 0 0.25rem;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -443,18 +492,26 @@
 
 .home__recipes-dot::before {
   content: "";
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 0 0 1px rgba(27, 58, 107, 0.7);
+  width: 1.25rem;
+  height: 3px;
+  border-radius: 2px;
+  background-color: rgba(27, 58, 107, 0.6);
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .home__recipes-dot--current::before {
-  width: 0.55rem;
-  height: 0.55rem;
-  background-color: var(--tc-yellow-madras);
-  box-shadow: 0 0 0 1px var(--tc-navy);
+  width: 2.5rem;
+  background-color: var(--tc-navy);
+}
+
+/* Mouvement réduit : aucun fondu ni allongement animé. */
+@media (prefers-reduced-motion: reduce) {
+  .home__recipes-disc,
+  .home__recipes-dot::before {
+    transition: none;
+  }
 }
 
 /* Parcourir par catégorie */
@@ -603,6 +660,47 @@
   color: var(--tc-white);
 }
 
+/* Essai : liseré or au survol des cartes — bloc à supprimer pour revenir en arrière */
+
+/* Calque posé sur la photo : trait intérieur, donc ni décalage ni rognage par le carrousel. */
+.home__recipes-item .recipe-card__photo::after,
+.home__categories-photo::after,
+.home__origins-photo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: var(--tc-card-radius);
+  box-shadow: inset 0 0 0 2px var(--tc-gold-madras);
+  opacity: 0;
+  /* Le calque ne bloque pas le clic sur la carte. */
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Visible seulement sur la carte survolée à la souris. */
+/* Pas au focus clavier : le trait s'ajoutait au contour de focus (double trait), */
+/* et une carte gardée en focus restait dorée pendant qu'on en survolait une autre. */
+@media (hover: hover) {
+  .home__recipes-item .recipe-card:hover .recipe-card__photo::after,
+  .home__categories-card:hover .home__categories-photo::after,
+  .home__origins-card:hover .home__origins-photo::after {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home__recipes-item .recipe-card__photo::after,
+  .home__categories-photo::after,
+  .home__origins-photo::after {
+    transition: none;
+  }
+}
+
+/* Fin de l'essai : liseré or au survol des cartes */
+
 /* Boutons CTA centrés (override .btn width: 100%) */
 .home__recipes .home__recipes-cta,
 .home__categories .home__categories-cta,
@@ -640,8 +738,14 @@
     width: min(1180px, calc(100% - 3rem));
   }
 
-  .home__heading {
-    font-size: 1.5rem;
+  .home__recipes,
+  .home__categories,
+  .home__origins {
+    gap: 2rem;
+  }
+
+  .home__title {
+    font-size: 2.25rem;
   }
 
   .home__frame {
@@ -661,10 +765,6 @@
 
   .home__about .home__frame-inner {
     gap: 2rem;
-  }
-
-  .home__about-title {
-    font-size: 2.25rem;
   }
 
   /* Photo en bandeau : pleine largeur sans devenir trop haute. */
@@ -725,7 +825,7 @@
     grid-row: 1 / span 2;
   }
 
-  .home__about-header {
+  .home__about .home__section-header {
     grid-column: 2;
     grid-row: 1;
   }

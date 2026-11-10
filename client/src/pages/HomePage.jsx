@@ -399,15 +399,29 @@ function HomePage() {
       ")))",
   };
 
+  // Glyphes en SVG : traits nets, centrés, de la couleur du texte du bouton.
   let playGlyph = (
-    <span className="home__recipes-glyph home__recipes-glyph--pause" aria-hidden="true">
-      <span />
-      <span />
-    </span>
+    <svg
+      className="home__recipes-icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {/* Pause : deux barres. */}
+      <path d="M9 6.5v11M15 6.5v11" />
+    </svg>
   );
   if (playButtonLabel === "Lecture") {
     playGlyph = (
-      <span className="home__recipes-glyph home__recipes-glyph--play" aria-hidden="true" />
+      <svg
+        className="home__recipes-icon home__recipes-icon--solid"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {/* Lecture : triangle plein, décalé à droite pour paraître centré. */}
+        <path d="M9 6.5v11l9-5.5z" />
+      </svg>
     );
   }
 
@@ -489,9 +503,9 @@ function HomePage() {
         <div className="home__frame">
           <div className="home__frame-inner">
             {/* Surtitre + titre : hors du <details>, donc visibles même texte replié. */}
-            <header className="home__about-header">
-              <p className="home__about-eyebrow">À propos</p>
-              <h2 className="home__about-title">Bienvenue à ma table</h2>
+            <header className="home__section-header">
+              <p className="home__eyebrow">À propos</p>
+              <h2 className="home__title">Bienvenue à ma table</h2>
             </header>
             {/* Le conteneur porte le cadre or décalé derrière la photo. */}
             <div className="home__about-media">
@@ -543,9 +557,12 @@ function HomePage() {
         aria-roledescription="carrousel"
         aria-labelledby="home-recipes-heading"
       >
-        <h2 id="home-recipes-heading" className="home__heading">
-          Quelques recettes
-        </h2>
+        <header className="home__section-header">
+          <p className="home__eyebrow">Recettes</p>
+          <h2 id="home-recipes-heading" className="home__title">
+            Les dernières recettes
+          </h2>
+        </header>
 
         <div className="home__frame">
           <div
@@ -590,7 +607,16 @@ function HomePage() {
                       onClick={showPreviousRecipe}
                       aria-label="Recette précédente"
                     >
-                      <span aria-hidden="true">‹</span>
+                      {/* Pastille visible : le bouton autour sert de zone tactile. */}
+                      <span className="home__recipes-disc" aria-hidden="true">
+                        <svg
+                          className="home__recipes-icon"
+                          viewBox="0 0 24 24"
+                          focusable="false"
+                        >
+                          <path d="M14.75 6.5L9.25 12l5.5 5.5" />
+                        </svg>
+                      </span>
                     </button>
 
                     <button
@@ -599,57 +625,72 @@ function HomePage() {
                       onClick={showNextRecipe}
                       aria-label="Recette suivante"
                     >
-                      <span aria-hidden="true">›</span>
+                      <span className="home__recipes-disc" aria-hidden="true">
+                        <svg
+                          className="home__recipes-icon"
+                          viewBox="0 0 24 24"
+                          focusable="false"
+                        >
+                          <path d="M9.25 6.5l5.5 5.5-5.5 5.5" />
+                        </svg>
+                      </span>
                     </button>
-
-                    <button
-                      type="button"
-                      className="home__recipes-play"
-                      onClick={handlePlayPauseClick}
-                      aria-label={playButtonLabel}
-                    >
-                      {playGlyph}
-                    </button>
-
-                    <ul className="home__recipes-dots">
-                      {featuredRecipes.map((recipe, recipeIndex) => {
-                        let isCurrent = false;
-                        if (recipeIndex === activeIndex) {
-                          isCurrent = true;
-                        }
-
-                        let ariaCurrent = "false";
-                        if (isCurrent) {
-                          ariaCurrent = "true";
-                        }
-
-                        let dotClassName = "home__recipes-dot";
-                        if (isCurrent) {
-                          dotClassName = "home__recipes-dot home__recipes-dot--current";
-                        }
-
-                        let recipeLabel = "Recette " + (recipeIndex + 1);
-                        if (typeof recipe.title === "string" && recipe.title !== "") {
-                          recipeLabel = recipe.title;
-                        }
-
-                        return (
-                          <li key={recipe.id}>
-                            <button
-                              type="button"
-                              className={dotClassName}
-                              aria-label={recipeLabel}
-                              aria-current={ariaCurrent}
-                              onClick={() => {
-                                showRecipeAtIndex(recipeIndex);
-                              }}
-                            />
-                          </li>
-                        );
-                      })}
-                    </ul>
                   </>
                 )}
+              </div>
+            )}
+
+            {/* Barre sous les photos : repères de position puis lecture / pause. */}
+            {featuredRecipes.length > 1 && (
+              <div className="home__recipes-nav">
+                <ul className="home__recipes-dots">
+                  {featuredRecipes.map((recipe, recipeIndex) => {
+                    let isCurrent = false;
+                    if (recipeIndex === activeIndex) {
+                      isCurrent = true;
+                    }
+
+                    let ariaCurrent = "false";
+                    if (isCurrent) {
+                      ariaCurrent = "true";
+                    }
+
+                    let dotClassName = "home__recipes-dot";
+                    if (isCurrent) {
+                      dotClassName = "home__recipes-dot home__recipes-dot--current";
+                    }
+
+                    let recipeLabel = "Recette " + (recipeIndex + 1);
+                    if (typeof recipe.title === "string" && recipe.title !== "") {
+                      recipeLabel = recipe.title;
+                    }
+
+                    return (
+                      <li key={recipe.id}>
+                        <button
+                          type="button"
+                          className={dotClassName}
+                          aria-label={recipeLabel}
+                          aria-current={ariaCurrent}
+                          onClick={() => {
+                            showRecipeAtIndex(recipeIndex);
+                          }}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                <button
+                  type="button"
+                  className="home__recipes-play"
+                  onClick={handlePlayPauseClick}
+                  aria-label={playButtonLabel}
+                >
+                  <span className="home__recipes-disc" aria-hidden="true">
+                    {playGlyph}
+                  </span>
+                </button>
               </div>
             )}
           </div>
@@ -661,7 +702,10 @@ function HomePage() {
       </section>
 
       <section className="home__categories">
-        <h2 className="home__heading">Parcourir par catégorie</h2>
+        <header className="home__section-header">
+          <p className="home__eyebrow">Catégories</p>
+          <h2 className="home__title">Parcourir par catégorie</h2>
+        </header>
 
         <div className="home__frame">
           <div className="home__frame-inner">
@@ -711,7 +755,10 @@ function HomePage() {
       </section>
 
       <section className="home__origins" aria-busy={originsLoading}>
-        <h2 className="home__heading">Parcourir par origines</h2>
+        <header className="home__section-header">
+          <p className="home__eyebrow">Origines</p>
+          <h2 className="home__title">Parcourir par origine</h2>
+        </header>
 
         <div className="home__frame">
           <div className="home__frame-inner">
