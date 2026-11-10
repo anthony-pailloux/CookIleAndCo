@@ -486,18 +486,25 @@ function HomePage() {
       </section>
 
       <section className="home__about">
-        <h2 className="home__heading">À propos</h2>
         <div className="home__frame">
           <div className="home__frame-inner">
-            <img
-              className="home__about-img"
-              src={aboutImage}
-              alt="Table familiale aux saveurs des Antilles"
-              width={640}
-              height={427}
-              loading="lazy"
-              decoding="async"
-            />
+            {/* Surtitre + titre : hors du <details>, donc visibles même texte replié. */}
+            <header className="home__about-header">
+              <p className="home__about-eyebrow">À propos</p>
+              <h2 className="home__about-title">Bienvenue à ma table</h2>
+            </header>
+            {/* Le conteneur porte le cadre or décalé derrière la photo. */}
+            <div className="home__about-media">
+              <img
+                className="home__about-img"
+                src={aboutImage}
+                alt="Table familiale aux saveurs des Antilles"
+                width={640}
+                height={427}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <details
               className="home__about-details"
               open={aboutOpen}
@@ -508,18 +515,23 @@ function HomePage() {
                 <p>
                   Bienvenue chez Cook'île & Co, un univers gourmand où les saveurs des
                   Antilles et du monde se rencontrent, se partagent et se dégustent !
+                </p>
+                <p>
                   Les Antilles y occupent une place particulière, avec leurs recettes
                   traditionnelles, spécialités emblématiques, douceurs maison et
                   produits qui sentent bon le soleil et les souvenirs de famille. Mais
                   je vous emmène aussi à la découverte des saveurs d’ailleurs, à
                   travers des recettes, des spécialités, des découvertes gourmandes et
-                  mes coups de cœur culinaires. Cook'île & Co, c’est avant tout une
-                  histoire de cuisine, de partage, de découverte et de gourmandise,
-                  avec des recettes accessibles à cuisiner simplement, à votre rythme
-                  et surtout avec plaisir. Alors, prenez place, ouvrez grand vos
-                  papilles et laissez-vous embarquer pour un voyage gourmand… An nou
-                  ay !!!
+                  mes coups de cœur culinaires.
                 </p>
+                <p>
+                  Cook'île & Co, c’est avant tout une histoire de cuisine, de partage,
+                  de découverte et de gourmandise, avec des recettes accessibles à
+                  cuisiner simplement, à votre rythme et surtout avec plaisir. Alors,
+                  prenez place, ouvrez grand vos papilles et laissez-vous embarquer
+                  pour un voyage gourmand…
+                </p>
+                <p className="home__about-signature">An nou ay ! Tetelle</p>
               </div>
             </details>
           </div>
