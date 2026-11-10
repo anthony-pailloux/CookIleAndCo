@@ -16,9 +16,9 @@
   justify-content: center;
   text-align: center;
   padding: 3.5rem 1.5rem;
-  /* Header mobile : padding 1rem + bordure 3px + logo (max 112px, à côté de loupe + burger). */
+  /* Header mobile : padding 0.125rem + bordure 3px + logo (max 112px, à côté de loupe + burger) moins 0.875rem qui dépasse. */
   --home-header-offset: calc(
-    1rem + 3px + min(112px, (100vw - 7.5rem) * 276 / 720)
+    0.125rem + 3px - 0.875rem + min(112px, (100vw - 7.5rem) * 276 / 720)
   );
   min-height: calc(100vh - var(--home-header-offset));
   min-height: calc(100dvh - var(--home-header-offset));
@@ -660,6 +660,14 @@
   color: var(--tc-white);
 }
 
+/* Mobile : 2 cartes visibles par section (une seule rangée de deux). */
+@media (max-width: 767px) {
+  .home__categories-grid > li:nth-child(n + 3),
+  .home__origins-grid > li:nth-child(n + 3) {
+    display: none;
+  }
+}
+
 /* Essai : liseré or au survol des cartes — bloc à supprimer pour revenir en arrière */
 
 /* Calque posé sur la photo : trait intérieur, donc ni décalage ni rognage par le carrousel. */
@@ -722,8 +730,8 @@
 /* Desktop */
 @media (min-width: 768px) {
   .home__hero {
-    /* Header desktop : padding 0.75rem × 2, ligne 100px, bordure 3px. */
-    --home-header-offset: calc(1.5rem + 100px + 3px);
+    /* Header desktop : padding haut 0.125rem, ligne 81px, bordure 3px. */
+    --home-header-offset: calc(0.125rem + 81px + 3px);
     padding: 5rem 2rem;
   }
 

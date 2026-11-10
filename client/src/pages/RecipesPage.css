@@ -260,3 +260,98 @@
     gap: 1.25rem;
   }
 }
+
+/* Essai : grille mosaïque du catalogue — bloc à supprimer pour revenir à la grille régulière */
+
+/* Téléphone et petite tablette : deux colonnes, une carte pleine largeur de temps en temps. */
+@media (max-width: 767px) {
+  .recipes-page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Carte large : la 1re (nombre impair de cartes, ou au moins 6), la 6e,
+     et la dernière si elle resterait seule sur sa rangée. */
+  .recipes-page__grid-item:first-child:nth-last-child(odd),
+  .recipes-page__grid-item:first-child:nth-last-child(n + 6),
+  .recipes-page__grid-item:nth-child(6),
+  .recipes-page__grid-item:last-child:nth-child(odd):nth-child(n + 7) {
+    grid-column: span 2;
+  }
+
+  .recipes-page__grid-item:first-child:nth-last-child(odd) .recipe-card__title,
+  .recipes-page__grid-item:first-child:nth-last-child(n + 6) .recipe-card__title,
+  .recipes-page__grid-item:nth-child(6) .recipe-card__title,
+  .recipes-page__grid-item:last-child:nth-child(odd):nth-child(n + 7) .recipe-card__title {
+    font-size: 1.125rem;
+  }
+}
+
+/* Téléphone : petites cartes en portrait pour laisser voir la photo au-dessus de la légende. */
+@media (max-width: 559px) {
+  .recipes-page__grid-item .recipe-card__photo img {
+    aspect-ratio: 4 / 5;
+  }
+
+  .recipes-page__grid-item:first-child:nth-last-child(odd) .recipe-card__photo img,
+  .recipes-page__grid-item:first-child:nth-last-child(n + 6) .recipe-card__photo img,
+  .recipes-page__grid-item:nth-child(6) .recipe-card__photo img,
+  .recipes-page__grid-item:last-child:nth-child(odd):nth-child(n + 7) .recipe-card__photo img {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Petite tablette : la carte large est moins haute. */
+@media (min-width: 560px) and (max-width: 767px) {
+  .recipes-page__grid-item:first-child:nth-last-child(odd) .recipe-card__photo img,
+  .recipes-page__grid-item:first-child:nth-last-child(n + 6) .recipe-card__photo img,
+  .recipes-page__grid-item:nth-child(6) .recipe-card__photo img,
+  .recipes-page__grid-item:last-child:nth-child(odd):nth-child(n + 7) .recipe-card__photo img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* Tablette et desktop : carte vedette sur 2 colonnes et 2 rangées.
+   La 1re (à gauche) s'il y a au moins 3 cartes, la 8e (à droite) si une 9e la suit. */
+@media (min-width: 768px) {
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3),
+  .recipes-page__grid-item:nth-child(8):not(:last-child) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* La carte vedette épouse sa cellule : la hauteur vient des cartes voisines. */
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3) .recipe-card,
+  .recipes-page__grid-item:nth-child(8):not(:last-child) .recipe-card,
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3) .recipe-card__photo,
+  .recipes-page__grid-item:nth-child(8):not(:last-child) .recipe-card__photo {
+    height: 100%;
+  }
+
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3) .recipe-card__photo img,
+  .recipes-page__grid-item:nth-child(8):not(:last-child) .recipe-card__photo img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3) .recipe-card__caption,
+  .recipes-page__grid-item:nth-child(8):not(:last-child) .recipe-card__caption {
+    gap: 0.35rem;
+    padding: 3rem 1.25rem 1.1rem;
+  }
+
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3) .recipe-card__title,
+  .recipes-page__grid-item:nth-child(8):not(:last-child) .recipe-card__title {
+    font-size: 1.375rem;
+    line-height: 1.25;
+  }
+
+  .recipes-page__grid-item:first-child:nth-last-child(n + 3) .recipe-card__time,
+  .recipes-page__grid-item:nth-child(8):not(:last-child) .recipe-card__time {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Fin de l'essai : grille mosaïque du catalogue */

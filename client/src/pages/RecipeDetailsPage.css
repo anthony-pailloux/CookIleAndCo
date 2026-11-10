@@ -383,6 +383,13 @@
   margin-top: 0.75rem;
 }
 
+/* Boutons admin de la fiche : cible tactile de 44 px. */
+.recipe-detail__actions .admin-form__edit,
+.recipe-detail__comment-item .admin-form__step-delete {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
 .recipe-detail__comment-form {
   display: flex;
   flex-direction: column;

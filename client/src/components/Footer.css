@@ -11,11 +11,12 @@
 .site-footer__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 2rem;
+  gap: 1.25rem;
   width: min(1180px, calc(100% - 2rem));
   margin-left: auto;
   margin-right: auto;
-  padding: 2.5rem 0 1.25rem;
+  /* Peu de marge en bas : le lien de 44px du crédit apporte déjà de l'air. */
+  padding: 1.5rem 0 0.5rem;
 }
 
 /* Marque */
@@ -47,7 +48,7 @@
   display: block;
   width: 3.5rem;
   height: 2px;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   background-color: var(--tc-yellow-madras);
 }
 
@@ -58,7 +59,7 @@
 
 /* Surtitre : blanc pur, ni jaune ni blanc atténué, trop peu contrastés sur le vert. */
 .site-footer__eyebrow {
-  margin: 0 0 0.25rem;
+  margin: 0;
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -113,11 +114,14 @@
 }
 
 /* Mentions : séparées du reste par un trait fin. */
+/* Sur une ligne dès que la place suffit ; le crédit passe dessous sinon. */
 .site-footer__bottom {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-top: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1rem;
+  padding-top: 0.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.35);
   font-size: 1rem;
   font-weight: 600;
@@ -129,15 +133,15 @@
   line-height: 1.5;
 }
 
-/* Tablette et bureau : marque à gauche, navigation à droite, mentions sur une ligne. */
+/* Tablette et bureau : marque à gauche, navigation à droite. */
 @media (min-width: 768px) {
   .site-footer__inner {
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 3rem;
-    row-gap: 2.5rem;
+    row-gap: 1.25rem;
     align-items: start;
     width: min(1180px, calc(100% - 3rem));
-    padding: 3.5rem 0 1.5rem;
+    padding: 1.75rem 0 0.5rem;
   }
 
   .site-footer__name {
@@ -154,10 +158,7 @@
 
   .site-footer__bottom {
     grid-column: 1 / -1;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
+    column-gap: 1.5rem;
   }
 }
 
