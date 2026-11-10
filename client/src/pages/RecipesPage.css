@@ -1,154 +1,262 @@
+/* Catalogue : même largeur utile et même en-tête éditorial que l'accueil. */
 .recipes-page {
+  width: min(1180px, calc(100% - 2rem));
   max-width: 1180px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
+  padding: 2rem 0 3rem;
   background-color: var(--tc-background);
 }
 
+/* En-tête : surtitre, titre, filet or. */
+.recipes-page__header {
+  min-width: 0;
+  margin-bottom: 1.5rem;
+}
+
+.recipes-page__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tc-text-muted);
+}
+
 .recipes-page__title {
-  font-size: 1.625rem;
-  margin: 0 0 1rem;
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
   color: var(--tc-text);
 }
 
-/* Filtres */
-.recipes-page__filters {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem 1.25rem;
+.recipes-page__header::after {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-top: 1rem;
+  background-color: var(--tc-gold-madras);
 }
 
-.field--filter {
-  flex: 1;
+/* Filtres : empilés sur mobile, trois colonnes égales ensuite. */
+.recipes-page__filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.recipes-page .field--filter {
+  position: relative;
   min-width: 0;
   margin-bottom: 0;
 }
 
-.field--filter label {
+.recipes-page .field--filter label {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tc-text-muted);
 }
 
-.select {
+/* Chevron dessiné en CSS : la flèche native est masquée sur la liste. */
+.recipes-page .field--filter::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  bottom: 1.25rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--tc-text-muted);
+  border-bottom: 2px solid var(--tc-text-muted);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.recipes-page .select {
+  display: block;
   width: 100%;
-  padding: 0.625rem 0.75rem;
-  border: 1px solid transparent;
+  min-height: 3rem;
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+  border: 1px solid rgba(44, 24, 16, 0.32);
   border-radius: var(--tc-radius);
-  /* Même filet dégradé que les cadres de l'accueil. */
-  background:
-    linear-gradient(var(--tc-white), var(--tc-white)) padding-box,
-    linear-gradient(
-      90deg,
-      var(--tc-green-madras) 0%,
-      var(--tc-gold-madras) 42%,
-      var(--tc-yellow-madras) 58%,
-      var(--tc-green-madras) 100%
-    ) border-box;
+  background-color: var(--tc-background-alt);
   color: var(--tc-text);
   font-family: inherit;
   font-size: 1rem;
+  letter-spacing: inherit;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s ease;
 }
 
-/* États */
+.recipes-page .select:hover {
+  border-color: var(--tc-green-madras);
+}
+
+/* États : chargement en texte simple, « aucun résultat » dans un encadré. */
 .recipes-page__status {
+  margin: 0;
+  padding: 3rem 1rem;
   text-align: center;
+  line-height: 1.6;
   color: var(--tc-text-muted);
-  margin: 2rem 0;
+  /* Évite un guillemet seul sur la dernière ligne. */
+  text-wrap: balance;
+}
+
+.recipes-page__status--empty {
+  border: 1px solid rgba(44, 24, 16, 0.14);
+  border-radius: var(--tc-card-radius);
+  background-color: var(--tc-background-alt);
+  overflow-wrap: anywhere;
 }
 
 /* Grille recettes */
 .recipes-page__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
   list-style: none;
   padding: 0;
-  margin: 0 0 1.625rem;
+  margin: 0;
 }
 
 .recipes-page__grid-item {
   min-width: 0;
 }
 
-/* Pagination */
+/* Liseré or au survol des cartes, comme sur l'accueil (souris uniquement). */
+.recipes-page__grid-item .recipe-card__photo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: var(--tc-card-radius);
+  box-shadow: inset 0 0 0 2px var(--tc-gold-madras);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  .recipes-page__grid-item .recipe-card:hover .recipe-card__photo::after {
+    opacity: 1;
+  }
+}
+
+/* Pagination : cases de 44 px, vert madras pour la page en cours. */
 .recipes-page__pagination {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
-  margin-top: 1.625rem;
+  margin-top: 2rem;
 }
 
 .recipes-page__pagination-nav,
 .recipes-page__pagination-page,
 .recipes-page__pagination-nav:visited,
 .recipes-page__pagination-page:visited {
-  padding: 10px 16px;
-  border: 1px solid var(--tc-navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid rgba(44, 24, 16, 0.32);
   border-radius: var(--tc-radius);
-  background: var(--tc-yellow-madras);
-  color: var(--tc-white);
+  background-color: var(--tc-background-alt);
+  color: var(--tc-text);
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: inherit;
   text-decoration: none;
-  transition: background-color 0.35s ease, opacity 0.35s ease, border-color 0.35s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .recipes-page__pagination-nav:hover,
 .recipes-page__pagination-page:hover {
-  background: var(--tc-green-madras);
-  border: 1px solid var(--tc-yellow-madras);
+  border-color: var(--tc-green-madras);
+  background-color: var(--tc-green-madras);
   color: var(--tc-white);
-  opacity: 0.9;
 }
 
 .recipes-page__pagination-page--active,
 .recipes-page__pagination-page--active:visited {
-  background: var(--tc-green-madras);
+  border-color: var(--tc-green-madras);
+  background-color: var(--tc-green-madras);
   color: var(--tc-white);
-  border: 1px solid var(--tc-navy);
+  font-weight: 700;
 }
 
-.recipes-page__pagination-page--active:hover {
-  background: var(--tc-green-madras);
-  opacity: 1;
-}
-
-.recipes-page__pagination-nav:disabled {
+.recipes-page__pagination-nav:disabled,
+.recipes-page__pagination-nav:disabled:hover {
+  border-color: rgba(44, 24, 16, 0.32);
+  background-color: var(--tc-background-alt);
+  color: var(--tc-text);
   opacity: 0.45;
   cursor: not-allowed;
 }
 
-.recipes-page__pagination-nav:disabled:hover {
-  background: var(--tc-yellow-madras);
-  border: 1px solid var(--tc-navy);
-  opacity: 0.45;
+@media (prefers-reduced-motion: reduce) {
+  .recipes-page .select,
+  .recipes-page__grid-item .recipe-card__photo::after,
+  .recipes-page__pagination-nav,
+  .recipes-page__pagination-page {
+    transition: none;
+  }
 }
 
-/* Desktop */
-@media (min-width: 768px) {
+/* Deux cartes par rangée dès que la largeur le permet. */
+@media (min-width: 560px) {
   .recipes-page__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  /* Même largeur utile que la rangée de cartes : le padding horizontal était le retrait */
-  .recipes-page__filters {
-    padding-left: 0;
-    padding-right: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* Mobile filtres */
+/* Mobile */
 @media (max-width: 767px) {
-  .recipes-page__filters {
-    flex-direction: column;
-  }
-
   /* Wireframe mobile : 6 cartes visibles max */
   .recipes-page__grid-item:nth-child(n + 7) {
     display: none;
+  }
+}
+
+/* Tablette et desktop */
+@media (min-width: 768px) {
+  .recipes-page {
+    width: min(1180px, calc(100% - 3rem));
+    padding-top: 2.5rem;
+  }
+
+  .recipes-page__header {
+    margin-bottom: 2rem;
+  }
+
+  .recipes-page__title {
+    font-size: 2.25rem;
+  }
+
+  .recipes-page__filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 2rem;
+  }
+
+  .recipes-page__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
   }
 }

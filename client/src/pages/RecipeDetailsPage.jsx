@@ -258,8 +258,55 @@ function RecipeDetailsPage() {
 
   return (
     <main className="recipe-detail">
-      {/* Hero */}
+      {/* En-tête : surtitre, titre, repères, puis photo encadrée */}
       <section className="recipe-detail__hero">
+        <header className="recipe-detail__header">
+          <p className="recipe-detail__eyebrow">
+            {recipeDetails.category.name}
+          </p>
+          <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
+          <dl className="recipe-detail__meta">
+            <div className="recipe-detail__meta-item">
+              <dt className="recipe-detail__meta-label">Préparation</dt>
+              <dd className="recipe-detail__meta-value">
+                {recipeDetails.preparationTime} min
+              </dd>
+            </div>
+            <div className="recipe-detail__meta-item">
+              <dt className="recipe-detail__meta-label">Cuisson</dt>
+              <dd className="recipe-detail__meta-value">
+                {recipeDetails.cookingTime} min
+              </dd>
+            </div>
+            <div className="recipe-detail__meta-item">
+              <dt className="recipe-detail__meta-label">Origine</dt>
+              <dd className="recipe-detail__meta-value">
+                {recipeDetails.origin.name}
+              </dd>
+            </div>
+            <div className="recipe-detail__meta-item">
+              <dt className="recipe-detail__meta-label">Type de repas</dt>
+              <dd className="recipe-detail__meta-value">
+                {recipeDetails.mealType.name}
+              </dd>
+            </div>
+          </dl>
+          {auth.admin !== null && (
+            <div className="recipe-detail__actions">
+              <EditIconButton
+                to={
+                  "/dashboard-admins/recettes/" +
+                  recipeDetails.id +
+                  "/modifier"
+                }
+                ariaLabel={
+                  'Modifier la recette "' + recipeDetails.title + '"'
+                }
+              />
+            </div>
+          )}
+        </header>
+
         <div className="recipe-detail__photo">
           <img
             src={photoSource}
@@ -328,39 +375,6 @@ function RecipeDetailsPage() {
               />
             </svg>
           </button>
-          {/* Titre posé sur le bas de la photo. Le voile ne couvre que le texte. */}
-          <div className="recipe-detail__overlay">
-            <div className="recipe-detail__overlay-copy">
-              <div className="recipe-detail__badges">
-                <span className="recipe-detail__badge">
-                  {recipeDetails.category.name}
-                </span>
-                <span className="recipe-detail__badge">
-                  {recipeDetails.origin.name}
-                </span>
-                <span className="recipe-detail__badge">
-                  {recipeDetails.mealType.name}
-                </span>
-              </div>
-              <h1 className="recipe-detail__title">{recipeDetails.title}</h1>
-              <p className="recipe-detail__time">
-                Préparation ⏱ {recipeDetails.preparationTime} min · Cuisson ⏱{" "}
-                {recipeDetails.cookingTime} min
-              </p>
-            </div>
-            {auth.admin !== null && (
-              <EditIconButton
-                to={
-                  "/dashboard-admins/recettes/" +
-                  recipeDetails.id +
-                  "/modifier"
-                }
-                ariaLabel={
-                  'Modifier la recette "' + recipeDetails.title + '"'
-                }
-              />
-            )}
-          </div>
         </div>
       </section>
 

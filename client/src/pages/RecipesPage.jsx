@@ -307,20 +307,26 @@ function RecipesPage() {
   } else if (recipes.length === 0) {
     if (activeSearch !== "") {
       contentMessage = (
-        <p className="recipes-page__status">
+        <p className="recipes-page__status recipes-page__status--empty">
           Aucune recette trouvée pour « {activeSearch} ».
         </p>
       );
     } else {
       contentMessage = (
-        <p className="recipes-page__status">Aucune recette pour le moment.</p>
+        <p className="recipes-page__status recipes-page__status--empty">
+          Aucune recette pour le moment.
+        </p>
       );
     }
   }
 
   return (
     <main className="recipes-page">
-      <h1 className="recipes-page__title">Toutes les recettes</h1>
+      {/* En-tête éditorial : même trio que les sections de l'accueil. */}
+      <header className="recipes-page__header">
+        <p className="recipes-page__eyebrow">Catalogue</p>
+        <h1 className="recipes-page__title">Toutes les recettes</h1>
+      </header>
 
       <div className="recipes-page__filters">
         <div className="field field--filter">
