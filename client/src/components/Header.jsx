@@ -41,10 +41,37 @@ function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Session ici pour afficher Dashboard si un admin est encore connecte.
   useEffect(function () {
     auth.loadSession();
+  }, []);
+
+  // Transparent seulement après avoir défilé toute la hauteur du header.
+  useEffect(function () {
+    function updateScrolledState() {
+      let headerHeight = 0;
+
+      if (headerRef.current !== null) {
+        headerHeight = headerRef.current.offsetHeight;
+      }
+
+      if (headerHeight > 0 && window.scrollY >= headerHeight) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    }
+
+    updateScrolledState();
+    window.addEventListener("scroll", updateScrolledState);
+    window.addEventListener("resize", updateScrolledState);
+
+    return function removeScrollListeners() {
+      window.removeEventListener("scroll", updateScrolledState);
+      window.removeEventListener("resize", updateScrolledState);
+    };
   }, []);
 
   // Le champ prend le focus des que le panneau s ouvre.
@@ -235,6 +262,11 @@ function Header() {
     navClassName = "site-header__nav site-header__nav--open";
   }
 
+  let headerClassName = "site-header bg-green-textured";
+  if (isScrolled === true) {
+    headerClassName = "site-header bg-green-textured site-header--scrolled";
+  }
+
   let menuIcon;
   if (isMenuOpen === true) {
     menuIcon = (
@@ -310,7 +342,7 @@ function Header() {
   }
 
   return (
-    <header ref={headerRef} className="site-header bg-green-textured">
+    <header ref={headerRef} className={headerClassName}>
       <div className="site-header__inner">
         <button
           type="button"

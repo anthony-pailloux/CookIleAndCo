@@ -74,8 +74,8 @@ function HomePage() {
   useEffect(() => {
     async function loadFeaturedRecipes() {
       try {
-        // Liste déjà triée par createdAt DESC : les 5 premières sont les plus récentes.
-        const response = await listRecipes({ page: 1, limit: 5 });
+        // Liste déjà triée par createdAt DESC : les 3 premières sont les plus récentes.
+        const response = await listRecipes({ page: 1, limit: 3 });
 
         if (Array.isArray(response.data)) {
           setFeaturedRecipes(response.data);

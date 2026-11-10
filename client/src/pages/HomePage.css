@@ -228,6 +228,12 @@
 }
 
 /* Cartes recettes de l'accueil : plus hautes et titre plus lisible que le catalogue. */
+/* L'ombre (rgba 44,24,16 à 0.32, flou 20px) teinte l'écart et les coins arrondis. */
+.home__recipes-item .recipe-card,
+.home__recipes-item .recipe-card:hover {
+  box-shadow: none;
+}
+
 .home__recipes-item .recipe-card__photo img {
   aspect-ratio: 5 / 4;
 }

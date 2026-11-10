@@ -281,7 +281,29 @@
 /* Desktop — logo et liens restent dans le flux pour ne pas se chevaucher */
 @media (min-width: 768px) {
   .site-header {
+    /* Reste collé en haut au scroll, sans sortir du flux. */
+    position: sticky;
+    top: 0;
     padding: 0.75rem 2rem;
+  }
+
+  /* Fond seul à 0.88 : logo et liens restent opaques. */
+  .site-header.site-header--scrolled {
+    background-color: transparent;
+    background-image: none;
+  }
+
+  .site-header.site-header--scrolled::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--tc-green-madras);
+    background-image: var(--tc-texture);
+    background-repeat: repeat;
+    background-blend-mode: screen;
+    opacity: 0.88;
+    pointer-events: none;
   }
 
   .site-header__inner {

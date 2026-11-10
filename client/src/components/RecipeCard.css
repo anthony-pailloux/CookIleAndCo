@@ -4,7 +4,8 @@
   display: block;
   border-radius: var(--tc-card-radius);
   overflow: hidden;
-  background: var(--tc-white);
+  /* Même gris que la page : sinon un liseré blanc apparaît sur les coins arrondis. */
+  background: var(--tc-background);
   text-decoration: none;
   color: var(--tc-white);
   box-shadow: var(--tc-shadow);
@@ -18,7 +19,7 @@
 
 .recipe-card__photo {
   position: relative;
-  background-color: var(--tc-background-alt);
+  background-color: var(--tc-background);
 }
 
 .recipe-card__photo img {
