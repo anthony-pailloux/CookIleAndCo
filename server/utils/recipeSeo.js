@@ -3,6 +3,9 @@
 
 const SITE_ORIGIN = 'https://www.cookileandco.fr';
 const DEFAULT_OG_IMAGE = SITE_ORIGIN + '/og-cook-ile-co-cuisine-des-saveurs-du-monde.jpg';
+// Fichier de marque (PNG servi en .jpg) : 1200×630. Les photos uploadées n'ont pas cette taille.
+const BRAND_OG_IMAGE_WIDTH = 1200;
+const BRAND_OG_IMAGE_HEIGHT = 630;
 
 function isSpace(character) {
     if (character === ' ' || character === '\n' || character === '\r' || character === '\t') {
@@ -43,6 +46,13 @@ function truncateText(value, maxLength) {
     }
 
     let cut = value.slice(0, maxLength - 3);
+    const lastSpace = cut.lastIndexOf(' ');
+
+    // Coupe sur un mot quand c'est possible.
+    if (lastSpace > 20) {
+        cut = cut.slice(0, lastSpace);
+    }
+
     cut = cut.trim();
     return cut + '...';
 }
@@ -182,18 +192,163 @@ export function buildRecipeTitle(recipe) {
     return recipe.title + " | Cook'île & Co";
 }
 
+function readLinkedName(linked) {
+    if (linked === null || linked === undefined) {
+        return '';
+    }
+
+    if (linked.name === null || linked.name === undefined) {
+        return '';
+    }
+
+    return cleanWhitespace(String(linked.name));
+}
+
+function formatMinutesLabel(minutes) {
+    let value = minutes;
+
+    if (typeof value === 'string') {
+        if (value.trim() === '') {
+            return '';
+        }
+
+        value = Number(value);
+    }
+
+    if (typeof value !== 'number') {
+        return '';
+    }
+
+    if (Number.isNaN(value) || value <= 0) {
+        return '';
+    }
+
+    return String(Math.round(value)) + ' min';
+}
+
+function firstSentence(value) {
+    const text = cleanWhitespace(String(value));
+
+    if (text === '') {
+        return '';
+    }
+
+    let endIndex = -1;
+
+    for (let index = 0; index < text.length; index++) {
+        const character = text[index];
+
+        if (character === '.' || character === '!' || character === '?') {
+            endIndex = index;
+            break;
+        }
+    }
+
+    let sentence = text;
+
+    if (endIndex !== -1) {
+        sentence = text.slice(0, endIndex + 1).trim();
+    }
+
+    if (sentence.length > 140) {
+        sentence = truncateText(sentence, 140);
+    }
+
+    return sentence;
+}
+
+function buildRecipeKeywords(recipe) {
+    const categoryName = readLinkedName(recipe.category);
+    const originName = readLinkedName(recipe.origin);
+    const mealTypeName = readLinkedName(recipe.mealType);
+    const parts = [];
+
+    if (categoryName !== '') {
+        parts.push('catégorie ' + categoryName);
+    }
+
+    if (originName !== '') {
+        parts.push('origine ' + originName);
+    }
+
+    if (mealTypeName !== '') {
+        parts.push('repas ' + mealTypeName);
+    }
+
+    let keywords = '';
+
+    for (let index = 0; index < parts.length; index++) {
+        if (keywords !== '') {
+            keywords = keywords + ', ';
+        }
+
+        keywords = keywords + parts[index];
+    }
+
+    return keywords;
+}
+
 export function buildRecipeDescription(recipe) {
-    let source = '';
+    let title = '';
+
+    if (recipe.title !== null && recipe.title !== undefined && String(recipe.title).trim() !== '') {
+        title = cleanWhitespace(String(recipe.title));
+    }
+
+    if (title === '') {
+        title = "Recette Cook'île & Co";
+    }
+
+    const originName = readLinkedName(recipe.origin);
+    const categoryName = readLinkedName(recipe.category);
+    let description = title;
+
+    if (originName !== '') {
+        description = description + ', origine ' + originName;
+    }
+
+    if (categoryName !== '') {
+        description = description + ', catégorie ' + categoryName;
+    }
+
+    description = description + '.';
+
+    const preparationLabel = formatMinutesLabel(recipe.preparationTime);
+    const cookingLabel = formatMinutesLabel(recipe.cookingTime);
+
+    if (preparationLabel !== '' && cookingLabel !== '') {
+        description = description + ' Préparation ' + preparationLabel + ', cuisson ' + cookingLabel + '.';
+    } else if (preparationLabel !== '') {
+        description = description + ' Préparation ' + preparationLabel + '.';
+    } else if (cookingLabel !== '') {
+        description = description + ' Cuisson ' + cookingLabel + '.';
+    }
+
+    let tipsSentence = '';
 
     if (recipe.tips !== null && recipe.tips !== undefined && String(recipe.tips).trim() !== '') {
-        source = cleanWhitespace(String(recipe.tips));
+        tipsSentence = firstSentence(String(recipe.tips));
     }
 
-    if (source === '') {
-        source = recipe.title + " — recette Cook'île & Co";
+    if (tipsSentence !== '') {
+        const tipsCompare = tipsSentence.toLowerCase();
+        const descriptionCompare = description.toLowerCase();
+        let tipsAlreadySaid = false;
+
+        if (descriptionCompare.indexOf(tipsCompare) !== -1) {
+            tipsAlreadySaid = true;
+        }
+
+        if (tipsAlreadySaid === false) {
+            description = description + ' ' + tipsSentence;
+        }
     }
 
-    return truncateText(source, 160);
+    if (cleanWhitespace(description) === '') {
+        description = "Recette Cook'île & Co";
+    }
+
+    return description;
 }
 
 export function buildRecipeCanonicalUrl(id) {
@@ -201,16 +356,38 @@ export function buildRecipeCanonicalUrl(id) {
 }
 
 export function buildRecipeJsonLd(recipe) {
+    // Aucun nom d'auteur n'est stocké sur la recette : la marque signe le schéma.
     const data = {
         '@context': 'https://schema.org',
         '@type': 'Recipe',
         name: recipe.title,
         description: buildRecipeDescription(recipe),
+        inLanguage: 'fr',
+        author: {
+            '@type': 'Organization',
+            name: "Cook'île & Co",
+        },
     };
 
     const imageUrl = absoluteRecipePhotoUrl(recipe.photo);
     if (imageUrl !== '') {
         data.image = imageUrl;
+    }
+
+    const categoryName = readLinkedName(recipe.category);
+    if (categoryName !== '') {
+        data.recipeCategory = categoryName;
+    }
+
+    const originName = readLinkedName(recipe.origin);
+    if (originName !== '') {
+        data.recipeCuisine = originName;
+    }
+
+    // Recipe n'a pas de propriété standard pour le type de repas.
+    const keywords = buildRecipeKeywords(recipe);
+    if (keywords !== '') {
+        data.keywords = keywords;
     }
 
     const ingredientLines = [];
@@ -262,6 +439,11 @@ export function buildRecipeJsonLd(recipe) {
     const cookTime = toIsoDuration(recipe.cookingTime);
     if (cookTime !== '') {
         data.cookTime = cookTime;
+    }
+
+    const datePublished = formatDateOnly(recipe.createdAt);
+    if (datePublished !== '') {
+        data.datePublished = datePublished;
     }
 
     const dateModified = formatDateOnly(recipe.updatedAt);
@@ -332,4 +514,4 @@ export function formatSitemapDate(value) {
     return formatDateOnly(value);
 }
 
-export { SITE_ORIGIN, DEFAULT_OG_IMAGE };
+export { SITE_ORIGIN, DEFAULT_OG_IMAGE, BRAND_OG_IMAGE_WIDTH, BRAND_OG_IMAGE_HEIGHT };

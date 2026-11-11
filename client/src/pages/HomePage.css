@@ -8,14 +8,15 @@
   padding-bottom: 7rem;
 }
 
-/* Hero — photo en cover, du bas du header jusqu'au bas de l'écran */
+/* Hero — photo bord à bord, du bas du header jusqu'au bas de l'écran.
+   Pas de gouttière ni de max-width : seul le texte est en colonne. */
 .home__hero {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 3.5rem 1.5rem;
+  padding: 0;
   /* Header mobile : padding 0.125rem + bordure 3px + logo (max 112px, à côté de loupe + burger) moins 0.875rem qui dépasse. */
   --home-header-offset: calc(
     0.125rem + 3px - 0.875rem + min(112px, (100vw - 7.5rem) * 276 / 720)
@@ -23,22 +24,34 @@
   min-height: calc(100vh - var(--home-header-offset));
   min-height: calc(100dvh - var(--home-header-offset));
   width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  align-self: stretch;
   background-color: var(--tc-background-alt);
-  border-bottom: 1px solid var(--tc-border);
   overflow: hidden;
 }
 
-/* Calque décoratif : ne participe pas à la hauteur du hero */
+/* Calque photo : hors flux, collé aux quatre bords du hero. */
 .home__hero-media {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
 }
 
 .home__hero-img,
 .home__hero-overlay {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
+  max-width: none;
   height: 100%;
 }
 
@@ -50,39 +63,93 @@
   display: block;
 }
 
+/* Voile brun, même teinte que les cartes : plus dense au centre, plus léger aux bords. */
 .home__hero-overlay {
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.58);
+  background: linear-gradient(
+    to bottom,
+    rgba(44, 24, 16, 0.38) 0%,
+    rgba(44, 24, 16, 0.2) 20%,
+    rgba(44, 24, 16, 0.52) 46%,
+    rgba(44, 24, 16, 0.58) 64%,
+    rgba(44, 24, 16, 0.28) 100%
+  );
 }
 
+/* Colonne lisible, centrée. Sa largeur ne rétrécit pas la photo. */
 .home__hero-content {
   position: relative;
   z-index: 2;
-  width: 100%;
+  width: min(36rem, calc(100% - 2rem));
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 2.75rem;
+  padding-bottom: 2.75rem;
 }
 
-.home__hero h1 {
-  font-size: 2.4rem;
-  margin: 0 0 0.5rem;
-  letter-spacing: 0.06em;
+/* Halo derrière les lettres : le chapeau clair reste lisible, la photo aussi. */
+.home__hero-content::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 46%;
+  width: 150%;
+  height: 170%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(44, 24, 16, 0.66) 0%,
+    rgba(44, 24, 16, 0.36) 46%,
+    rgba(44, 24, 16, 0) 72%
+  );
+  pointer-events: none;
+}
+
+.home__hero-title {
+  margin: 0;
+  font-family: var(--tc-font-heading);
+  font-size: 2.65rem;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.04em;
   color: var(--tc-white);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 2px 14px rgba(44, 24, 16, 0.55);
 }
 
-.home__hero-accroche {
-  font-size: 1.35rem;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 0.75rem;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+/* Même filet or que les en-têtes de section, centré sous le titre. */
+.home__hero-title::after {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--tc-gold-madras);
+  box-shadow: 0 1px 3px rgba(44, 24, 16, 0.45);
 }
 
-.home__hero-accroche:last-child {
-  margin-bottom: 0;
-}
-
-.home__hero-accroche--italic {
+.home__hero-tagline {
+  margin: 1.25rem 0 0;
+  font-family: var(--tc-font-heading);
+  font-size: 1.5rem;
   font-style: italic;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  color: var(--tc-yellow-madras);
+  text-shadow: 0 1px 8px rgba(44, 24, 16, 0.7);
+}
+
+.home__hero-subtitle {
+  margin: 0.85rem 0 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--tc-white);
+  text-shadow: 0 1px 8px rgba(44, 24, 16, 0.6);
 }
 
 /* Sections — même largeur, sans encadré : titre au-dessus du contenu */
@@ -668,46 +735,71 @@
   }
 }
 
-/* Essai : liseré or au survol des cartes — bloc à supprimer pour revenir en arrière */
-
-/* Calque posé sur la photo : trait intérieur, donc ni décalage ni rognage par le carrousel. */
-.home__recipes-item .recipe-card__photo::after,
-.home__categories-photo::after,
-.home__origins-photo::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+/* Survol des cartes : léger zoom de la photo, rogné aux coins arrondis. */
+.home__recipes-item .recipe-card__photo,
+.home__categories-photo,
+.home__origins-photo {
+  overflow: hidden;
   border-radius: var(--tc-card-radius);
-  box-shadow: inset 0 0 0 2px var(--tc-gold-madras);
-  opacity: 0;
-  /* Le calque ne bloque pas le clic sur la carte. */
-  pointer-events: none;
-  transition: opacity 0.2s ease;
 }
 
-/* Visible seulement sur la carte survolée à la souris. */
-/* Pas au focus clavier : le trait s'ajoutait au contour de focus (double trait), */
-/* et une carte gardée en focus restait dorée pendant qu'on en survolait une autre. */
+.home__recipes-item .recipe-card__photo img,
+.home__categories-photo img,
+.home__origins-photo img {
+  transition: transform 0.35s ease;
+}
+
+/* Ombre de survol des cartes catégories et origines : une couche proche, une couche large et diffuse. */
+.home {
+  --home-card-shadow-hover:
+    0 6px 14px rgba(44, 24, 16, 0.22), 0 26px 56px rgba(44, 24, 16, 0.34);
+}
+
+/* Même durée que le zoom ; le z-index ne retombe qu'une fois l'ombre revenue. */
+.home__categories-card,
+.home__origins-card {
+  position: relative;
+  transition:
+    box-shadow 0.35s ease,
+    z-index 0s 0.35s;
+}
+
+/* Souris seulement : rien au toucher ni au focus clavier. */
 @media (hover: hover) {
-  .home__recipes-item .recipe-card:hover .recipe-card__photo::after,
-  .home__categories-card:hover .home__categories-photo::after,
-  .home__origins-card:hover .home__origins-photo::after {
-    opacity: 1;
+  .home__recipes-item .recipe-card:hover .recipe-card__photo img,
+  .home__categories-card:hover .home__categories-photo img,
+  .home__origins-card:hover .home__origins-photo img {
+    transform: scale(1.03);
+  }
+
+  /* La carte survolée passe au-dessus de ses voisines pour ne pas rogner l'ombre. */
+  .home__categories-card:hover,
+  .home__origins-card:hover {
+    z-index: 1;
+    box-shadow: var(--home-card-shadow-hover);
+    transition:
+      box-shadow 0.35s ease,
+      z-index 0s;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home__recipes-item .recipe-card__photo::after,
-  .home__categories-photo::after,
-  .home__origins-photo::after {
+  .home__recipes-item .recipe-card__photo img,
+  .home__categories-photo img,
+  .home__origins-photo img,
+  .home__categories-card,
+  .home__origins-card,
+  .home__categories-card:hover,
+  .home__origins-card:hover {
     transition: none;
   }
-}
 
-/* Fin de l'essai : liseré or au survol des cartes */
+  .home__recipes-item .recipe-card:hover .recipe-card__photo img,
+  .home__categories-card:hover .home__categories-photo img,
+  .home__origins-card:hover .home__origins-photo img {
+    transform: none;
+  }
+}
 
 /* Boutons CTA centrés (override .btn width: 100%) */
 .home__recipes .home__recipes-cta,
@@ -719,6 +811,8 @@
   left: 50%;
   transform: translateX(-50%);
   top: calc(100% + 1.25rem);
+  /* Au-dessus de l'ombre étalée d'une carte survolée. */
+  z-index: 2;
   margin-top: 0;
   margin-left: 0;
   margin-right: 0;
@@ -732,11 +826,27 @@
   .home__hero {
     /* Header desktop : padding haut 0.125rem, ligne 81px, bordure 3px. */
     --home-header-offset: calc(0.125rem + 81px + 3px);
-    padding: 5rem 2rem;
+    padding: 0;
   }
 
-  .home__hero h1 {
-    font-size: 3rem;
+  .home__hero-content {
+    width: min(40rem, calc(100% - 3rem));
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .home__hero-title {
+    font-size: 3.5rem;
+  }
+
+  .home__hero-tagline {
+    margin-top: 1.35rem;
+    font-size: 1.85rem;
+  }
+
+  .home__hero-subtitle {
+    margin-top: 0.95rem;
+    font-size: 1.1875rem;
   }
 
   .home__about,
@@ -855,10 +965,10 @@
   }
 }
 
-/* Ultra-wide (ex. 34") — cadrage sur le bas de l'image */
+/* Ultra-wide (ex. 34") — cadrage sur le bas de l'image, toujours sans gouttière. */
 @media (min-width: 1920px) and (min-aspect-ratio: 21/9) {
   .home__hero {
-    padding: 4.5rem 2rem;
+    padding: 0;
   }
 
   .home__hero-img {

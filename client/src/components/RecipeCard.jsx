@@ -15,6 +15,17 @@ function RecipeCard({ recipe, isFirstCard, showTimes }) {
     imageFetchPriority = "auto";
   }
 
+  // Taille du fichier. Le CSS (100 % et aspect-ratio) garde le cadrage affiché.
+  let imageWidth;
+  let imageHeight;
+  if (
+    typeof recipe.imageWidth === "number" &&
+    typeof recipe.imageHeight === "number"
+  ) {
+    imageWidth = recipe.imageWidth;
+    imageHeight = recipe.imageHeight;
+  }
+
   let displayTimes = true;
   if (showTimes === false) {
     displayTimes = false;
@@ -36,6 +47,8 @@ function RecipeCard({ recipe, isFirstCard, showTimes }) {
         <img
           src={photoSource}
           alt={recipe.title}
+          width={imageWidth}
+          height={imageHeight}
           loading={imageLoading}
           fetchPriority={imageFetchPriority}
           onError={(event) => {

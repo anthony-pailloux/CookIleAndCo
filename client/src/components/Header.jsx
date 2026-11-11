@@ -381,7 +381,7 @@ function Header() {
           </NavLink>
 
           <NavLink to="/categories" className={getNavLinkClass}>
-            Catégories
+            Catégorie et origine
           </NavLink>
 
           {auth.admin !== null && (

@@ -25,6 +25,8 @@
 .recipe-card__photo img {
   display: block;
   width: 100%;
+  /* Annule la hauteur du fichier : le ratio ci-dessous garde le cadrage. */
+  height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }

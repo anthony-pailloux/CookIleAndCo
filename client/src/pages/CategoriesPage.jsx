@@ -50,15 +50,14 @@ function CategoriesPage() {
 
   return (
     <main className="categories-page">
-      <header className="categories-page__header">
-        <h1>Catégories &amp; origines</h1>
-        <p className="categories-page__intro">
-          Choisis une catégorie ou une origine pour voir les recettes associées.
-        </p>
-      </header>
+      {/* Titre de page gardé pour les lecteurs d'écran, masqué à l'écran. */}
+      <h1 className="categories-page__sr-only">Catégorie et origine</h1>
 
       <section className="categories-page__section">
-        <h2>Catégories</h2>
+        <header className="categories-page__section-header">
+          <p className="categories-page__eyebrow">Catégories</p>
+          <h2 className="categories-page__title">Parcourir par catégorie</h2>
+        </header>
 
         {categories.length === 0 && (
           <p className="categories-page__empty">
@@ -98,10 +97,13 @@ function CategoriesPage() {
       </section>
 
       <section className="categories-page__section categories-page__section--origins">
-        <h2>Origines</h2>
-        <p className="categories-page__subtitle">
-          Des Antilles aux saveurs du monde.
-        </p>
+        <header className="categories-page__section-header">
+          <p className="categories-page__eyebrow">Origines</p>
+          <h2 className="categories-page__title">Parcourir par origine</h2>
+          <p className="categories-page__subtitle">
+            Des Antilles aux saveurs du monde.
+          </p>
+        </header>
 
         {origins.length === 0 && (
           <p className="categories-page__empty">

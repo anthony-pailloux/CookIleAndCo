@@ -13,6 +13,7 @@ import AdminReferencesPage from "./pages/AdminReferencesPage.jsx";
 import PlanningPage from "./pages/PlanningPage.jsx";
 import ShoppingListPage from "./pages/ShoppingListPage.jsx";
 import AdminStatsPage from "./pages/AdminStatsPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/recettes" element={<RecipesPage />} />
           <Route path="/recettes/:id" element={<RecipeDetailsPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Layout>
     </>

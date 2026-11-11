@@ -237,6 +237,9 @@ a.admin-page__tab.admin-page__tab--active:hover {
   display: block;
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
+  /* Vignette 60 px, comme l'ancien width="60". Le CSS garde cette taille. */
+  width: 60px;
+  height: 60px;
 }
 
 .admin-recipes-table__photo-link:hover img {

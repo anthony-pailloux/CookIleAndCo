@@ -470,6 +470,24 @@ function AdminPage() {
                 {recipes.map(function (recipe) {
                   const photoUrl = getRecipePhotoUrl(recipe.photo);
 
+                  let recipePhoto = (
+                    <img src={photoUrl} alt={recipe.title} width="60" height="60" />
+                  );
+
+                  if (
+                    typeof recipe.imageWidth === "number" &&
+                    typeof recipe.imageHeight === "number"
+                  ) {
+                    recipePhoto = (
+                      <img
+                        src={photoUrl}
+                        alt={recipe.title}
+                        width={recipe.imageWidth}
+                        height={recipe.imageHeight}
+                      />
+                    );
+                  }
+
                   return (
                     <tr key={recipe.id}>
                       <td data-label="Photo">
@@ -479,12 +497,7 @@ function AdminPage() {
                           to={"/recettes/" + recipe.id}
                           aria-label={"Voir la fiche : " + recipe.title}
                         >
-                          <img
-                            src={photoUrl}
-                            alt={recipe.title}
-                            width="60"
-                            height="60"
-                          />
+                          {recipePhoto}
                         </Link>
                       </td>
                       <td data-label="Titre">{recipe.title}</td>

@@ -28,7 +28,7 @@ function Footer() {
             </li>
             <li>
               <Link className="site-footer__link" to="/categories">
-                Catégories
+                Catégorie et origine
               </Link>
             </li>
           </ul>

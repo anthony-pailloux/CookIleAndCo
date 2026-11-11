@@ -182,8 +182,8 @@
   outline-offset: 2px;
 }
 
-/* Mobile — burger à gauche, logo au centre, loupe à droite. */
-@media (max-width: 767px) {
+/* Mobile et tablette — burger à gauche, logo au centre, loupe à droite. */
+@media (max-width: 1199px) {
   /* Barre courte : presque plus de marge autour du logo. */
   .site-header {
     padding: 0.125rem 0.75rem 0;
@@ -220,7 +220,7 @@
   .site-header__logo {
     height: auto;
     width: auto;
-    max-height: 112px;
+    max-height: 100px;
     max-width: 100%;
     /* Logo à sa taille : seul le bas, sous le slogan, dépasse de la barre. */
     margin-bottom: -0.875rem;
@@ -293,7 +293,7 @@
 }
 
 /* Desktop — logo et liens restent dans le flux pour ne pas se chevaucher */
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .site-header {
     /* Reste collé en haut au scroll, sans sortir du flux. */
     position: sticky;
@@ -344,8 +344,8 @@
     display: block;
     height: auto;
     width: auto;
-    max-height: 100px;
-    max-width: min(360px, 100%);
+    max-height: 112px;
+    max-width: 100%;
     /* Logo à sa taille : 19 px (sous le slogan) dépassent de la ligne de 81 px. */
     margin-bottom: -19px;
   }

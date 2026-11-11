@@ -140,7 +140,7 @@ function pageTypeLabel(pageType) {
   } else if (pageType === "catalog") {
     label = "Catalogue";
   } else if (pageType === "categories") {
-    label = "Catégories";
+    label = "Catégorie et origine";
   } else if (pageType === "recipe") {
     label = "Fiche recette";
   }

@@ -488,12 +488,11 @@ function HomePage() {
           />
           <div className="home__hero-overlay" />
         </div>
+        {/* Colonne de texte seulement : la photo reste bord à bord. */}
         <div className="home__hero-content">
-          <h1>Cook'île & Co</h1>
-          <p className="home__hero-accroche home__hero-accroche--italic">
-            "An Nou Ay !"
-          </p>
-          <p className="home__hero-accroche">
+          <h1 className="home__hero-title">Cook'île & Co</h1>
+          <p className="home__hero-tagline">"An Nou Ay !"</p>
+          <p className="home__hero-subtitle">
             Des antilles aux saveurs du monde
           </p>
         </div>

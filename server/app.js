@@ -110,6 +110,8 @@ function setClientStaticHeaders(res, filePath) {
 
 if (hasClientBuild) {
     app.use(express.static(clientDistPath, {
+        // GET / ne doit plus être répondu ici pour que serveClient injecte l'accueil.
+        index: false,
         setHeaders: setClientStaticHeaders,
     }));
     app.use(createServeClient(indexHtmlPath));

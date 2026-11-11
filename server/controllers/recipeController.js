@@ -6,7 +6,21 @@ import Origin from '../models/Origin.js';
 import MealType from '../models/MealType.js';
 import RecipeIngredient from '../models/RecipeIngredient.js';
 import RecipeStep from '../models/RecipeStep.js';
+import { readRecipePhotoDimensions } from '../utils/imageDimensions.js';
 import { Op } from 'sequelize';
+
+// Ajoute imageWidth et imageHeight quand le fichier photo est lisible.
+async function withPhotoDimensions(recipe) {
+    const plain = recipe.toJSON();
+    const size = await readRecipePhotoDimensions(plain.photo);
+
+    if (size !== null) {
+        plain.imageWidth = size.width;
+        plain.imageHeight = size.height;
+    }
+
+    return plain;
+}
 
 // Sequelize 6 lie Op.like, sans clause ESCAPE.
 // MySQL utilise \ par defaut pour LIKE : on le prefixe devant \, % et _.
@@ -150,8 +164,15 @@ export async function listRecipes(req, res) {
         totalPages,
     };
 
+    const recipes = [];
+
+    for (let index = 0; index < result.rows.length; index++) {
+        const recipe = await withPhotoDimensions(result.rows[index]);
+        recipes.push(recipe);
+    }
+
     res.status(200).json({
-        data: result.rows,
+        data: recipes,
         meta,
     });
 }
@@ -197,7 +218,9 @@ export async function getRecipeById(req, res) {
         return;
     }
 
-    res.status(200).json(recipe);
+    const recipeWithSize = await withPhotoDimensions(recipe);
+
+    res.status(200).json(recipeWithSize);
 }
 
 // Creation d une recette
@@ -269,7 +292,9 @@ export async function createRecipe(req, res) {
 
     await RecipeStep.bulkCreate(stepsToCreate);
 
-    res.status(201).json(newRecipe);
+    const createdWithSize = await withPhotoDimensions(newRecipe);
+
+    res.status(201).json(createdWithSize);
 }
 
 // Modification d une recette (admin)
@@ -352,7 +377,9 @@ export async function updateRecipe(req, res) {
 
     await RecipeStep.bulkCreate(stepsToCreate);
 
-    res.status(200).json(recipe);
+    const updatedWithSize = await withPhotoDimensions(recipe);
+
+    res.status(200).json(updatedWithSize);
 }
 
 // Suppression d une recette
@@ -391,5 +418,7 @@ export async function addRecipePhoto(req, res) {
 
     await recipe.update({ photo: photoPath });
 
-    res.status(200).json(recipe);
+    const recipeWithSize = await withPhotoDimensions(recipe);
+
+    res.status(200).json(recipeWithSize);
 }

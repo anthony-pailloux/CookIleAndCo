@@ -131,24 +131,42 @@
   min-width: 0;
 }
 
-/* Liseré or au survol des cartes, comme sur l'accueil (souris uniquement). */
-.recipes-page__grid-item .recipe-card__photo::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+/* Survol des cartes, comme sur l'accueil : léger zoom de la photo (souris uniquement). */
+.recipes-page__grid-item .recipe-card__photo {
+  overflow: hidden;
   border-radius: var(--tc-card-radius);
-  box-shadow: inset 0 0 0 2px var(--tc-gold-madras);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
+}
+
+.recipes-page__grid-item .recipe-card__photo img {
+  transition: transform 0.35s ease;
+}
+
+/* Ombre de survol : une couche proche, une couche large et diffuse. */
+.recipes-page {
+  --recipes-card-shadow-hover:
+    0 6px 14px rgba(44, 24, 16, 0.22), 0 26px 56px rgba(44, 24, 16, 0.34);
+}
+
+/* Même durée que le zoom ; le z-index ne retombe qu'une fois l'ombre revenue. */
+.recipes-page__grid-item .recipe-card {
+  position: relative;
+  transition:
+    box-shadow 0.35s ease,
+    z-index 0s 0.35s;
 }
 
 @media (hover: hover) {
-  .recipes-page__grid-item .recipe-card:hover .recipe-card__photo::after {
-    opacity: 1;
+  .recipes-page__grid-item .recipe-card:hover .recipe-card__photo img {
+    transform: scale(1.03);
+  }
+
+  /* La carte survolée passe au-dessus de ses voisines pour ne pas rogner l'ombre. */
+  .recipes-page__grid-item .recipe-card:hover {
+    z-index: 1;
+    box-shadow: var(--recipes-card-shadow-hover);
+    transition:
+      box-shadow 0.35s ease,
+      z-index 0s;
   }
 }
 
@@ -213,10 +231,16 @@
 
 @media (prefers-reduced-motion: reduce) {
   .recipes-page .select,
-  .recipes-page__grid-item .recipe-card__photo::after,
+  .recipes-page__grid-item .recipe-card__photo img,
+  .recipes-page__grid-item .recipe-card,
+  .recipes-page__grid-item .recipe-card:hover,
   .recipes-page__pagination-nav,
   .recipes-page__pagination-page {
     transition: none;
+  }
+
+  .recipes-page__grid-item .recipe-card:hover .recipe-card__photo img {
+    transform: none;
   }
 }
 

@@ -172,7 +172,7 @@ function labelForLivePage(pageType, recipeTitle) {
     } else if (pageType === 'catalog') {
         label = 'Catalogue';
     } else if (pageType === 'categories') {
-        label = 'Catégories';
+        label = 'Catégorie et origine';
     } else if (pageType === 'recipe') {
         if (recipeTitle !== '') {
             label = recipeTitle;

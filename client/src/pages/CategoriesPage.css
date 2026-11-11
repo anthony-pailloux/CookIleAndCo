@@ -1,50 +1,73 @@
+/* Page catégories et origines : même style éditorial que l'accueil. */
 .categories-page {
-  max-width: 1180px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  width: min(1180px, calc(100% - 2rem));
+  min-width: 0;
   margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
+  padding: 2rem 0 3.5rem;
   background-color: var(--tc-background);
 }
 
-.categories-page__header {
-  margin-bottom: 2rem;
-}
-
-.categories-page h1 {
-  font-size: 1.625rem;
-  margin: 0 0 0.75rem;
-  color: var(--tc-text);
-}
-
-.categories-page__intro {
+/* Masqué à l'écran, toujours lu par les lecteurs d'écran. */
+.categories-page__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   margin: 0;
-  line-height: 1.6;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Section sans cadre : en-tête au-dessus de la grille. */
+.categories-page__section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+/* En-tête de section : surtitre, titre, filet or. */
+.categories-page__section-header {
+  min-width: 0;
+}
+
+/* Surtitre : brun et non or, pour garder un contraste suffisant. */
+.categories-page__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--tc-text-muted);
 }
 
-/* Section sans cadre : le padding garde l'écart titre / cartes. */
-.categories-page__section {
-  margin-bottom: 2.5rem;
-  padding: 1.5rem;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.categories-page__section h2 {
-  font-size: 1.25rem;
-  margin: 0 0 1.25rem;
+.categories-page__title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
   color: var(--tc-text);
-}
-
-.categories-page__section--origins h2 {
-  margin-bottom: 0.5rem;
 }
 
 .categories-page__subtitle {
-  margin: 0 0 1.25rem;
+  margin: 0.5rem 0 0;
   color: var(--tc-text-muted);
   font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+/* Filet or décoratif sous le titre. */
+.categories-page__section-header::after {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-top: 1rem;
+  background-color: var(--tc-gold-madras);
 }
 
 .categories-page__empty {
@@ -101,10 +124,10 @@
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 1.75rem 0.5rem 0.55rem;
+  padding: 2.25rem 0.7rem 0.75rem;
   font-family: var(--tc-font-heading);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 1.05rem;
   line-height: 1.35;
   text-align: center;
   color: var(--tc-white);
@@ -121,27 +144,196 @@
   color: var(--tc-white);
 }
 
+/* Survol des cartes : léger zoom de la photo, rogné aux coins arrondis. */
+.categories-page__photo {
+  overflow: hidden;
+  border-radius: var(--tc-card-radius);
+}
+
+.categories-page__photo img {
+  transition: transform 0.35s ease;
+}
+
+/* Ombre de survol : une couche proche, une couche large et diffuse. */
+.categories-page {
+  --categories-card-shadow-hover:
+    0 6px 14px rgba(44, 24, 16, 0.22), 0 26px 56px rgba(44, 24, 16, 0.34);
+}
+
+/* Même durée que le zoom ; le z-index ne retombe qu'une fois l'ombre revenue. */
+.categories-page__card {
+  position: relative;
+  transition:
+    box-shadow 0.35s ease,
+    z-index 0s 0.35s;
+}
+
+/* Souris seulement : rien au toucher ni au focus clavier. */
+@media (hover: hover) {
+  .categories-page__card:hover .categories-page__photo img {
+    transform: scale(1.03);
+  }
+
+  /* La carte survolée passe au-dessus de ses voisines pour ne pas rogner l'ombre. */
+  .categories-page__card:hover {
+    z-index: 1;
+    box-shadow: var(--categories-card-shadow-hover);
+    transition:
+      box-shadow 0.35s ease,
+      z-index 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categories-page__photo img,
+  .categories-page__card,
+  .categories-page__card:hover {
+    transition: none;
+  }
+
+  .categories-page__card:hover .categories-page__photo img {
+    transform: none;
+  }
+}
+
 /* Desktop */
 @media (min-width: 768px) {
   .categories-page {
-    padding: 3rem 2rem 4rem;
+    gap: 5rem;
+    width: min(1180px, calc(100% - 3rem));
+    /* Même départ sous l'en-tête que le catalogue. */
+    padding: 2.5rem 0 5rem;
   }
 
-  .categories-page h1 {
-    font-size: 2rem;
-  }
-
-  .categories-page__section {
-    padding: 2rem;
-  }
-
-  .categories-page__section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+  .categories-page__title {
+    font-size: 2.25rem;
   }
 
   .categories-page__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+    gap: 1.5rem;
+  }
+
+  .categories-page__section {
+    gap: 2rem;
+  }
+
+  .categories-page__name {
+    font-size: 1.2rem;
+    padding: 2.5rem 0.85rem 0.9rem;
   }
 }
+
+/* Essai : grille mosaïque des catégories et origines — bloc à supprimer pour revenir à la grille régulière */
+
+/* Mobile : 2 colonnes, une carte pleine largeur toutes les 5 cartes. */
+@media (max-width: 767px) {
+  /* Carte large en tête de chaque groupe de 5 ; */
+  /* pas si elle n'est suivie que d'une carte (rangée incomplète). */
+  .categories-page__grid > li:nth-child(5n + 1):not(:nth-last-child(2)),
+  /* Fin à 4 cartes dans le groupe : la dernière est large aussi. */
+  .categories-page__grid > li:last-child:nth-child(5n + 4) {
+    grid-column: span 2;
+  }
+
+  .categories-page__grid
+    > li:is(
+      :nth-child(5n + 1):not(:nth-last-child(2)),
+      :last-child:nth-child(5n + 4)
+    )
+    .categories-page__photo
+    img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .categories-page__grid
+    > li:is(
+      :nth-child(5n + 1):not(:nth-last-child(2)),
+      :last-child:nth-child(5n + 4)
+    )
+    .categories-page__name {
+    font-size: 1.25rem;
+    padding: 2.75rem 0.85rem 0.9rem;
+  }
+}
+
+/* Desktop : 3 colonnes, motif de 12 cartes avec deux vedettes (2 × 2). */
+@media (min-width: 768px) {
+  /* Vedette à gauche (1re du motif) : il faut 2 cartes après elle ; */
+  /* annulée si elle est 4e avant la fin (fin en briques, voir plus bas). */
+  .categories-page__grid
+    > li:nth-child(12n + 1):nth-last-child(n + 3):not(:nth-last-child(4)),
+  /* Vedette à droite (8e du motif) : il faut 1 carte après elle ; */
+  /* annulée si elle est 3e avant la fin. */
+  .categories-page__grid
+    > li:nth-child(12n + 8):nth-last-child(n + 2):not(:nth-last-child(3)) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* Fin de grille sans trou : */
+  /* reste de 2 cartes → la dernière est large ; */
+  /* reste de 1 carte → briques sur les 4 dernières (large, petite / petite, large). */
+  .categories-page__grid > li:last-child:nth-child(3n + 2),
+  .categories-page__grid > li:last-child:nth-child(3n + 1),
+  .categories-page__grid > li:nth-last-child(4):nth-child(3n + 1) {
+    grid-column: span 2;
+  }
+
+  /* Carte seule : large, avec sa propre hauteur. */
+  .categories-page__grid > li:only-child {
+    aspect-ratio: 8 / 3;
+  }
+
+  /* Vedettes et cartes larges : la photo remplit toute la cellule. */
+  .categories-page__grid
+    > li:is(
+      :nth-child(12n + 1):nth-last-child(n + 3):not(:nth-last-child(4)),
+      :nth-child(12n + 8):nth-last-child(n + 2):not(:nth-last-child(3)),
+      :last-child:nth-child(3n + 2),
+      :last-child:nth-child(3n + 1),
+      :nth-last-child(4):nth-child(3n + 1)
+    )
+    .categories-page__card,
+  .categories-page__grid
+    > li:is(
+      :nth-child(12n + 1):nth-last-child(n + 3):not(:nth-last-child(4)),
+      :nth-child(12n + 8):nth-last-child(n + 2):not(:nth-last-child(3)),
+      :last-child:nth-child(3n + 2),
+      :last-child:nth-child(3n + 1),
+      :nth-last-child(4):nth-child(3n + 1)
+    )
+    .categories-page__photo {
+    height: 100%;
+  }
+
+  .categories-page__grid
+    > li:is(
+      :nth-child(12n + 1):nth-last-child(n + 3):not(:nth-last-child(4)),
+      :nth-child(12n + 8):nth-last-child(n + 2):not(:nth-last-child(3)),
+      :last-child:nth-child(3n + 2),
+      :last-child:nth-child(3n + 1),
+      :nth-last-child(4):nth-child(3n + 1)
+    )
+    .categories-page__photo
+    img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  /* Nom plus grand sur les vedettes. */
+  .categories-page__grid
+    > li:is(
+      :nth-child(12n + 1):nth-last-child(n + 3):not(:nth-last-child(4)),
+      :nth-child(12n + 8):nth-last-child(n + 2):not(:nth-last-child(3))
+    )
+    .categories-page__name {
+    font-size: 1.625rem;
+    padding: 4rem 1.25rem 1.25rem;
+  }
+}
+
+/* Fin de l'essai : grille mosaïque des catégories et origines */

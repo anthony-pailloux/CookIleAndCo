@@ -39,6 +39,8 @@ function AdminRecipeFormPage() {
   // Photo choisie sur l ordinateur. On l envoie seulement en enregistrant.
   const [photoFile, setPhotoFile] = useState(null);
   const [currentPhotoUrl, setCurrentPhotoUrl] = useState("");
+  const [currentPhotoWidth, setCurrentPhotoWidth] = useState(null);
+  const [currentPhotoHeight, setCurrentPhotoHeight] = useState(null);
   // Apercu local du fichier choisi, avant l enregistrement.
   const [chosenPhotoUrl, setChosenPhotoUrl] = useState("");
   const [tips, setTips] = useState("");
@@ -120,6 +122,17 @@ function AdminRecipeFormPage() {
           setCookingTime(String(recipe.cookingTime));
           setPreparationTime(String(recipe.preparationTime));
           setCurrentPhotoUrl(getRecipePhotoUrl(recipe.photo));
+
+          if (
+            typeof recipe.imageWidth === "number" &&
+            typeof recipe.imageHeight === "number"
+          ) {
+            setCurrentPhotoWidth(recipe.imageWidth);
+            setCurrentPhotoHeight(recipe.imageHeight);
+          } else {
+            setCurrentPhotoWidth(null);
+            setCurrentPhotoHeight(null);
+          }
 
           if (recipe.tips !== null && recipe.tips !== undefined) {
             setTips(capitalizeFirstLetter(recipe.tips));
@@ -412,14 +425,31 @@ function AdminRecipeFormPage() {
       </div>
     );
   } else if (isEditMode === true && currentPhotoUrl !== "") {
-    photoPreview = (
-      <div className="admin-form__photo-fit">
+    let currentPhoto = (
+      <img
+        className="admin-form__photo-preview"
+        src={currentPhotoUrl}
+        alt="Photo actuelle de la recette"
+      />
+    );
+
+    if (
+      typeof currentPhotoWidth === "number" &&
+      typeof currentPhotoHeight === "number"
+    ) {
+      currentPhoto = (
         <img
           className="admin-form__photo-preview"
           src={currentPhotoUrl}
           alt="Photo actuelle de la recette"
+          width={currentPhotoWidth}
+          height={currentPhotoHeight}
         />
-      </div>
+      );
+    }
+
+    photoPreview = (
+      <div className="admin-form__photo-fit">{currentPhoto}</div>
     );
   }
 

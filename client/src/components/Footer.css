@@ -27,16 +27,16 @@
 .site-footer__name {
   margin: 0 0 0.35rem;
   font-family: var(--tc-font-heading);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.06em;
 }
 
-/* 19px gras : assez grand pour rester lisible en blanc sur ce vert. */
+/* 16px gras : lisible en blanc sur le vert, sans dominer le nom. */
 .site-footer__tagline {
   margin: 0;
-  font-size: 1.1875rem;
+  font-size: 1rem;
   font-style: italic;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -91,11 +91,11 @@
   transition: text-decoration-color 0.2s ease;
 }
 
-/* Comme les liens du header, en un peu plus grand et plus gras pour le contraste. */
+/* Même corps que les liens du header : 16px, graisse 600. */
 .site-footer__link {
   font-family: var(--tc-font-heading);
-  font-size: 1.1875rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: 0.06em;
 }
 
@@ -145,11 +145,11 @@
   }
 
   .site-footer__name {
-    font-size: 1.75rem;
+    font-size: 1.375rem;
   }
 
   .site-footer__tagline {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 
   .site-footer__links {
